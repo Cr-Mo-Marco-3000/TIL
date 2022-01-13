@@ -151,7 +151,7 @@ Date:   Thu Jan 13 16:32:46 2022 +0900
     test1.txt라는 파일을 생성한 버전입니다.
 ```
 
-
+ㅎ
 
 ### 2.6 git push
 
@@ -172,7 +172,7 @@ origin이라는 이름으로 https://github.com/edujustin.hphk/TIL.git라는 주
 ```
 
 ```bash
-# 저장된 주소 확인
+# 저장된 주소 확인(v: verbose: 상세한, 말많은 Be a little more verbose and show remote url after name.)
 
 $ git remote -v
 origin  https://github.com/edujustin.hphk/TIL.git
