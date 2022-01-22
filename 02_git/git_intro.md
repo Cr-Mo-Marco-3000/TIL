@@ -119,6 +119,9 @@ No commits yet
 Changes to be committed:
   (use "git rm --cached <file>..." to unstage)
         new file:   test1.txt
+        
+# add한 파일을 되돌리는 방법
+$ git rm --cached 파일명
 ```
 
 
@@ -151,7 +154,7 @@ Date:   Thu Jan 13 16:32:46 2022 +0900
     test1.txt라는 파일을 생성한 버전입니다.
 ```
 
-ㅎ
+
 
 ### 2.6 git push
 
