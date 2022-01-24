@@ -37,7 +37,7 @@ print(c)
 
 
 
-### open
+### open(file, mode, encoding)
 
 ```python
 # 파일들을 불러와서 읽을 때 쓴다.
