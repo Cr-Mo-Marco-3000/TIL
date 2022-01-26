@@ -2,6 +2,8 @@
 
 
 
+![data structure](types.assets/data structure.png)
+
 ## Dictionary
 
 - 키:값으로 이루어진 타입이다.
