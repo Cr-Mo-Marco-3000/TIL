@@ -139,7 +139,7 @@ print(b.strip()) => 'asdffdsa'
 
 
 
-#### s.split(chars(단위) : 중요
+#### s.split(chars(단위)) : 중요
 
 - 문자열을 ()안의 특정한 단위로 나눠 **리스트**로 **반환**한다.
 
