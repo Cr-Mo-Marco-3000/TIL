@@ -24,11 +24,11 @@
 ```python
 class Faker():
     
-    def __init__(self, lang):
+    def __init__(self, Locale = 'en_US'):
         
 # a)는 __init__ 여야 하고
 # b)는 self 여야만 하지만
-# c)는 내가 정할 수 있다. 언어가 들어가 매개변수 명을 lang이라 했다.
+# c)는 내가 정할 수 있다. 주어진 대로 매개변수명은 Locale, 기본값을 en_US라 했다.
 ```
 
 
@@ -67,6 +67,6 @@ print(fake.name())
 fake2 = Faker('ko_KR')
 print(fake2.name())
 
-# 아직 잘 모르겠다.
+# 앞의 seed()와는 다르게, 인스턴스 메서드이다.
 ```
 
