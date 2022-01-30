@@ -103,7 +103,7 @@ print(c) # => -1
 
 
 
-### 3) 문자열 변경 메서드(upper과 lower,swapcase도 해보자.)
+### 3) 문자열 변경 메서드
 
 
 
@@ -223,8 +223,12 @@ print("".join(c)) # TypeError
 
 ## 2. number(immutable)
 
+
+
 - 정확히 real, imag는 메서드가 아니고, 인스턴스 변수라 할 수 있다.
-- 귀찮으니 나중에 정리하겠다.
+- 나중에 정리하겠다.
+
+
 
 #### number.real
 
@@ -519,6 +523,8 @@ print(a) # 2
 
 ## 5. Set(mutable, unordered, iterable)
 
+
+
 - 변경 가능하고, 순서가 없고, **순회가능**하다.
 - Set과 같이, 순서가 없어도 순회가능함에 유의!
 
@@ -607,19 +613,126 @@ print(a) # {'사과', '바나나', '수박'}
 
 ## 6. dict(mutable, unordered, iterable)
 
-- 변경 가능하고, 순서가 없고, **순회가능**하다.
+
+
+- 변경 가능하고, 순서가 없고, **순회가능**하다(단, for문을 통한 순회 등을 할 때 key값만이 대입된다.
 - Set과 같이, 순서가 없어도 순회가능함에 유의!
+
+
+
+### 조회
+
+
+
+#### d.get(key[, default])
+
+- key를 통해 value를 가져온다
+- key가 존재하지 않을 경우, None을 반환한다. 즉, d[key]와는 달리 KeyError가 발생하지 않는다.
+- default에는 key가 없을 경우 반환할 기본값을 설정할 수 있다.
+
+```python
+my_dict = {'apple': '사과', 'banana': '바나나', 'melon': '멜론'}
+
+# my_dict['strawberry'] # KeyError
+
+print(my_dict.get('strawberry')) # None
+
+print(my_dict.get('strawberry', 'pepper')) # pepper
+
+```
+
+
+
+#### d.setdefault(key[, default])
+
+- key를 통해 value를 가져온다
+- .get()과 다른 점은 key가 존재하지 않을 경우,
+  default값을 입력한 키의 value로 집어넣고 그 값을 반환한다는 점이다.
+
+```python
+my_dict = {'apple': '사과', 'banana': '바나나', 'melon': '멜론'}
+
+print(my_dict.setdefault('strawberry')) # None
+
+print(my_dict.setdefault('peach', '복숭아')) # 복숭아
+
+print(my_dict) {'apple': '사과', 'banana': '바나나', 'melon': '멜론', 'strawberry': None, 'peach': '복숭아'}
+```
+
+
+
+### 추가 및 삭제
+
+
+
+#### d.pop(key[, default])
+
+- key가 딕셔너리에 있으면 제거하고 그 값을 반환한다. 그렇지 않으면 default값을 반환한다.
+- default 값을 설정하지 않은 상태인데 해당 key가 딕셔너리에 없을 경우, KeyError가 발생한다.
+
+```python
+my_dict = {'apple': '사과', 'banana': '바나나'}
+
+print(my_dict.pop("apple", "음슴")) # 음슴
+
+print(my_dict.pop("apple")) # ValueError
+
+print(my_dict) # {'banana': '바나나'}
+```
+
+
+
+#### d.update([other])
+
+- other가 제공하는 key, value쌍으로 딕셔너리를 **덮어쓴다.**
+- other에는 다른 딕셔너리나 key/value 쌍으로 되어 있는 모든 iterable을 사용 가능하다.
+
+```python
+my_dict = {'apple': '사과', 'banana': '바나나', 'melon': '멜론'}
+
+my_dict.update(strawberry='딸기', peach='복숭아', apple='사과앙')
+
+print(my_dict) 
+# {'apple': '사과앙', 'banana': '바나나', 'melon': '멜론', 'strawberry': '딸기', 'peach': '복숭아'}
+
+d = {'mango':'망고', 'watermelon':'수박'}
+
+my_dict.update(d)
+
+print(my_dict) 
+# {'apple': '사과앙', 'banana': '바나나', 'melon': '멜론', 'strawberry': '딸기', 'peach': '복숭아', 'mango': '망고', 'watermelon': '수박'}
+```
+
+
 
 #### dict.keys(), dict.values(), dict.items()
 
-- 각각 dict에 있는 모든 key 값들, value값들 key:items 값들을 반환한다.
+- 각각 dict에 있는 모든 key 값들, value값들 key:items 값들을 dictionary view object로 반환한다.
 - 반환되는 타입은 고유값이므로, 사용하려면 형변환이 필요하다.
+- .items()로 반환한 객체의 item들은 key와 value를 묶은 tuple 형태이다.
 - () 안에는 아무 것도 들어가면 안된다!
 
 ```python
-a = {1='a', 2='b' 3:'c'}
-b = list(a.keys())
-c = list(a.values())
-d = list(a.items())
-print(b, c, d)
+my_dict = {'apple': '사과', 'banana': '바나나', 'melon': '멜론'}
+
+a = my_dict.keys()
+b = my_dict.values()
+c = my_dict.items()
+
+print(str(a) + "\n" + str(b) + "\n" + str(c) + "\n")
+
+
+'''
+
+dict_keys(['apple', 'banana', 'melon'])
+dict_values(['사과', '바나나', '멜론'])
+dict_items([('apple', '사과'), ('banana', '바나나'), ('melon', '멜론')])
+
+'''
+
+# for 문으로 dictionary 순환하는 법!
+# .items()에서 반환되는 개개 item들은 (key, value)의 튜플형태로 묶어 있으므로 (key, value) = (key, value)가 돼서 순환가능하다!
+for key, value in dict.items():
+    print(f"{key} : {value}")
+
 ```
