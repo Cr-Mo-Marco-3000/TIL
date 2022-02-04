@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>학생 건강 설문</title>
+  </head>
+  <body>
+    <!-- header -->
+    <header>
+      <!-- 싸피 홈페이지로 이동하는 링크 -->
+      <!-- a -> 링크 -->
+      <!-- https://developer.mozilla.org/ko/docs/Web/HTML/Element/a#attr-target -->
+      <a href="https://edu.ssafy.com/" target="_blank">
+        <!-- img -> 이미지 -->
+        <img
+          src="https://www.ssafy.com/swp/images/sns_img.png"
+          alt="ssafy-logo-image"
+        />
+      </a>
+    </header>
+
+    <!-- section -->
+    <section>
+      <h1>SSAFY 학생 건강설문</h1>
+      <!-- 건강 설문 작성 form -->
+      <form action="#">
+        <!-- 이름 -->
+        <div>
+          <label for="name">이름을 기재해주세요.</label>
+          <input type="text" autofocus id="name" name="name" />
+        </div>
+
+        <!-- 지역 -->
+        <div>
+          <label for="region">지역을 선택해주세요.</label>
+          <select name="region" id="region">
+            <option value="서울">서울</option>
+            <option value="대전">대전</option>
+            <option value="구미">구미</option>
+            <option value="광주">광주</option>
+            <option value="부울경">부울경</option>
+            <option value="강원" disabled>강원</option>
+          </select>
+        </div>
+
+        <!-- 체온 -->
+        <div>
+          <!-- radio
+          https://developer.mozilla.org/ko/docs/Web/HTML/Element/Input/radio
+        -->
+          <p>오늘의 체온을 선택해주세요.</p>
+          <label for="temp-normal">37도 미만</label>
+          <input
+            type="radio"
+            id="temp-normal"
+            value="normal"
+            name="body-heat"
+            checked
+          />
+
+          <label for="temp-warning">37도 이상</label>
+          <input
+            type="radio"
+            id="temp-warning"
+            value="warning"
+            name="body-heat"
+          />
+        </div>
+
+        <!-- 전송 -->
+        <input type="submit" value="전송!!!" />
+      </form>
+    </section>
+
+    <!-- footer -->
+    <footer>Google 설문지를 통해 비밀번호를 제출하지 마시오.</footer>
+  </body>
+</html>

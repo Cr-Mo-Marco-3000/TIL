@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      input {
+        display: block;
+        margin-bottom: 10px;
+      }
+      input[type="checkbox"] {
+        display: inline;
+      }
+      input[type="radio"] {
+        display: inline;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- https://developer.mozilla.org/ko/docs/Web/HTML/Element/form -->
+    <form action="*" method="*">
+      <!-- action에는 form을 처리할 서버의 url, method는 제출 시 사용할 http 메서드 -->
+      <!-- 
+        input 관련 MDN 공식 문서
+        https://developer.mozilla.org/ko/docs/Web/HTML/Element/Input
+     -->
+      <div>
+        <!-- 제출 버튼 -->
+        <input type="text" />
+        <input type="submit" value="제출" />
+      </div>
+      <!-- 일반 입력 -->
+      <div>
+        <p>text</p>
+        <!-- input: name(form control에 적용되는 이름), 
+          value pair(form control에 적용되는 값)로 전송됨 -->
+        <!-- python으로 치면 dict형태: name=value형태  -->
+        <input type="text" autofocus />
+        <hr />
+      </div>
+
+      <div>
+        <p>password</p>
+        <input type="password" />
+        <hr />
+      </div>
+
+      <div>
+        <p>email</p>
+        <input type="email" />
+        <hr />
+      </div>
+
+      <div>
+        <p>number</p>
+        <input type="number" />
+        <hr />
+      </div>
+
+      <div>
+        <p>file</p>
+        <input type="file" />
+        <hr />
+      </div>
+
+      <!-- 항목 중 선택 -->
+      <!-- check box -->
+      <div>
+        <!-- label의 for과 input의 id를 맞춰줘야 함! -->
+        <!-- check박스에서 여러 값 중의 하나로 전송할 때, name을 통일해야 한다. -->
+        <p>checkbox</p>
+        <input id="html" type="checkbox" name="language" value="html" />
+        <label for="html">HTML</label>
+        <input id="python" type="checkbox" name="language" value="python" />
+        <label for="python">파이썬</label>
+        <input id="python" type="checkbox" name="language" value="java" />
+        <label for="java">자바</label>
+        <hr />
+      </div>
+
+      <!-- radio button -->
+      <!-- 공식 문서
+      https://developer.mozilla.org/ko/docs/Web/HTML/Element/Input/radio
+    -->
+      <div>
+        <p>radio button</p>
+        <!-- radio: 단일선택 -->
+        <!-- radio에서, 여러 객 중 하나만 선택하게 하려고 할 때, name을 맞춰주어야 한다. -->
+        <input id="happy" type="radio" name="mood" value="happy" />
+        <label for="happy">행복</label>
+        <input id="sadness" type="radio" name="mood" value="sadness" />
+        <label for="sadness">슬픔</label>
+        <input id="neutral" type="radio" name="mood" value="neutral" />
+        <label for="neutral">중립</label>
+        <hr />
+      </div>
+
+      <!-- 기타 -->
+      <!-- color -->
+      <div>
+        <p>color</p>
+        <input type="color" />
+        <hr />
+      </div>
+
+      <!-- date -->
+      <div>
+        <p>date</p>
+        <input type="date" />
+        <hr />
+      </div>
+
+      <!-- hidden -->
+      <div>
+        <p>hidden</p>
+        <input type="hidden" />
+        <hr />
+      </div>
+    </form>
+
+    <!-- form 추가 설명 -->
+    <h2>Form 추가 설명</h2>
+    <form action="/articles/login/" method="GET">
+      <label for="id">아이디</label>
+      <!-- 
+      name 속성
+      https://developer.mozilla.org/ko/docs/Web/HTML/Element/Input#htmlattrdefname
+     -->
+      <input type="text" id="id" name="my-id" />
+      <label for="password">비밀번호</label>
+      <input type="password" id="password" name="my-password" />
+      <input type="submit" value="로그인" />
+    </form>
+  </body>
+</html>
