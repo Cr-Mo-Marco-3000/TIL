@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    /* 자식 & 자손 결합자 */
+    /* 자식 */
+    /* div > span {
+      color: red;
+    } */
+
+    /* 자손 */
+    /* div span {
+      color: red;
+    } */
+
+    /* 일반 형제 결합자 A ~ B */
+    /* 셀렉터 A의 형제 요소 중 셀렉터 A 뒤에 위치하는 셀렉터B 요소를 모두 선택 */
+    
+    /* p 요소의 형제 요소 중에서 p 요소 뒤에 위치하는 span 요소를 모두 선택 */
+    p + span {
+      color: red;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- 자식 & 자손 결합자 -->
+  <div>
+    <span>이건 빨강입니다.</span>
+    <p>이건 빨강이 아닙니다.</p>
+    <p>
+      <span>이건 빨강입니다.</span>
+    </p>
+  </div>
+
+  <hr>
+  <!-- 일반 형제 결합자 -->
+  <span>1</span>
+  <p>2</p>
+  <b>3</b>
+  <span>4</span>
+  <b>5</b>
+  <span>6</span>
+</body>
+</html>
