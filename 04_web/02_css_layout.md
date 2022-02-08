@@ -335,16 +335,16 @@
   - 공간 나누기
     - **justify-content(main axis)**
     - align-content(cross axis)
-  
-  - 정렬
-    - **align-items(모든 아이템을 cross axis 기준으로)**
       - Cross axis를 기준으로 공간 배분 ( 아이템이 한 줄로 배치되는 경우 확인할 수 없음)
-  
+  - 정렬
+    - **align-items(모든 아이템을 cross axis 기준으로 정렬)**
     - align-self(**개별 아이템에 적용**)
-  
   - Flex에 적용하는 기타 속성(**얘들도 개별 아이템에 적용**)
     - flex-grow: 남은 영역을 아이템에 분배해서 자라게 함
     - order: 배치 순서
+      - **기본값이 0이므로**, 예를 들어 네 객체 중에서 특정 값에 order:1;을 했을 경우,
+        그 객체가 가장 마지막에 가게 된다(다른 객체는 모두 0인 상태이므로).
+      - 그러므로, 순서를 주기 위해서는, 다른 객체에도 order값을 넣던지 해야 한다.
   
 
 
