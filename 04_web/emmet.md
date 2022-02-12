@@ -7,10 +7,13 @@
 
 ```HTML
 <!-- vs code -->
-<!-- 과일 목록 ul li 3개정도 -->
+
+<!-- ul li 3개 -->
 ul>li*3
 
-<!-- 이렇게 나옴
+<!-- 
+이렇게 나옴
+
 <ul>
   <li></li>
   <li></li>
@@ -21,7 +24,9 @@ ul>li*3
 <!-- fruit-list 아이디를 ul에 지정, fruit-list 클래스를 li 3개에 지정 -->
 ul#fruit-list>li.fruit-list*3
 
-<!-- 이렇게 나옴
+<!-- 
+이렇게 나옴
+
 <ul id="fruit-list">
   <li class="fruit-list"></li>
   <li class="fruit-list"></li>
@@ -33,7 +38,9 @@ ul#fruit-list>li.fruit-list*3
 <!--테이블-->
 table>(thead>tr>th*3)+(tbody>tr>td*3)+(tfoot>tr>td*3)
 
-<!-- 이렇게 나옴
+<!-- 
+이렇게 나옴
+
 <table>
   <thead>
     <tr>
@@ -58,6 +65,15 @@ table>(thead>tr>th*3)+(tbody>tr>td*3)+(tfoot>tr>td*3)
   </tfoot>
 </table>
 -->
+
+<!--태그 안 글씨-->
+h1{Text in Tag}
+
+<!--
+<h1>Text in Tag</h1>
+-->
+
+
 ```
 
 - 이외의 사용법은 [치팅시트 ](https://docs.emmet.io/cheat-sheet/)참조
