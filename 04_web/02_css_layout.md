@@ -205,7 +205,7 @@
 </html>
 ```
 
-- 개별적으로 clear:left;를 주어 해결할 수 있을 것 같아 보이지만, 
+- 개별적으로 clear:left;를 주면 해결할 수 있을 것 같아 보이지만, 
 
   만약 부모가 있다면 자식이 float되어 부모가 인식을 못 하는 문제가 발생한다.
 
@@ -368,30 +368,15 @@
 
 - 사용법
   - head에 `<link>`태그를 달고, `</body>` 바로 위에 `<script>` 태그를 만든다.
-  - 직접 파일을 연결하거나, 공식 사이트에서 따온다.
-
-
+  - 직접 파일을 연결하거나, CDN(Content Delivery Network를 사용해서 따온다.)
 
 - spacing
 
   - .mt-1 == margin top 0.25rem
   - 2: 0.5rem, 3: 1rem, 4: 1.5rem, 5: 3rem
-
-  - .mx-0 ? : x축
-
-
-
-
-
-
-
-!important가 다 붙어 있다.
-
-
-
-
-
-
+  - mx(가로) my(세로 등)
+  
+  
 
 grid system
 
