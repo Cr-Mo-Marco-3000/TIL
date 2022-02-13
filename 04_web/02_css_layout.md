@@ -205,7 +205,7 @@
 </html>
 ```
 
-- 개별적으로 clear:left;를 주면 해결할 수 있을 것 같아 보이지만, 
+- 개별적으로 clear:left;를 주어 해결할 수 있을 것 같아 보이지만, 
 
   만약 부모가 있다면 자식이 float되어 부모가 인식을 못 하는 문제가 발생한다.
 
@@ -335,16 +335,16 @@
   - 공간 나누기
     - **justify-content(main axis)**
     - align-content(cross axis)
-      - Cross axis를 기준으로 공간 배분 ( 아이템이 한 줄로 배치되는 경우 확인할 수 없음)
+  
   - 정렬
-    - **align-items(모든 아이템을 cross axis 기준으로 정렬)**
+    - **align-items(모든 아이템을 cross axis 기준으로)**
+      - Cross axis를 기준으로 공간 배분 ( 아이템이 한 줄로 배치되는 경우 확인할 수 없음)
+  
     - align-self(**개별 아이템에 적용**)
+  
   - Flex에 적용하는 기타 속성(**얘들도 개별 아이템에 적용**)
     - flex-grow: 남은 영역을 아이템에 분배해서 자라게 함
     - order: 배치 순서
-      - **기본값이 0이므로**, 예를 들어 네 객체 중에서 특정 값에 order:1;을 했을 경우,
-        그 객체가 가장 마지막에 가게 된다(다른 객체는 모두 0인 상태이므로).
-      - 그러므로, 순서를 주기 위해서는, 다른 객체에도 order값을 넣던지 해야 한다.
   
 
 
@@ -368,20 +368,171 @@
 
 - 사용법
   - head에 `<link>`태그를 달고, `</body>` 바로 위에 `<script>` 태그를 만든다.
-  - 직접 파일을 연결하거나, CDN(Content Delivery Network를 사용해서 따온다.)
+  - 직접 파일을 연결하거나, 공식 사이트에서 따온다.
+
+
+
+### class		
+
+- 물론 다 외우는 것은 불가능하다.
+- 중요한 것들 위주로 기억하고, Pure CSS와 어떻게 연계되는지 정도만 기억하자.
+
+
 
 - spacing
 
   - .mt-1 == margin top 0.25rem
-  - 2: 0.5rem, 3: 1rem, 4: 1.5rem, 5: 3rem
-  - mx(가로) my(세로 등)
+  - 1:0.25rem, 2: 0.5rem, 3: 1rem, 4: 1.5rem, 5: 3rem
+  - .mx-0
+    - .mx-0 {margin-right: 0px; margin-left: 0px;}
+  - .mx-auto
+    - .mx-auto {margin-right: auto; margin-left: auto;}
+
+
+
+- colors
+
+  - .bg-primary, text-primary 등으로 쓴다.
+  - primary
+  - secondary
+  - success
+  - info
+  - 등등
+
   
+
+- text-align
+
+  - text-start
+  - text-center
+  - text-end
+
   
 
-grid system
+- font style
 
-column
+  - fw-bold
+  - fw-normal
+  - fst-italic
 
-12개의 column
+  
 
-6개의 grid breakpoints
+- display
+
+  - d-inline
+  - d-block
+  - d-flex 등으로 쓴다.
+
+  
+
+- border
+  - border-radius
+
+
+
+- position
+
+  - fixed-top
+
+  
+
+- flexbox
+  - d-flex justify-content-start 등으로 쓴다.
+
+
+
+## Responsive Web
+
+- 반응형 웹
+- 다양한 화면 크기를 가진 디바이스들이 등장함에 따라 responsive web design 개념이 등장
+- 반응형 웹은 별도의 기술 이름이 아닌 웹 디자인에 대한 접근 방식, 반응형 레이아웃 작성에 도움이 되는 사례들의 모음 등을 기술하는 데 사용되는 용어
+- 예시
+  - Media Queries, Flexbox, Bootstrap Grid System, The viewpoint meta tag
+
+
+
+### Bootstrap Grid System
+
+- 요소들의 디자인과 배치에 도움을 주는 시스템
+- 기본 요소
+  - Column: 실제 컨텐츠를 포함하는 부분
+  - Gutter: 칼럼과 칼럼 사이의 공간(사이 간격)
+  - Container: Column들을 담고 있는 공간.
+
+- Bootstrap Grid System은 Flexbox로 제작됨
+
+- container, row, column으로 컨텐츠를 배치하고 정렬
+
+- 반드시 기억해야 할 2가지!
+
+  - 12개의 column
+
+    - 각자의 col에 class를 주는 법
+
+      - class="col-md-3"
+        - 768px 이상의 화면에서 12개 그리드 중 3개를 먹는다!
+        - col 뒤에 아무것도 붙이지 않으면, 남는 자리를 알아서 분배해 먹는다.
+
+    - row에 col을 주는 법
+
+      - ```css
+        <div class="container">
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
+            <div class="col">Column</div>
+            <div class="col">Column</div>
+            <div class="col">Column</div>
+            <div class="col">Column</div>
+          </div>
+        </div>
+        ```
+
+      - 576 이하에서는 column을 하나로 표시
+
+      - 576~768에서는 2개로 표시
+
+      - 768 이상에서는 4개로 표시
+
+    - nesting
+
+      - col 안에 col을 주는 것!
+
+      - ```css
+        <div class="row">
+        	<div class="col-6">
+        		<div class="row">
+        			<div class="col-3"> 
+        /* 이 라인부터는 기준이 전체 화면의 절반이 된다. 즉 6/12 * 3/12만큼 먹는다. */
+        ```
+
+        
+
+  - 6개의 grid breakpoint
+
+    - xs: < 576px
+
+    - sm: >= 576px
+
+    - md: >= 768px
+
+    - lg: >= 992px
+
+    - xl: >= 1200px
+
+    - xxl: <= 1400px
+
+      
+
+- offset
+
+  - e.g. col-4 offset-4 col-md-4 offset-md-0 col-lg-8 offset-lg-2
+    - 768 이하일 때, offset-4 col-4
+    - 768 ~ 992일 때, offset-0 col-4
+    - 992 이상일 때, offset-2, col-8
+
+  
+
+
+
+- 기억해야 할 원칙
+  - 어떤 스타일이 적용이 안 됐으면 클래스에 문제가 있는 것이다!
+
