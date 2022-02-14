@@ -469,7 +469,7 @@
 
     - 각자의 col에 class를 주는 법
 
-      - class="col-md-3"
+      - class="col-breakpoint-grid_number"
         - 768px 이상의 화면에서 12개 그리드 중 3개를 먹는다!
         - col 뒤에 아무것도 붙이지 않으면, 남는 자리를 알아서 분배해 먹는다.
 

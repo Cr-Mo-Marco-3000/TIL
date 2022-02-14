@@ -22,7 +22,7 @@ html 태그 작성 및 css도 많이 써보고 익숙해지는 방법으로 접�
 
   - 문서 제목, 인코딩, 스타일, 외부 파일 로딩 등
 
-  - <title>, <meta>, <link>, <script>, <style>
+  - `<title>, <meta>, <link>, <script>, <style>`등
 
 - body: 문서 본문 요소
 
@@ -342,15 +342,19 @@ html 태그 작성 및 css도 많이 써보고 익숙해지는 방법으로 접�
 - display: inline-block
 
   - block과 inline 레벨 요소의 특징을 모두 가짐
+
   - inline처럼 한 줄에 표시 가능하고, block처럼 width, height, margin 속성을 모두 지정할 수 있음
+
   - 근데 잘 안쓴다. flexbox를 쓰지.
-  - 
+
+    
 
 - display: none
 
   - 해당 요소를 화면에 표시하지 않고, 공간조차 부여되지 않음
   - 이와 비슷한 visibility: hidden은 해당 요소가 공간은 차지하나 화면에 표시만 하지 않는다.
-  - 
+
+  
 
 - 속성에 따른 수평 정렬
   - margin-right: auto == text-align: left == 좌측 정렬
