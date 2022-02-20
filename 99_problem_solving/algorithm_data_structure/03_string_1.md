@@ -158,9 +158,7 @@ a = map(int, input())
 
 
 
-
-
-연속한 1의 개수
+- 연속한 1의 개수
 
 ```python
 for tc in range(T):
@@ -181,14 +179,6 @@ for tc in range(T):
             
     print(~~~)
 ```
-
-
-
-고대유물
-
-당근
-
-
 
 
 
