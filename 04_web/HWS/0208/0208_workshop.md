@@ -274,7 +274,8 @@
         <div class="item col-4 offset-md-4 col-md-4 offset-lg-7 col-lg-5">
           <p>item1</p>
         </div>
-        <!-- offset-n 하면 모든 경우에 다 먹힌다. 즉 최소넓이인 경우 개별 오프셋 설정이 불가능하다. 그냥 justify content 쓰자. -->
+        <!-- offset-n 하면 모든 경우에 다 먹힌다. 즉 최소넓이인 경우 개별 오프셋 설정이 불가능하다. offset-md-0로 설정할 수도 있다. -->
+          <!--item col-4 offset-4 col-md-4 offset-md-0 col-lg-8 offset-lg-2-->
         <div class="item col-4 col-md-4 offset-lg-4 col-lg-8">
           <p>item2</p>
         </div>
