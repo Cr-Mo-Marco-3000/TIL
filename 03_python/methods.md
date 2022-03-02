@@ -80,7 +80,7 @@ print(c) # => -1
 - 소문자인지,
 - Title(띄어쓰기 된 단어의 맨 앞글자가 대문자)인지 판별한다.
 - 앞에 is가 붙는다면 ~인지 검증한다는 의미로 쓰인다고 할 수 있고, 변수 이름설정에도 유용하게 쓰인다.
-- s.isdecimal(), s.isdigit(), s.isnumeric() 등은 그냥 numeric이 가장 큰 범주라고만 기억하자!
+- **s.isdecimal()**, s.isdigit(), s.isnumeric() 등은 그냥 numeric이 가장 큰 범주라고만 기억하자!
 
 
 
