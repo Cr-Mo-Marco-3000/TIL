@@ -94,7 +94,7 @@
   - Template(View)
     - 파일의 구조나 레이아웃을 정의
     - 실제 내용을 **보여주는 데** 사용(presentation)
-  - View(Controller) - **관리자** 느낌: 가장 중요한 부분
+  - View(Controller) - **중간관리자** 느낌: 가장 중요한 부분
     - Model과 Template의 관리/소통 + 알파
     - HTTP 요청을 수신하고 HTTP 응답을 반환
     - Model을 통해 요청을 충족시키는데 필요한 데이터에 접근
@@ -103,7 +103,7 @@
 ![img](https://mdn.mozillademos.org/files/13931/basic-django.png)
 
 - MTV Pattern 도식화
-  - HTTP Request: 요청이 들어옴 -> 2. URLS: 처음으로 요청을 받음 -> 3. View: 들어온 요청을 수신하고  -> 4. 그대로 Response하거나, 사용자에게 보여줄 Template이 있다면 이를 불러와서 응답하거나, Model로부터 데이터를 뽑아와 응답함
+  - HTTP Request: 요청이 들어옴 -> 2. URLS: 처음으로 요청을 받음: view안의 연결된 함수가 호출 -> 3. View: 들어온 요청을 수신하고  -> 4. 그대로 Response하거나, 사용자에게 보여줄 Template이 있다면 이를 불러와서 응답하거나(렌더링:보여지는 것), Model로부터 데이터를 뽑아와 응답함
   - 기본적인 도식을 익히자
 
 
@@ -424,7 +424,9 @@ def index(request):
 ### 8. Django Template
 
 - 데이터 표현을 제어하는 도구이자 표현에 관련된 로직
-- 사용하는 built-in-system: Django template language(DTL)
+- 사용하는 built-in-system
+  - Django template language(DTL)
+
 
 
 
@@ -444,6 +446,8 @@ def index(request):
 
   => 사용자의 편의를 위해 비슷하게 지정했을 뿐!
 
+  
+
 - DTL Syntax
 
   1. Variable
@@ -458,7 +462,55 @@ def index(request):
   - render()를 사용하여 **views.py에서 정의한 변수**를 **template 파일로 넘겨 사용**하는 것
   - 변수명은 영어, 숫자와 밑줄(_)의 조합으로 구성될 수 있으나 밑줄로는 시작할 수 없음
   - dot(.)을 사용하여 변수 속성에 접근할 수 있음
-  - view.py 에서 return 할 때 render()의 **세 번째 인자**로 {'key': value}와 같이 딕셔너리 형태로 넘겨주며, 여기서 정의한 key에 해당하는 문자열이 template에서 사용 가능한 변수명이 됨
+  - view.py 에서 return 할 때 render()의 **세 번째 인자(주로 context라고 한다)**로 {'key': value}와 같이 딕셔너리 형태로 넘겨주며**(view에서 넘겨줄 때)**, 여기서 정의한 key에 해당하는 문자열이 **template에서** 사용 가능한 변수명이 됨
+  - 새로고침 하면, name 부분이 변수화 됨!
+
+```python
+# views.py
+
+from multiprocessing import context
+from django.shortcuts import render
+
+# Create your views here.
+def index(request):
+    return render(request, 'index.html')
+
+
+def greeting(request):
+    foods = ['apple', 'banana', 'coconut',]
+    info = {
+        'name': 'Alice',
+        }
+    context = {
+    # 일반적으로 key:value 이름을 맞춰준다.
+    # template에 왼쪽의 키 값을 입력해 접근하는 것!
+    'foods': foods,
+    'info': info,
+}
+    return render(request, 'greeting.html', context)
+```
+
+```html
+# tamplate.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <p>안녕하세요 저는 {{ info.name }} 입니다.</p> <<!--안녕하세요 저는 Alice 입니다.-->>
+  <p>제가 가장 좋아하는 음식은 {{ foods }} 입니다.</p> <<!--['apple', 'banana', 'coconut']-->>
+    <<!--리스트에 인덱스로 접근-->>
+  <p>저는 사실 {{ foods.0 }}를 가장 좋아합니다.</p> <<!--저는 사실 apple를 가장 좋아합니다.-->>
+</body>
+</html>
+```
+
+
+
 - DTL Syntax(2/4) - Filters
   - `{{ variable|filter }}`
   - 표시할 변수를 수정할 때 사용
@@ -467,3 +519,38 @@ def index(request):
   - 60개의 built-in template filters를 제공
   - chained가 가능하며 일부 필터는 인자를 받기도 함
     - `{{ variable|truncatewords:30 }}`
+
+
+
+- DTL Syntax(3/4) - Tags
+  - `{% tag %}`
+  - 출력 텍스트를 만들거나, 반복 또는 논리를 수행하여 제어 흐름을 만드는 등 변수보다 복잡한 일들을 수행
+  - 일부 태그는 시작과 종료 태그가 필요
+  - 약 24개의 built-in template tags를 제공
+- DTL Syntax(4/4) - comments
+  - `{# #}`
+  - django template에서 라인의 주석을 표현하기 위해 사용
+  - 아래처럼 유효하지 않은 템플릿 코드가 포함될 수 있ㅇ므
+  - 한 줄 주석에만 사용할 수 있음
+  - 여러 줄 주석은 {% comment %} {% endcomment %} 사이에 입력
+- DTL Syntax 실습
+
+
+
+## HTML form
+
+- HTML form
+  - 
+- HTTP request method - get
+  - 서버로부터 **정보**를 **조회**하는 데 사용
+  - 데이터를 가져올 때만 사용해야 함
+- HTTP
+  - HyperText Transfer Protocol(protocol: 규약)
+  - 웹에서 이루어지는 모든 데이터 교환의 기초
+  - 주어진 리소스가 수행 할 작업을 나타내는 request methods를 정의
+  - HTTP request method 종류
+    - GET, POST, PUT, DELETE
+- HTML input element
+  - 사용자로부터 데이터를 입력 받기 위해 사용
+  - type 속성에 따라 달라짐
+
