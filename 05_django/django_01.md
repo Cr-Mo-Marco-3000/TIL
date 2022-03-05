@@ -388,6 +388,7 @@ def index(request):
 - Language_code
 
   - 모든 사용자에게 제공되는 번역을 결정
+  - 이 설정이 적용 되려면 USE_I18N이 활성화되어 있어야 함
   - language-identifiers 사이트에 들어가서 골라 쓰자
   - 단, 사이트에서와는 달리 소문자로 변경해서 쓰는 게 좋다
   - 'ko-kr' 등
@@ -537,20 +538,209 @@ def greeting(request):
 
 
 
+### 9. Template inheritance(템플릿 상속)
+
+- 템플릿 상속은 기본적으로 코드의 재사용성에 초점을 맞춤
+
+- 템플릿 상속을 사용하면 사이트의 모든 공통 요소를 포함하고, 하위 템플릿이 재정의(override)할 수 있는 블록을 정의하는 기본 "skeleton" 템플릿을 만들 수 있음.'
+
+- `{% extends 'base.html(base template 이름)' %}`
+
+  - 자식(하위)템플릿이 부모 템플릿을 확장한다는 것을 알림
+  - 반드시 템플릿 최상단에 작성 되어야 함
+
+- `{% block content content(이름) %} {% endblock  %}`
+
+  - 하위 템플릿에서 재지정(overridden)할 수 있는 블록을 정의
+  - 즉, 하위 템플릿이 채울 수 있는 공간
+
+  
+
+
+
 ## HTML form
 
-- HTML form
-  - 
-- HTTP request method - get
-  - 서버로부터 **정보**를 **조회**하는 데 사용
-  - 데이터를 가져올 때만 사용해야 함
+
+
+- HTML 'form' element
+  - 웹에서 사용자 정보를 입력하는 여러 방식(text, button, checkbox, file, hidden, image, password, radio, reset, submit)을 제공하고, 사용자로부터 할당된 데이터를 서버로 전송하는 역할을 담당.
+  - 핵심 속성(attribute)
+    - **action**: 입력 데이터가 전송될 URL 지정
+    - **method**: 입력 데이터 전달 방식 지정
+
+  
+
+- HTML 'input' element
+
+  - 사용자로부터 데이터를 입력 받기 위해 사용
+  - type 속성에 따라 동작 방식이 달라짐
+  - 핵심 속성(attribute)
+    - name
+      - 어떤 박스에 담아서 던질지 결정
+      - name의 값은 박스의 이름을 의미한다
+
+    - 중복 가능, 양식을 제출했을 때 name이라는 이름에 설정된 값을 넘겨서 값을 가져올 수 있음
+    - 주요 용도는 GET/POST 방식으로 서버에 전달하는 파라미터(name은 key, value는 value)로 매핑하는 것
+    - GET 방식에서는 URL에서 ?key=value&key=value 형식으로 데이터를 전달함'
+
+
+
+
+- HTML 'label' element
+
+  - 사용자 인터페이스 항목에 대한 설명(caption)을 나타냄
+
+  - label을 input 요소와 연결하기
+
+    1. input에 id속성 부여
+
+    2. label에는 input의 id와 동일한 값의 for 속성 부여
+
+
+
+
 - HTTP
   - HyperText Transfer Protocol(protocol: 규약)
   - 웹에서 이루어지는 모든 데이터 교환의 기초
   - 주어진 리소스가 수행 할 작업을 나타내는 request methods를 정의
   - HTTP request method 종류
     - GET, POST, PUT, DELETE
+
+
+
+- HTTP request method - 'GET'
+
+  - 서버로부터 **정보**를 **조회**하는 데 사용
+
+  - 데이터를 가져올 때만 사용해야 함
+
+  - 데이터를 서버로 전송할 때 body가 아닌 Query String Parameters를 통해 전송
+
+  - 우리는 서버에 요청을 하면 HTML 문서 파일 한 장을 받는데, 이때 사용하는 요청의 방식이 GET
+
+    
+
 - HTML input element
   - 사용자로부터 데이터를 입력 받기 위해 사용
   - type 속성에 따라 달라짐
 
+
+
+### App URL mapping
+
+- app의 view함수가 많아지면서 사용하는 path() 또한 많아지고, app 또한 더 많이 작성되기 때문에 프로젝트의 urls.py에서 모두 관리하는 것은 프로젝트 유지보수에 좋지 않음
+- 이제는 각 app에 urls.py를 작성하게 됨
+
+#### Including other URLconfs
+
+urlpattern은 언제든지 다른 URLconf 모듈을 포함할 수 있음
+
+
+
+
+
+
+
+- templates namespace
+
+render 내부의 템플릿 이름은 사실은 템플릿의 경로이다!
+
+다만 우리가 장고와 templates 폴더 안에 있다고 약속했기 때문에 이름만 써주었을 뿐
+
+base를 가져올 때도 마찬가지로, 경로이다.
+
+장고는, 약속된 경로들 이후를 모아서 본다!
+
+현재 장고와 약속된 templates 폴더는
+
+app1/templates
+
+app2/templates
+
+Base/templates
+
+3개인데, app1과 app2에 모두 인덱스가 존재하는 상황
+
+templates를 모아서 보고 있으므로, 안에 물리적인 경로를 끼워놓자는 것
+
+articles/templates/index.html
+
+=>
+
+articles/templates/articles(이름공간 역할)/index.html
+
+장고는 인식하는 약속된 경로는 templates까지 
+
+이제 첫번째 앱의 index 페이지를 가져오려면 articles/index.html을 써야 한다.
+
+
+
+디버깅 => 현재 요청한 페이지부터 보자
+
+그 다음에는 base로 가볼까?
+
+
+
+- url namespace
+
+{% url 'index' %}를 해도 계속 첫 번째 앱의 index url로만 간다.
+
+이름으로도 한계가 있다. => 카테고리를 하나 더 붙이자.
+
+어떤 앱의 url인지 말해주자
+
+
+
+
+
+articles의 urls.py로 와준 후
+
+urlpatterns 위에
+
+정해진 변수명
+
+app_name = 'articles(앱의 이름 작성)'
+
+
+
+{% url 'articles:index' %}
+
+수정해야 될 곳들이 많다.
+
+특히 action부분 주의!
+
+
+
+Static Files
+
+웹 서버와 정적 파일
+
+- 웹 서버는 특정 위치(URL)에 있는 자원(resource)를 요청()받아서 제공하는 응답을 처리하는 것을 기본 동작으로 함
+- 이는 자원과 접근 가능한 주소가 정적으로 연결된 관계
+  - 예를 들어, 사진 파일은 자원이고 파일 경로는 웹 주소라 함
+- 즉 웹 서버는 요청 받은 URL로 서버에 존재하는 정적 자원을 제공
+
+정적 파일
+
+- 응답할 때 별도의 처리 없이 파일 내용을 그대로 보여주면 되는 파일
+  - 사용자의 요청에 따라 내용이 바뀌는 것이 아니라 요청한 것을 그대로 보여주는 파일
+- 예를 들어, 웹 서버는 일반적으로 이미지, 자바 스크
+
+
+
+스태틱 파일 디렉토리
+
+app / static
+
+template와 유사, 따라서 이름 공간 추가를 해주어야 함
+
+
+
+staticfields_dirs: templates 기본 경로 작성하는 것 처럼
+
+
+static은 built in tag가 아님! 따라서 load 태그로 연결해주어야 함
+
+
+
+STATIC_URL이 웹페이지에서 이미지를 띄울 때, 사용되는 URL
