@@ -518,16 +518,111 @@ def greeting(request):
   - 예시
     - name 변수를 모두 소문자로 출력: `{{ name|lower }}`
   - 60개의 built-in template filters를 제공
+  - filter는 variable 안에도, tag 안에도 사용이 가능하다.
   - chained가 가능하며 일부 필터는 인자를 받기도 함
     - `{{ variable|truncatewords:30 }}`
+  
+  
 
 
 
 - DTL Syntax(3/4) - Tags
   - `{% tag %}`
+  
   - 출력 텍스트를 만들거나, 반복 또는 논리를 수행하여 제어 흐름을 만드는 등 변수보다 복잡한 일들을 수행
+  
   - 일부 태그는 시작과 종료 태그가 필요
+  
   - 약 24개의 built-in template tags를 제공
+  
+    - for나 end같은 경우, python과 다르게 endfor와 endif로 닫아줘야 함에 유의!!! 
+    - 다시 말하지만, filter는 variable 안에도, tag 안에도 사용이 가능하다.
+    - {{ }} 안에 ''로 묶은 문자열을 넣고, 필터를 쓸 수 있다. 변수를 넣어 쓰려면 ''를 뺀다
+  
+    ```django
+      <h3>1. for</h3>
+      {% for food in foods %}
+        <p>{{ food }}</p>
+      {% endfor %}
+      <hr>
+    
+      {% for food in foods %}
+        <p>{{ forloop.counter }} {{ food }}</p>
+      {% endfor %}
+      <hr>
+    
+      {% for user in empty_list %}
+        <p>{{ user }}</p>
+      {% empty %}
+        <p>지금 가입한 유저가 없습니다.</p>
+      {% endfor %}
+      <hr>
+    
+    
+      <h3>2. if</h3>
+      {% if '짜장면' in foods %}
+        <p>짜장면엔 고추가루지 !</p>
+      {% endif %}
+      <hr>
+    
+      {% for food in foods %}
+        {% if forloop.first %}
+          <p>짜장면+고추가루</p>
+        {% else %}
+          <p>{{ food }}</p>
+        {% endif %}
+      {% endfor %}
+      <hr>
+    
+      <p>3. length filter 활용</p>
+      {% for fruit in fruits %}
+        {% if fruit|length > 5 %}
+          <p>이름이 너무 길어요.</p>
+        {% else %}
+          <p>{{ fruit }}, {{ fruit|length }}</p>
+        {% endif %}
+      {% endfor %}
+      <hr>
+    
+      <h3>4. lorem ipsum</h3>
+      {% lorem %}
+      <hr>
+      {% lorem 3 w %}
+      <hr>
+      {% lorem 4 w random %}
+      <hr>
+      {% lorem 2 p %}
+      <hr>
+    
+      <h3>5. 글자 관련 필터</h3>
+      <p>{{ 'ABC'|lower }}</p>
+      <p>{{ my_sentence|title }}</p>
+      <p>{{ foods|random }}</p>
+      <hr>
+    
+      <h3>6. 연산</h3>
+      <p>{{ 4|add:6 }}</p>
+      <hr>
+    
+      <h3>7. 다양한 날짜 표현</h3>
+      {% now "DATETIME_FORMAT" %}<br>
+      {% now "SHORT_DATETIME_FORMAT" %}<br>
+      {% now "DATE_FORMAT" %}<br>
+      {% now "SHORT_DATE_FORMAT" %}
+      <hr>
+      {% now "Y년 m월 d일 (D) h:i" %}
+      <hr>
+      {% now "Y" as current_year %}
+      Copyright {{ current_year }}
+      <hr>
+    
+      <a href="/index/">back</a>
+    ```
+  
+    
+
+
+
 - DTL Syntax(4/4) - comments
   - `{# #}`
   - django template에서 라인의 주석을 표현하기 위해 사용
@@ -549,7 +644,7 @@ def greeting(request):
   - 자식(하위)템플릿이 부모 템플릿을 확장한다는 것을 알림
   - 반드시 템플릿 최상단에 작성 되어야 함
 
-- `{% block content content(이름) %} {% endblock  %}`
+- `{% block content(이름) %} {% endblock  %}`
 
   - 하위 템플릿에서 재지정(overridden)할 수 있는 블록을 정의
   - 즉, 하위 템플릿이 채울 수 있는 공간
