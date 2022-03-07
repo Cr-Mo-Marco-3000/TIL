@@ -1,6 +1,6 @@
 # Django
 
-
+[toc]
 
 ## Web Framework란 무엇인가?
 
@@ -338,8 +338,19 @@ urlpatterns = [
 
 - Views
   - http 요청을 수신하고 http 응답을 반환하는 함수 작성
+
   - Model을 통해 요청에 맞는 필요 데이터에 접근
+
   - Template에게 HTTP 응답 서식을 맡김
+
+  - **Request object** 
+
+    > https://docs.djangoproject.com/en/3.1/ref/request-response/#module-django.http
+
+    - 요청 간의 모든 정보를 담고 있는 변수
+    - 페이지가 요청되면 Django는 요청에 대한 메타 데이터를 포함하는 `HttpRequest` 객체를 만들고
+    - 그런 다음 Django는 적절한 view 함수를 로드하고 `HttpRequest`를 뷰 함수의 첫 번째 인수로 전달. 
+    - 그리고 각 view는 `HttpResponse` 개체를 반환한다.
 
 ```python
 # views.py
@@ -721,16 +732,31 @@ def greeting(request):
 
 
 
-### App URL mapping
+##### App URL mapping
 
-- app의 view함수가 많아지면서 사용하는 path() 또한 많아지고, app 또한 더 많이 작성되기 때문에 프로젝트의 urls.py에서 모두 관리하는 것은 프로젝트 유지보수에 좋지 않음
-- 이제는 각 app에 urls.py를 작성하게 됨
+##### Including other URLconfs
 
-#### Including other URLconfs
+##### variable routing
 
-urlpattern은 언제든지 다른 URLconf 모듈을 포함할 수 있음
+등은 `00_django_intro.md`를 참조
 
+### Namescape
 
+- namescape 설정을 언제, 왜 하는지 구분하자
+  - templates
+    - django에서는, templates를 찾을 때 settings.py 안의`'DIRS': [BASE_DIR / 'templates',]` 경로와, settings.py 안의 installed_app들의 내부 templates 폴더들을 모은 다음 순서대로 찾는다.
+    - 즉, django 입장에서는 같은 이름의 template들이 서로 다른 templates 폴더들 안에 있어도, 이를 구분하지 못하는 것이다.
+    - 따라서, views.py에서 template로 값을 넘길 때, 즉 render(request, 'asdf.html')를 쓸 때,
+      appname/template_name.html로 넘기고, 
+      template들을 만드는 경로를 templates/`<appname>`/`<template_name>`로 만들어 이름공간을 생성해준다.
+  - url
+    - 각 url에 name attribute를 붙일 때, 서로 다른 앱의 template로 가는 url임에도 name이 겹칠 수가 있다.
+    - 예를 들어, articles 앱의 index와, pages 앱의 index가 각각 `name="index"`로 겹치는 경우가 있다.
+    - 이럴 경우, 각 urls.py의 urlpatterns list 위에 `app_name="articles"` 이런 식으로 적어준다.
+    - html에서 url tag 등을 사용하여 읽을 때, {% url "articles:index" %} 이렇게 불러올 수 있다.
+    - form의 input에서, `action="{% url "articles:catch" %}"`이 부분도 주의하자!
+  - staticfile
+    - 
 
 
 
