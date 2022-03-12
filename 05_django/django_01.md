@@ -112,27 +112,23 @@
 
 
 
-##### 참고:코드 작성 순서
+> **참고:코드 작성 순서**
+>
+> - URL
+> - View
+> - Template
+>
+>   - 데이터의 흐름에 따라서
 
-- URL
-
--  View
-
-- Template
-
-  - 데이터의 흐름에 따라서
-
-  
-
-##### 참고: 장고 사용 순서
-
-- 가상환경 생성
-- 가상환경 활성화
-- 장고 설치
-- 프로젝트 생성
-- 서버 활성화 => 로켓 확인하기
-- 앱 생성
-- 앱 등록
+> **참고: 장고 사용 순서**
+>
+>- 가상환경 생성
+>- 가상환경 활성화
+>- 장고 설치
+>- 프로젝트 생성
+>- 서버 활성화 => 로켓 확인하기
+>- 앱 생성
+>- 앱 등록
 
 
 
@@ -732,19 +728,24 @@ def greeting(request):
 
 
 
-##### App URL mapping
+> App URL mapping
+>
+> Including other URLconfs
+>
+> variable routing
+>
+> 등은 `00_django_intro.md`를 참조
+>
 
-##### Including other URLconfs
 
-##### variable routing
 
-등은 `00_django_intro.md`를 참조
+
 
 ### Namescape
 
 - namescape 설정을 언제, 왜 하는지 구분하자
   - templates
-    - django에서는, templates를 찾을 때 settings.py 안의`'DIRS': [BASE_DIR / 'templates',]` 경로와, settings.py 안의 installed_app들의 내부 templates 폴더들을 모은 다음 순서대로 찾는다.
+    - django에서는, templates를 찾을 때 settings.py 안의 installed_app들의 내부 templates 폴더들을 모은 다음 순서대로 찾는다. 또는 settings.py 안의`'DIRS':` 경로를 만들었다면, 여기도 찾는다.
     - 즉, django 입장에서는 같은 이름의 template들이 서로 다른 templates 폴더들 안에 있어도, 이를 구분하지 못하는 것이다.
     - 따라서, views.py에서 template로 값을 넘길 때, 즉 render(request, 'asdf.html')를 쓸 때,
       appname/template_name.html로 넘기고, 

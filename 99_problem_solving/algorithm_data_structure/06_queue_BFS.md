@@ -248,7 +248,7 @@ for tc in range(1, T+1):
 def dfs(i, j, N, c): 		# c는 지나온 칸 수
     global minV
     if maze[i][j] == 3:		# 목적지에 도착하면 최소거리와 비교
-        if minV > c:		# 
+        if minV > c:		
             minV = c
     # elif c > minV:
         # return
