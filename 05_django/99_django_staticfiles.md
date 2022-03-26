@@ -43,7 +43,7 @@
   - `<img src="{% static 'my_app/example.jpg' %}">` 
   - 실제로는 `my_app/static/my_app/sample.jpg` 경로지만, django에서는 `my_app/static`(기본경로)을 조사하기 때문에, 이름 공간을 만들어준 것이다.
 
-<br>
+<br>{% load static %}
 
 - 이미지 파일 위치 - `articles/static/articles/images/`
 - static file 기본 경로

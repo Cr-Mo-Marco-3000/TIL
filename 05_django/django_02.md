@@ -46,7 +46,7 @@
 
 > ORM
 
-- Object-Relational_mapping
+- Object-Relational-mapping
 - 객체 지향 프로그래밍 언어를 사용하여 호환되지 않는 유형의 시스템 간에(Django - SQL) 데이터를 변환하는 프로그래밍 기술
 - 장점
   - SQL을 잘 알지 못해도 DB 조작이 가능
@@ -110,8 +110,9 @@ class Appname(models.Model):
   3. migrate => DB 반영
   4. sql migrate => SQL명령어를 보는 명령어
   5. showmigrations => DB반영여부
-
 - models.py가 바뀌면 무조건 설계도부터 다시 만들어줘야 한다!!!
+
+
 
 ## 4. Database API
 
@@ -237,7 +238,7 @@ $ Article.objects.create(title='세 번째 제목', content='세 번째 내용')
   - Methods that do not return querysets
     - get()
       - 주어진 lookup매개변수와 일치하는 객체를 반환
-      - 객체를 찾을 수 없으면 DoewNotExist 예외를 발생시키고 둘 이상의 객체를 찾의면 MultipleObjectsReturned 예외를 발생시킴
+      - 객체를 찾을 수 없으면 DoesNotExist 예외를 발생시키고 둘 이상의 객체를 찾의면 MultipleObjectsReturned 예외를 발생시킴
       - 즉, primary key(pk)와 같이 고유성을 보장하는 조회에서 사용해야 함
       - `article = Article.objects.get(pk=1)`
 
