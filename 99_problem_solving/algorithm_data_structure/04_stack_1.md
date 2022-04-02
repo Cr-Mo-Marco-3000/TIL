@@ -60,6 +60,8 @@
   - 자료 간의 관계가 1대 1의 관계를 갖는다
   - list, stack, queue, linked list 등
 
+
+
 - 비선형 자료구조
   - 자료 간의 관계가 1대 N의 관계를 갖는다.
   - graph, tree 등
