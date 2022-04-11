@@ -1,55 +1,36 @@
-from sys import stdin
-from sys import setrecursionlimit
+from collections import deque
 
-setrecursionlimit(10**6)
-
-
-N, M = map(int, stdin.readline().rstrip().split())
-
-def dfs(r, c, cnt):
-    global flag
-    global ans
-    visited[r][c] = cnt
-    if r == N-1 and c == M-1:
-        if cnt <= ans:
-            ans = cnt
-        return
-    elif cnt >= ans:
-        return
-    else:
+def do():
+    Q = deque([[0, 0]])
+    while Q:
+        r, c = Q.popleft()
         for w in range(4):
             nr = r + dr[w]
             nc = c + dc[w]
-            if 0 <= nr < N and 0 <= nc < M and not visited[nr][nc]:
-                if g[nr][nc] == 1 and flag == 1:
-                    flag = 0
-                    do(nr, nc, cnt + 1)
-                    visited[nr][nc] = 0
-                    flag = 1
-                elif g[nr][nc] == 0:
-                    do(nr, nc, cnt + 1)
-                    visited[nr][nc] = 0
-
-def bfs(r, c):
-    if g[r][c] == 1 and flag == 0:
-        return
-    elif g[r][c]:
-        pass
+            if 0 <= nr < N and 0 <= nc < N:
+                if visited[r][c][0]: # 만약 아직 벽을 부수지 않았을 때,
+                    if g[nr][nc]: # 만약 벽이라면
+                        visited[nr][nc] = [0, visited[r][c][1] + 1]
+                        Q.append([nr, nc])
+                    if not g[nr][nc]
+                        
+s
+                    Q.append([nr, nc])
 
 
 
-# 0,0에서 N,M으로 이동
 
 
-g = [list(map(int, stdin.readline().rstrip())) for _ in range(N)]
-visited = [[0] * M for _ in range(N)]
 
-dr = [-1, 0, 1, 0]
-dc = [0, 1, 0, -1]
-flag = 1
-ans = (N-1) * (M-1)
-dfs(0, 0, 1)
-if ans == (N-1) * (M-1):
-    print(-1)
-else:
-    print(ans)
+
+
+
+N, M = map(int, input().split())
+dr = (-1, 0, 1, 0)
+dc = (0, 1, -1, 0)
+g = [list(map(int, input())) for _ in range(N)]
+visited = [[1, 0] * M for _ in range(N)]
+start = (0, 0)
+end = (N-1, M-1)
+do()
+

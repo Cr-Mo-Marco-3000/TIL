@@ -59,11 +59,15 @@
 
 - 왜 ORM을 사용할까?
   - 우리는 DB를 객체(object)로 조작하기 위해 ORM을 사용한다.
+  - 상속을 받아 사용한다(서브클래스로 표현)
+    - models 모듈의 Model이라는 클래스
+  - models 모듈을 통해 어떠한 타입의 DB 컬럼을 정의할 것인지 정의
 
 ```python
 # appname/models.py
 
 class Appname(models.Model):
+    # CharField에게 max_length는 필수 인자
 	title = models.CharField(max_length=10)
     content = models.TextField()
     
@@ -85,14 +89,17 @@ class Appname(models.Model):
   1. makemigrations
      - model을 변경한 것에 기반한 새로운 마이그레이션(like 설계도)를 만들 때 사용
      - `$ python manage.py makemigrations`
+     - 단, 모든 상황이 변경사항은 아니다!
+       - `__str__` 추가 등은 필드에 영향을 끼치지 않고 출력 표현만을 바꾸는 것이므로 makemigrations해도 변화가 없다.
 
 
   2. migrate
      - 마이그레이션을 DB에 반영하기 위해 사용
+       - 반드시 makemigrations의 선행을 통해 설계도가 있어야 함
      - 설계도를 실제 DB에 반영하는 과정
+       - 기본값이 필요한 필드들이 있을 수 있음 => 장고에서 기본값을 제공
      - 모델에서의 변경 사항들과 DB의 스키마가 동기화를 이룸
      - `$ python manage.py migrate`
-
   3. sqlmigrate
      - 마이그레이션에 대한 SQL 구문을 보기 위해 사용
      - 마이그레이션이 SQL문으로 어떻게 해석되어서 동작할지 미리 확인할 수 있음
@@ -120,7 +127,7 @@ class Appname(models.Model):
 
 > DB API
 
-- DB를 조작하기 위한 도구
+- Python에서 ORM을 통해 DB를 조작할 때 사용하는 도구
 - Django가 기본적으로 ORM을 제공함에 따른 것으로 DB를 편하게 조작할 수 있도록 도움
 - Model을 만들면 Django는 객체들을 만들고 읽고 수정하고 지울 수 있는 database-abstract API를 자동으로 만듦
 - database-abstract API 혹은 database-access API라고도 함
@@ -226,9 +233,10 @@ $ Article.objects.create(title='세 번째 제목', content='세 번째 내용')
 
 > Read
 
-- QuerySet API method를 사용해 다양한 조회를 하는 것이 중요
+- QuerySet API method를 사용해 다양한 조회를 하는 것이 중요(가장 중요!)
 - QuerySet API는 크게 2가지로 분류
   - Methods that return new querysets
+    - Queryset은 리스트를 쓰듯이 다룰 수 있음(인덱스 접근, 슬라이싱 가능 => Iterable한 객체로 다룰 수 있음)
     - all()
       - 현재 QuerySet의 복사본을 반환
       - `Article.objects.all()`
@@ -239,8 +247,11 @@ $ Article.objects.create(title='세 번째 제목', content='세 번째 내용')
     - get()
       - 주어진 lookup매개변수와 일치하는 객체를 반환
       - 객체를 찾을 수 없으면 DoesNotExist 예외를 발생시키고 둘 이상의 객체를 찾의면 MultipleObjectsReturned 예외를 발생시킴
-      - 즉, primary key(pk)와 같이 고유성을 보장하는 조회에서 사용해야 함
+      - 즉, primary key(pk)와 같이 **고유성을 보장하는 조회**에서 사용해야 함
+        - pk가 아니어도 상관은 없지만, 유일한 값이어야만 조회가 됨
       - `article = Article.objects.get(pk=1)`
+
+
 
 > update
 
@@ -261,6 +272,7 @@ $ Article.objects.create(title='세 번째 제목', content='세 번째 내용')
 > Field lookups
 
 - 조회 시 특정 검색 조건을 지정
+- 키워드 인수 뒤쪽의 __로 시작(double underscore, dunderscore)
 - QuerySet 메서드 filter(), exclude() 및 get()에 대한 키워드 인수로 지정됨
 - 사용 예시
   - Article.objects.filter(pk**__gt=2**)
