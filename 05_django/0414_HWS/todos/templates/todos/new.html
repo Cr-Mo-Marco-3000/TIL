@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+<h1>NEW</h1>
+<form action="{% url 'todos:new' %}" method='POST'>
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="New">
+</form>
+  <a href="{% url 'accounts:signup' %}">Signnup</a>
+
+
+{% endblock content %}

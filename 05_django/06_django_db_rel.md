@@ -16,6 +16,7 @@
 > Foreign Key 예시
 
 - 게시글(Article)과 댓글(Comment)간의 모델 관계 설정
+- 참조하는 모델(Comment)에서 외래 키는 참조되는 모델의 기본 키(Primary Key)를 가리킴
 
 
 
