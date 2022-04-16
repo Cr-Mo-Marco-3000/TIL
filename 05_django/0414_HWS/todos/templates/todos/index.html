@@ -6,13 +6,13 @@
   <a href="{% url 'todos:new' %}">NEW</a>
   <hr>
 
-  {% for todo in todos %}
-    {% if todo.user == user %}
+  
+    {% for todo in todos %}
       <h2>할 일: {{ todo.title }}</h2>
       <h4>작성자: {{ user }} </h4>
       <h4>완료여부: {{ todo.completed }}</h4>
-    {% endif %}
-  {% endfor %}
+      <hr>
+    {% endfor %}
 
 
 

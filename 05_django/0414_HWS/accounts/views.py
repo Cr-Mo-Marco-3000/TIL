@@ -5,7 +5,6 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth import login as auth_login
 from .forms import CustomUserCreationForm
 
-
 @require_http_methods(['POST', 'GET'])
 def login(request):
     if request.user.is_authenticated:

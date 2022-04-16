@@ -10,7 +10,7 @@ from .forms import TodoForm
 
 @login_required
 def index(request):
-    todos = Todo.objects.all()
+    todos = Todo.objects.filter(author=request.user)
     context = {
         'todos': todos,
     }
