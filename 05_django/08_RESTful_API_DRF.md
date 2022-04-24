@@ -1,4 +1,4 @@
-# REST API
+# REST API & DRF(Django Rest Framework)
 
 [toc]
 
@@ -316,7 +316,7 @@ def article_json_2(request):
   - settings.py에서 installed_app에 'rest_framework' 추가
 - Article 모델에 맞춰 자동으로 필드를 생성해 serialize 해주는 Model Serializer 확인
 
-#### - many argument
+#### many argument
 
 - many=True
   - Serializing multiple objects
@@ -514,6 +514,13 @@ class ArticleSerializer(serializers.ModelSerializer):
 - DRF에는 status code를 보다 명확하고 읽기 쉽게 만드는 데 사용할 수 있는 정의된 상수 집합을 제공
 - status 모듈에 HTTP status code 집합이 모두 포함
 - 단순히 status=201 같은 표현으로도 사용할 수 있지만 DRF는 권장하지 않음
+  - `return Response(serializer.data, status=201)` <= 비권장됨!
+
+
+#### `raise_exception` Argument
+
+- `is_valid()`는 유효성 검사 오류가 있는 경우 serializers.ValidationError 예외를 발생시키는 선택적 raise_exception 인자를 사용할 수 있음
+- DRF에서 제공하는 기본 예외 처리기에 의해 자동으로 처리되며, 기본적으로 HTTP status code 400을 응답으로 반환함
 
 ```python
 # view 함수 수정
@@ -533,7 +540,7 @@ from articles import serializers
 # Create your views here.
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST', 'DELETE', 'PUT'])
 def article_list(request):
     if request.method == 'GET':
         articles = get_list_or_404(Article)
@@ -542,7 +549,8 @@ def article_list(request):
 
     elif request.method == 'POST':
         serializer = ArticleSerializer(data=request.data)
-        if serializer.is_valid():
+        # serializer가 유효하지 않을 경우 400 response를 반환
+        if serializer.is_valid(raize_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
@@ -551,5 +559,62 @@ def article_list(request):
 
 
 
+### 7. Delete - Delete Article
+
+- 204 No Content 상태 코드 및 메시지 응답
+- article_detail 함수로 상세 게시글을 조회하거나 삭제하는 행위 모두 처리 가능
+
+```python
+# 위 article_list(request) 함수에 이어서 타이핑한다.
+
+    elif request.method == 'DELETE':
+        article = get_object_or_404(Article, pk=article_pk)
+        article.delete()
+        data = {
+            'delete': f'{article_pk}번 글이 삭제되었습니다.'
+        }
+        return Response(data, status=status.HTTP_204_NO_CONTENT)
+```
+
+
+
+### 8. PUT - Update Article
+
+- article_detail 함수로 상세 게시글을 조회하거나 삭제, 수정하는 행위 모두 처리 가능
+
+```python
+# 위 article_list(request) 함수에 이어서 타이핑한다.
+    elif request.method == 'PUT':
+        article = get_object_or_404(Article, pk=article_pk)
+        serializer = ArticleSerializer(article, request.data)
+        # serializer = ArticleSerializer(instance=article, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
+```
+
+
+
 ## 5. 1:N Relation
 
+### 1. DRF with 1:N Relation
+
+- 1:N 관계에서의 모델 data를 직렬화(serialization)하여 JSON으로 변환하는 방법에 대한 학습
+- 2개 이상의 1:N 관계를 맺는 모델을 두고 CRUD 로직을 수행 가능하도록 설계하기
+
+- 실습에서는 DB 초기화 후 Comment 모델을 작성한다.
+  - makemigrations, migrate, seed까지 작업 후 진행
+
+#### 1. GET - Comment List
+
+- Article List를 불러오는 방법과 동일하므로 기술하지 않겠다.
+
+#### 2. GET - Comment Detail
+
+
+
+#### 2. POST
+
+- 
+
+#### 3. DELETE & PUT

@@ -12,7 +12,7 @@
 
 ## 2. 일자별 로그
 
-### 2022-04-12
+### 1. 2022-04-12
 
 #### 1. 내가 구현한 부분
 
@@ -244,3 +244,102 @@ button {
 
 - 버튼의 색을 바꾸어주려 했는데, 부트스트랩의 btn 클래스 때문인지 적용에 실패했다. 임시로 !important로 적용시켜 놓긴 했지만, 차후 이를 제거하고 다른 방식으로 구현하도록 하자!!!
 - 구글 폰트를 사용해서 폰트를 적용하려 했는데, 어떤 이유에서인지 실패했다. 디자인의 기본은 폰트다. 구현하자!!!
+
+
+
+---
+
+### 2022-04-24
+
+#### 주요하게 구현한 부분
+
+##### 1. 30일 이후의 약속을 보는 plan_coming.html 페이지를 생성
+
+##### 1. plan_coming.css
+
+```python
+
+# css 부분은 index.css의 것을 그대로 가져왔다
+
+```
+
+
+
+##### 2. plan_comings.html
+
+```python
+
+# 이 부분도 별로 변한 건 없다.
+
+```
+
+
+
+##### 3. views.py
+
+- index를 만들 때 구현한 부분에서 filter 부분을 지금보다 30일 이후로 바꾸었다.
+- annotate 기능과 value 기능을 이해하자 => DB를 조정하는 게 아니라 쿼리셋을 조정하는 기능이다!
+
+```python
+
+def plan_coming(request):
+    # 그 이후의 약속 조회
+    startdate = date.today()
+    interval = 30
+    enddate = startdate + timedelta(days=interval)
+    print(startdate)
+
+    plan_cnt = Plan.objects.filter(date__gt=enddate).values('date').annotate(total=Count('date')).order_by('date')
+    print(plan_cnt)
+
+    # new 만들려고 한 거니 그대로 가져오면 된다
+    endtime = datetime.now()
+    starttime = endtime - timedelta(hours=24)
+    plan_new = Plan.objects.filter(created_at__range=[starttime, endtime]).values_list('date', flat=True)
+
+    context = {
+        "plan_cnt": plan_cnt,
+        'plan_new': plan_new,
+    }
+
+    return render(request, 'plans/plan_coming.html', context)
+
+```
+
+
+
+
+
+#### 마이너하게 구현한 부분
+
+> plans/index.html
+
+- 일정들이 나열되어 있을 때, 마지막에 여분의 공간이 있어야 이쁠 것 같아서 margin을 넣어 주었다.
+
+```django
+<!-- 이전 -->
+<div class="container d-flex flex-column align-items-center justify-content-evenly">
+
+
+<!-- 이후 -->
+<div class="container d-flex flex-column align-items-center justify-content-evenly mb-5">
+```
+
+
+
+> base.css
+
+- 팀원인 동준이의 말에 따라서, navbar의 각 버튼의 구획 부분을 33%로 조절하였다.
+
+```css
+
+.nav_button {
+  min-width: 33%;
+  display: flex;
+  justify-content: center;
+}
+
+```
+
+
+
