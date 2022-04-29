@@ -51,6 +51,10 @@
 
 ### 복습 해 볼 것들
 
+ForeignKeyField:
+
+manytomanyfield => through, symmetrical
+
 순열 조합 직접 구현
 
 분할정복, 퀵정렬

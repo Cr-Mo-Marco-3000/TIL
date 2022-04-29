@@ -279,6 +279,10 @@ console.log(x)		// 1
 
 
 
+!== 다르다는 것은 이렇게 표현
+
+
+
 - 논리 연산자
   - 세 가지 논리 연산자로 구성
   - and => `&&`연산자를 이용
@@ -736,6 +740,7 @@ result = numbers.indexOF
 - value는 모든 타입(함수포함) 가능
 - 객체 요소 접근은 점 또는 대괄호로 가능
   - 점 접근일 때는 키에 따옴표를 붙이지 않아도 되지만, 대괄호 접근일 때는 붙여주어야 한다.
+    - 파이썬과 다르게 key가 string일 때도 띄어쓰기가 없으면 `''`를 붙여주지 않아도 된다.
   - 참고: key 이름에 띄어쓰기 같은 구분자가 있으면 대괄호 접근만 가능
 
 ```js
@@ -752,6 +757,8 @@ console.log(me.name) // === console.log(me['name'])
 console.log(me.phoneNumber) // === console.log(me[phoneNumber])
 console.log(me['samsung products'].buds)
 ```
+
+
 
 ### 객체와 메서드
 
@@ -783,3 +790,127 @@ const me = {
 }
 ```
 
+
+
+구조 분해 할당
+
+```js
+const user = {
+    name: '유태영',
+    age: 20,
+    balance: 100
+}
+
+// 객체의 특정 key의 value값을 변수에 넣을 일이 많다.
+const name = user.name
+
+name // '유태영'
+
+const age = user.age
+
+age // 20
+
+const balance = user.balance
+
+balance // 100
+
+// 반복되는 부분이 많음
+// 아래 두 코드는 같다!
+const {name} = user 
+const name = user.name
+
+// user라는 객체에서 key와 {} 안의 변수명을 일치시켜야 한다!
+
+// 이렇게 사용도 가능하다!
+const {name, age, balance} = user
+// name => '유태영'
+// age => 20
+// balance => 100
+
+
+// 아래 두 함수는 동일하게 작동한다.
+
+fucntion printuser(user) {
+    console.log(user.name, user.age, user.balance)
+}
+
+function printUSer({name, age, balance}) {
+    console.name(age, balance, name)
+}
+
+printUser(user) // 20 100 '유태영'
+```
+
+
+
+this 정리
+
+JS에서 this는 딱 세 가지를 가리킨다.
+
+- class 내부의 생성자(constructor)함수에서
+  - this는 생성되는 객체를 가리킴(Python의 self)
+  - 우리 과정에서는 js로 클래스를 건드리지 않는다.
+- **메서드(객체.메서드명() 으로 호출 가능한 함수)에서**
+  - **this는 해당 메서드가 소속된 객체를 가리킴**
+  - 메서드는 `.함수명()` 으로 실행하는 함수
+
+- 위의 두가지 경우를 제외하면 모두 최상위 객체(window)를 가리킴
+  - 이런 방식으로 쓸일이 없다. 걍 window 쓰자
+
+```js
+const me ={
+    name:'neo',
+    printName: function () {
+        console.log(this.name)
+    }
+}
+// this는 어디서 왔을까?
+// python의 self와 헷갈리는 이유는 명시적으로 등장하지 않기 때문
+
+```
+
+```js
+function getFullName() {
+    return this.firstname + this.lastName
+}
+
+
+const me = {
+    firstName = '태영',
+    lastName = '유',
+    'getFullName' : getFullname // getFullName : getFullname 또는 그냥 getFullName으로도 사용 가능 
+}								// key와 value가 같은 경우 후자와 같은 방식으로도 사용 가능
+
+getFullName() // => NAN
+
+// 위의 함수는 메서드가 아님 => this는 window를 가리킴
+
+me.getFullName() // => '유태영'
+
+// 위의 함수는 메서드 => .을 통해서 불러옴 => this는 객체 me를 가리킴
+
+// 함수는 바뀐 적이 없지만 어떤 용도로 호출되느냐에 따라서 반환값이 달라짐
+
+const you = {
+    firstName: '준호',
+    lastName: '김',
+    qwer: getFullName
+}
+
+you.qwer() // '준호김'
+
+// 메서드는 동일하지만 어떤 실행 문맥(execution context)에서 불러오느냐에 따라 결과가 달라짐
+// me가 호출하냐 you가 호출하냐 window가 호출하냐에 따라 달라짐
+```
+
+```js
+// 예시에서 안쪽의 함수는 . 찍고 부르지 않음(못함)/ obj.함수명 으로 호출 불가!!! => 메서드가 아니라서 this는 window
+// 따라서 .bind(this)를 붙여주어야 함
+// bind를 매번 붙여주는 게 귀찮기 때문에 => 화살표 함수가 나옴
+```
+
+- 정리
+  - 함수 내부에 this 키워드가 존재할 경우
+    - 화살표 함수와 function 키워드로 선언한 함수가 다르게 동작
+  - 함수 내부에 this 키워드가 존재하지 않을 경우
+    - 완전히 동일하게 동작 => 즉 신경쓸 필요 없음
