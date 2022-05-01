@@ -632,6 +632,8 @@ for (let i = 0; i < 6; i ++) {
 	console.lot(i)
 }
 
+// 매 반복 시행 이후 i에 ++를 더해주기 때문에 let i 대신 const i 쓰면 망한다
+
 // 0, 1, 2, 3, 4, 5
 ```
 
@@ -664,7 +666,7 @@ for (let fruit in fruits) {
 
 
 
-### 5. for ... or
+### 5. for ... of
 
 - **반복 가능한(iterable)** 객체를 순회하며 값을 꺼낼 때 사용
   - 즉 일반 객체는 안 된다!

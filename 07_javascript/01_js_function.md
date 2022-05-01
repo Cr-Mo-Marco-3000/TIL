@@ -1,22 +1,36 @@
-# Function
+# Function & Methods
 
-## 함수 in javascript
+[toc]
+
+## 1. 함수
+
+### 1. 함수 in javascript
 
 - 참조 타입 중 하나로써 function 타입에 속함
 - JavaScript에서 함수를 정의하는 방법은 주로 2가지로 구분
-  - 함수 선언식
-  - 함수 표현식
-- JavaScript의 함수는 일급 객체에 해당
+  - 함수 선언식(function declaration)
+  - 함수 표현식(fucntion expression)
+- (참고) JavaScript의 함수는 일급 객체에 해당
+  - 일급 객체: 다음의 조건들을 만족하는 객체를 의미함
+    - 변수에 할당 가능
+    - 함수의 **메개변수**(argument)로 전달 가능
+    - 함수의 반환 값으로 사용 가능
 
 
 
-### 함수 선언식
+
+### 2. 함수 선언식(function declaration)
 
 - 함수의 이름과 함께 정의하는 방식
 - 3가지 부분으로 구성
-  - 함수의 이름
+  - 함수의 이름(name)
+  - 매개변수(arguments)
+  - 몸통(중괄호 내부)
+
+![image-20220501002524794](01_js_function.assets/image-20220501002524794.png)
 
 ```js
+
 function add(n1, n2) {
     return n1 + n2;
 }
@@ -24,33 +38,86 @@ function add(n1, n2) {
 let c = add(10, 20)
 console.log(c)
 
-
 ```
 
 
 
-### 함수 표현식
+### 3. 함수 표현식
 
 - 함수를 표현식 내에서 정의하는 방식
-- 함수의 이름을 생략하고 익명 함수로 정의
+  - 표현식: 어떤 하나의 값으로 결정되는 코드의 단위
+
+- 함수의 이름을 생략하고 익명 함수로 정의 가능
+  - 익명 함수: 이름이 없는 함수
+  - 익명 함수는 **함수 표현식에서만 가능**
+
 
 ```js
-// 아래와 같은 식으로 함수를 불러오는 게 아니라 함수를 변수에 지정해서도 사용 가능
+const add = function(num1, num2) {
+    return num1 + num2
+}
+
+add(1, 2) // 3
+```
+
+
+
+```js
+// 아래와 같은 식으로 함수를 선언하는 게 아니라 함수를 변수에 지정해서도 사용 가능
+
 // 메모리에 함수 코드 자체가 들어가 있음 => add(10, 20)을 만나면 그 함수가 있는 곳으로 가서 코드를 실행하고 return을 만나면 돌아옴
+
 // 함수가 저장될 주소 정보를 add가 갖고 있도록 함, 변수인 add를 이용해서 함수를 이용할 수 있게 함
-// c언어의 함수 포인터
+
+// c언어의 함수 포인터 개념과 비슷
 const add = function(n1, n2) {
     return n1 + n2;
 }
 // add(10, 20) => 30
+
 // typeof(add) => function
 ```
 
 
 
-### 기본 인자
+### 4. 기본 인자
+
+- 인자 작성 시 '=' 문자 뒤 기본 인자 선언 가능
 
 ```js
+const greeting = function (name = 'Anonymous') {
+    return `Hi ${name}`
+}
+console.log(greeting()) // 'Hi Anonymous'
+```
+
+
+
+### 5. 매개변수와 인자의 개수 불일치 허용
+
+- 매개변수보다 인자의 개수가 많을 경우
+
+```js
+const noArgs = function () {
+    return 0
+}
+
+noArgs(1, 2, 3) // 0
+const twoArgs = function (arg1, arg2) {
+    return [arg1, arg2]
+}
+noArgs(1, 2, 3) // [1, 2]
+```
+
+- 매개변수보다 인자의 개수가 적을 경우
+
+```js
+const threeArgs = function (arg1, arg2, arg3) {
+    return [arg1, arg2, arg3]
+}
+threeArgs() // [undefined, undefined, undefined]
+threeArgs(1) // [1, undefined, undefined]
+threeArgs(1, 2) // [1, 2, undefined]
 
 function add(n1, n2) {
     return n1 + n2;
@@ -67,32 +134,94 @@ const add2 = function(n1, n2=0){
     return n1 + n2
 }
 add2(1) // => 1
-
-
 ```
+
+
+
+### 6. Rest Parameter
+
+- rest parameter(`...`)를 사용하면 함수가 정해지지 않은 수의 매개변수를 배열로 받음(python의 *args와 유사)
+  - 만약 rest parameter로 처리한 매개변수에 인자가 넘어오지 않을 경우에는 빈 배열로 처리
+
+![image-20220501005326076](01_js_function.assets/image-20220501005326076.png)
+
+
+
+### 7. Spread operator
+
+- spread operator(`...`)를 사용하면 배열 인자를 전개하여 전달 가능
 
 ```js
-const greeting = function(name = 'Anonumous'){
-    return 'Hi ${name} ' //문자열 안에 변수를 넣을 때
+const spreadOpr = function (arg1, arg2, arg3) {
+    return arg1 + arg2 + arg3
 }
 
-greeting() // 
-greeting('오른') // 
+const numbers = [1, 2, 3]
+
+spreadOpr(...numbers) // 6
 ```
 
 
 
-## 선언식 vs 표현식
+## 2. 선언식 vs 표현식
 
-### 함수 선언식과 표현식 비교 정리
+### 1. 함수 선언식과 표현식 비교 정리
+
+![image-20220501005543346](01_js_function.assets/image-20220501005543346.png)
+
+### 2. 함수의 타입
+
+- 선언식 함수와 표현식 함수 모두 타입은 function으로 동일
+
+```js
+// 함수 표현식
+const add = function (args) {}
+function sub(args) {}
+
+console.log(typeof add) // function
+console.log(typeof sub) // function
+
+// typeof는 연산자라서 위와 같이 쓸 수도 있다.
+```
 
 
 
+### 3. 호이스팅(hoisting) - 함수 선언식
+
+- 함수 선언식으로 선언한 함수는 var로 정의한 변수처럼 hoisting 발생
+- 함수 소출 이후에 선언 해도 동작
+- 선언식을 쓸 때 호이스팅이 가능한 이유는 자바스크립트에서는 동작에 앞서 함수 테이블을 만들어주기 때문이다.
+
+```js
+add(2, 7)
+
+function add (args1, args2) {
+    return args1 + args2
+}
+
+// 9
+```
 
 
-선언식을 쓸 때 호이스팅이 가능한 이유는 먼저 함수 테이블을 만들어줘서
 
-표현식에서는 변수가 함수의 좌표를 지정하는지 어쩐지 모른다.
+### 4. 호이스팅(hoisting) - 함수 표현식
+
+- 반면 함수 표현식으로 선언한 함수는 함수 정의 전에 호출 시 에러 발생
+- 함후 표현식으로 정의된 함수는 변수로 평가되어 변수의 scope 규칙을 따름
+- 표현식에서는 변수가 함수의 좌표를 지정하는지 모르기 때문에 호이스팅이 불가능하다
+
+```js
+sub(7, 2)
+
+const sub = function (num1, num2) {
+    return num1 - num2
+}
+
+// ReferenceError
+```
+
+- 참고
+  - 함수 표현식을 var 키워드로 작성한 경우 변수가 선언 전 undefined로 초기화 되어 다른 에러가 발생
 
 ```js
 console.log(add2(10, 10))
@@ -106,40 +235,66 @@ var add2 = function(n1=0, n2=0){
 
 
 
-### 화살표 함수
+### 5. 화살표 함수
 
 - 함수를 비교적 간결하게 정의할 수 있는 문법
 - function 키워드 생략 가능
-- 
+- 함수의 매개변수가 단 하나 뿐이라면, '()' 도 생략 가능
+- 함수 몸통이 return을 포함한 표현식 하나라면 '{}'과 return도 생략 가능
+- 기존 function 키워드 사용 방식과의 차이점은 후반부 this 키워드를 학습하고 다시 설명
+
+```js
+// Arrow Function
+
+const arrow1 = function (name) {
+    return `hello, ${name}`
+}
+
+// 1. function 키워드 삭제
+
+const arrow2 = (name) => { return `hello, ${name}` }
+
+// 2. 매개변수가 1개일 경우에만 () 생략 가능
+
+const arrow3 = name => { return `hello, ${name}` }
+
+// 3. 함수 body가 return을 포함한 표현식 1개일 경우에 { } & return 생략 가능
+
+const arrow4 = name => `hello, ${name}`
+
+
+```
 
 
 
 
 
-## 문자열(String)
+## 3. 문자열(String)
 
 ### - 문자열 관련 주요 메서드 목록
 
-![image-20220426130542956](01_js_function.assets/image-20220426130542956.png)
+![image-20220501142804414](01_js_function.assets/image-20220501142804414.png)
 
-#### 1. includes
+### 1. includes
 
 - string.includes(value)
   - 문자열에 value가 존재하는지 판별 후 참 또는 거짓 반환
 
 ```js
+
 const str = 'a santa at nasa'
 str.includes('santa') // true
 str.includes('asan') // false
 
 ```
 
-#### 2. split
+### 2. split
 
 - string.split(value)
   - value가 없을 경우, 기존 문자열을 **배열에 담아** 반환
   - value가 빈 문자열일 경우 각 문자로 나눈 **배열을 반환**
   - value가 기타 문자열일 경우, 해당 문자열로 나눈 **배열을 반환**
+    - 공백으로 나눌 경우, python에서는 빈 `()` 를 넣어 줬지만 js에서는 `(' ')`을 넣어 줘야 함
 
 ```js
 const str = 'a cup'
@@ -149,7 +304,7 @@ str.split('') // ['a', ' ', 'c', 'u', 'p']
 str.split(' ') // ['a', 'cup']
 ```
 
-#### 3. replace
+### 3. replace
 
 - string.replace(from, to)
   - 문자열에 from 값이 존재할 경우, 1개만 to 값으로 교체하여 반환
@@ -162,7 +317,7 @@ str.replace(' ', '-') // 'a-b c d'
 str.replaceAll(' ', '-') // 'a-b-c-d'
 ```
 
-#### 4. trim
+### 4. trim
 
 - string.trim()
   - 문자열 시작과 끝의 모든 공백문자(스페이스, 탭, 엔터 등)를 제거한 문자열 반환
@@ -170,6 +325,7 @@ str.replaceAll(' ', '-') // 'a-b-c-d'
   - 문자열 시작의 공백문자(스페이스, 탭, 엔터 등)를 제거한 문자열 반환
 - string.trimEnd()
   - 문자열 끝의 공백문자(스페이스, 탭, 엔터)를 제거한 문자열 반환
+- python에서의 strip()과 유사 
 
 ```js
 const str = '	hello	'
@@ -181,7 +337,7 @@ str.trimEnd()) // '    hello'
 
 
 
-## 배열
+## 4. 배열(Arrays)
 
 ### - 배열의 정의와 특징
 
@@ -189,10 +345,11 @@ str.trimEnd()) // '    hello'
 - 순서를 보장하는 특징이 있음
 - 주로 대괄호를 이용하여 생성하고, 0을 포함한 양의 정수 인덱스로 특정 값에 접근 가능
 - 배열의 길이는 array.length 형태로 접근 가능
-  - (참고) 배열의 마지막 원소는 [array.length-1] 로 접근(파이썬에서처럼 [-1] 불가)
+  - 참고: 배열의 마지막 원소는 [array.length-1] 로 접근(파이썬에서처럼 음수 인덱스 사용 불가)
 
 ```js
 const numbers = [1, 2, 3, 4, 5]
+
 console.log(numbers[0])		// 1
 console.log(numbers[-1]) 	// undefined
 console.log(numbers.length) // 5
@@ -208,9 +365,11 @@ console.log(numbers[numbers.length - 5) // 1
 
 ### - 배열 관련 주요 메서드 목록 - 기본 배열 조작
 
-![image-20220426132041763](01_js_function.assets/image-20220426132041763.png)
+![image-20220501143239556](01_js_function.assets/image-20220501143239556.png)
 
-#### 1. reverse
+
+
+### 1. reverse
 
 - array.reverse()
   - 원본 배열의 요소들의 순서를 반대로 정렬
@@ -225,7 +384,7 @@ console.log(numbers) // [5, 4, 3, 2, 1]
 
 
 
-#### 2. push & pop
+### 2. push & pop
 
 - array.push()
   - 배열의 가장 뒤에 요소 추가
@@ -267,7 +426,7 @@ console.log(numbers) // [1, 2, 3, 4, 5]
 
 
 
-#### 4. includes
+### 4. includes
 
 - array.includes(value)
   - 배열에 특정 값이 존재하는지 판별 후 참 또는 거짓 반환
@@ -282,7 +441,7 @@ console.log(numbers.include(100)) // false
 
 
 
-#### 5. indexOf(value)
+### 5. indexOf
 
 - array.indexOf(value)
   - 배열에 특정 값이 존재하는지 확인 후 가장 첫 번째로 찾은 요소의 인덱스 반환
@@ -297,31 +456,290 @@ result = numbers.indexOF
 
 
 
+### 6. join
+
+- array.join([separator])
+  - 배열의 모든 요소를 연결하여 반환
+    - 배열의 요소 사이에 구분자를 넣어서 반환한다.
+  - separator(구분자)는 선택적으로 지정 가능하며, 생략 시 **쉼표**를 기본 값으로 사용
+
+```js
+
+const numbers = [1, 2, 3, 4, 5]
+let result
+
+result = numbers.join()
+console.log(result) // 1,2,3,4,5
+
+result = numbers.join('')
+console.log(result) // 12345
+
+result = numbers.join(' ')
+console.log(result) // 1 2 3 4 5
+
+result = numbers.join('-')
+console.log(result) // 1-2-3-4-5
+
+result = numbers.join(', ')
+console.log(result) // 1, 2, 3, 4, 5
+
+```
+
+
+
+### 7. Spread operator
+
+- spread operator(...)를 사용하면 배열 내부에서 배열 전개 가능.
+- ES5까지는 Array.content() 메서드를 사용.
+- 얕은 복사에 활용 가능
+
+```js
+const array = [1, 2, 3]
+const newArray = [0, ...array, 4]
+
+console.log(newArray) // [0, 1, 2, 3, 4]
+
+// 얕은 복사
+const array2 = [...array]
+array[0] = 7
+
+console.log(array) = [7, 2, 3]
+console.log(array2) = [1, 2, 3]
+```
+
+
+
+
+
 ### - 배열 관련 주요 메서드 목록 - 심화
 
 - 배열을 순회하며 특정 로직을 수행하는 메서드
-- 메서드 호출 시 인자로 callbakc 함수를 받는 것이 특징
+- 메서드 호출 시 인자로 callback 함수를 받는 것이 특징
   - callback 함수란 어떤 함수의 내부에서 실행될 목적으로 인자로 넘겨받는 함수를 말함
+  - 콜백 함수의 인자들은 배열의 특정 요소가 자동으로 들어간다.
+- 콜백 함수의 반환값을 반환하는 게 아니라, 다른 특정 값을 반환한다. 
+  - 새로운 배열, 누적값, 해당 요소, 부울값 등!
+  - 헷갈릴 수 있으니 주의하자!
 
-![image-20220426135114922](01_js_function.assets/image-20220426135114922.png)
 
-- callback 함수의 예시 - django에서 path 함수 안의 함수![image-20220426135359711](01_js_function.assets/image-20220426135359711.png)
+<img src="01_js_function.assets/image-20220426135114922.png" alt="image-20220426135114922" style="zoom: 67%;" />
+
+- callback 함수의 예시 - django에서 path 함수 안의 함수
+
+<img src="01_js_function.assets/image-20220426135359711.png" alt="image-20220426135359711" style="zoom:80%;" />
+
+
 
 #### 1. forEach
 
-- array.forEach(callback(element[, index[,array]]))
+- `array.forEach(callback(element[, index[,array]]))`
   - 배열의 각 요소에 대해 콜백 함수를 한 번씩 실행
   - 콜백 함수는 3가지 매개변수로 구성
     - element: 배열의 요소
     - index: 배열 요소의 인덱스
     - array: 배열 자체
-  - 반환 값(return)이 없는 메서드
+  - **반환 값(return)이 없는 메서드**
+
+<img src="01_js_function.assets/image-20220501152811314.png" alt="image-20220501152811314" style="zoom: 67%;" />
+
+```js
+const fruits = ['딸기', '수박', '사과', '체리']
+
+
+
+fruits.forEach((fruit, index) => {
+    console.log(fruit, index)
+}) // 딸기 0 수박 1 사과 2 체리 3
+
+/*
+const fruits = ['딸기', '수박', '사과', '체리']
+
+fruits.forEach(function (fruit, index) {
+    console.log(fruit, index)
+}) // 딸기 0 수박 1 사과 2 체리 3
+위와 같은 함수
+*/
+
+
+fruits.forEach((fruit) => {
+    console.log(fruit)
+}) // 딸기 수박 사과 체리
+```
+
+
+
+### 2. map
+
+- `array.map(callback(element[, index[, array]]))`
+  - 배열의 각 요소에 대해 콜백 함수를 한 번씩 실행
+  - 콜백 함수의 반환 값을 요소로 하는 새로운 배열 반환(forEach와 이런 점에서 다름)
+  - 기존 배열 전체를 다른 형태로 바꿀 때 유용
+
+```js
+
+const numbers = [1, 2, 3, 4, 5]
+
+const doubleNums = numbers.map((num) => {
+    return num * 2
+})
+
+console.log(doubleNums) // [2, 4, 6, 8, 10]
+
+```
+
+
+
+### 3. filter
+
+- `array.filter(callback(element[, index[, array]]))`
+  - 배열의 각 요소에 대해 콜백 함수를 한 번씩 실행
+  - 콜백 함수의 반환 값이 참인 요소들만 모아서 새로운 배열을 반환
+  - 기존 배열의 요소들을 필터링할 때 유용
+
+<img src="01_js_function.assets/image-20220501153636689.png" alt="image-20220501153636689" style="zoom:80%;" />
+
+```js
+const numbers = [1, 2, 3, 4, 5]
+
+const oddNums = numbers.filter((num) => {
+    return num % 2
+})
+
+console.log(oddNums) // [1, 3, 5]
+```
+
+
+
+### 4. reduce
+
+- `array.reduce(callback(acc, element, [index[, array]]))[, initialValue]`
+  - 배열의 각 요소에 대해 콜백 함수를 한 번씩 실행
+  - 콜백 함수의 반환 값들을 **하나의 값(acc)에 누적 후 반환**
+  - 즉 acc에는 이전의 반환값이 들어간다!
+  - reduce 메서드의 주요 매개변수
+    - acc
+      - 이전 callback 함수의 반환 값이 누적되는 변수
+    - initialValue(optional)
+      - 최초 callback 함수 호출 시 acc에 할당되는 값, 기본값은 배열의 첫 번째 값
+      - 만약 initialValue를 넣어준다면, acc의 할당값에 지정값이 들어간 후, 배열의 첫 번째 요소부터 콜백 함수를 실행
+      - 만약 initialValue가 없다면, acc의 할당값에 배열의 첫 번째 값이 들어간 상태에서, 배열의 두 번째 요소부터 콜백 함수를 실행 => 즉 첫 번째 요소에는 콜백 함수를 적용받지 않은 채로 acc에 들어가게 된다
+      - 따라서 initial value를 주는 것이 더 안전하다
+  - 참고: 빈 배열의 경우 initialValue를 제공하지 않으면 에러 발생
+
+```js
+
+// initialValue를 제공할 경우
+
+const numbers = [1, 2, 3]
+
+let result = numbers.reduce((acc, num) => {
+    return acc + num * 2
+}, 0)
+
+console.log(result) // 12 
+// 콜백 함수 총 3번 호출
+
+
+// initialValue를 제공하지 않을 경우
+let result = numbers.reduce((acc, num) => {
+    return acc + num * 2
+}) // 11
+
+// 콜백 함수 총 2번 호출
+// 첫 번째 인자는 콜백 함수가 먹히지 않고 그대로 acc에 들어갔기 때문에 1 * 2가 아닌 1이 들어감
+
+```
+
+
+
+### 5. find
+
+- `array.find(callback(element[, index [, array]]))`
+  - 배열의 각 요소에 대해 콜백 함수를 한 번씩 실행
+  - 콜백 함수의 **반환 값이 참**이면, 조건을 만족하는 **첫 번째 요소를 반환**
+    - 콜백 함수의 반환 값을 반환하는 것이 아니라, 요소를 반환하는 것!
+  - 찾는 값이 배열에 없으면 undefined 반환
+
+<img src="01_js_function.assets/image-20220501160520837.png" alt="image-20220501160520837" style="zoom: 80%;" />
+
+```js
+const avengers = [
+    {name: 'Tony Stark', age: 45},
+    {name: 'Steve Rogers', age: 32},
+    {name: 'Thor', age: 40},
+]
+
+const result = avengers.find((avenger) => {
+    return avenger.name = 'Steve Rogers'
+})
+
+console.log(result) // {name: 'Steve Rogers', age: 32}
+```
+
+
+
+### 6. some
+
+- array.some(callback(element[, index[, array]]))
+  - 배열의 요소 중 하나라도 주어진 판별 함수를 통과하면 **참을 반환**
+  - 모든 요소가 통과하지 못하면 거짓 반환
+  - 참고: 빈 배열은 항상 거짓 반환
+
+<img src="01_js_function.assets/image-20220501160928272.png" alt="image-20220501160928272" style="zoom:80%;" />
+
+```js
+const numbers = [1, 3, 5, 7, 9]
+
+const hasEvenNumber = numbers.some((num) => {
+    return !(num % 2)
+    // return num % 2 === 0
+})
+
+console.log(hasEvenNumber) // false
+
+const hasOddNumber = numbers.some((num) => {
+    return num % 2
+})
+
+console.log(hasOddNumber) // true
+```
 
 
 
 
 
-## 객체(Objects)
+### 7. every
+
+- array.every(callback(element[, index[, array]]))
+  - 배열의 모든 요소가 주어진 판별 함수를 통과하면 참을 반환
+  - 하나의 요소라도 통과하지 못하면 거짓 반환
+  - 참고: 빈 배열은 항상 참 반환
+
+<img src="01_js_function.assets/image-20220501161636925.png" alt="image-20220501161636925" style="zoom:80%;" />
+
+```js
+
+const numbers = [1, 3, 5, 7, 9]
+
+const isEveryNumberOdd = numbers.some((num) => {
+    return num % 2 === 1
+})
+
+console.log(isEveryNumberOdd) // true
+
+const isEveryNumberEven = numbers.some((num) => {
+    return num % 2 === 0
+})
+
+console.log(isEveryNumberEven) // false
+
+```
+
+### 8. 배열 순회 방법 비교
+
+<img src="01_js_function.assets/image-20220501161918368.png" alt="image-20220501161918368" style="zoom: 67%;" />
+
+## 5. 객체(Objects)
 
 ### 객체의 정의와 특징
 
