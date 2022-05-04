@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <!-- 1. onclick -->
+  <!-- 첫 번째 방법: onclick 뒤에 함수를 건다. -->
+  <button onclick="alertMessage()">나를 눌러봐!</button>
+
+  <!-- 2-1. addEventListener -->
+  <button id="my-button">나를 눌러봐2!!</button>
+  <hr>
+
+	<!-- 2-2. addEventListener -->
+  <p id="my-paragraph"></p>
+
+  <form action="#">
+    <label for="my-text-input">내용을 입력하세요.</label>
+    <input id="my-text-input" type="text">
+  </form>
+  <hr>
+
+  <!-- 2-3. addEventListener -->
+  <h2>Change My Color</h2>
+  <label for="change-color-input">원하는 색상을 영어로 입력하세요.</label>
+  <input id="change-color-input"></input>
+  <hr>
+
+  <script>
+    // 1
+    // javascript는 인자가 있던지 없던지 오류를 내지 않기 때문에, 아래쪽에서와 같이 event를 적지 않아줘도 된다
+    const alertMessage = function () {
+      alert('메롱!!!')
+    }
+
+    // 2-1
+    const myButton = document.querySelector('#my-button')
+
+    myButton.addEventListener('click', alertMessage)
+    
+    // 아래처럼 하면 절대 안 된다!
+    // 위 => 함수라는 값을 넘기는 것, 아래 => 함수를 실행해서 나오는 undefined를 넘기는 것! => alertMessage는 return이 없다.
+    // 떡볶이 만드는 기계에 떡볶이 레시피를 넣는 것과, 떡볶이를 넣는 것의 차이...
+    // myButton.addEventListener('click', alertMessage())
+
+    // 2-2
+    const myInput = document.querySelector('#my-text-input')
+
+    // const myInputFunc = function (event) {
+    //   const innerP = document.querySelector('#my-paragraph')
+    //   innerP.innerText = event.target.value
+    // }
+    // myInput.addEventListener('input', myInputFunc)
+
+    // 아래 한 줄로 간소화
+
+    // 아래 콜백 함수 안에서 바깥으로 빼면 좋은 코드
+    const innerP = document.querySelector('#my-paragraph')
+
+    myInput.addEventListener('input', event => innerP.innerText = event.target.value )
+
+
+    // 2-3
+    const colorInput = document.querySelector('#change-color-input')
+
+    // 바깥으로 빼면 좋은 코드
+    const innerH2 = document.querySelector('h2')
+
+    colorInput.addEventListener('input', event => {
+      const inputColor = event.target.value
+      // 내가 만든놈
+      // innerH2.setAttribute('style', `color: ${inputColor}`)
+      // 교수가 알려준놈
+      innerH2.style.color = inputColor
+    })
+
+
+
+
+  </script>
+</body>
+</html>
+
+

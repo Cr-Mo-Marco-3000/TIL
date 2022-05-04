@@ -626,6 +626,8 @@
 
 <img src="02_js_advanced.assets/image-20220502002400878.png" alt="image-20220502002400878" style="zoom: 67%;" />
 
+
+
 ### 5. DOM 관련 객체의 상속 구조 복습
 
 - EventTarget

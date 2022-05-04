@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTMLCollection & NodeList</title>
+  <style>
+		.red {
+			color: red;
+		}
+
+		.blue {
+			color: blue;
+		}
+	</style>
+</head>
+<body>
+  <div>
+    <p class="live">Live</p>
+    <p class="live">Live</p>
+    <p class="live">Live</p>
+  </div>
+	
+	<hr>
+  
+	<div>
+    <p class="non-live">Non-Live</p>
+    <p class="non-live">Non-Live</p>
+    <p class="non-live">Non-Live</p>
+  </div>
+	<script>
+    // 1
+    const liveNodes = document.getElementsByClassName('live')
+    // console.log(liveNodes)
+
+    for (let i = 0; i < liveNodes.length; i++) {
+      liveNodes[i].className = 'red'
+      console.log(liveNodes)
+    }
+
+    // 모든 liveNodes 자식 nod에게 red style을 먹여주었는데 첫 번째와 세 번째만 적용되었다.
+    // 이유는 다음과 같다.
+    // i === 0인 class live를 red로 변경
+    // 실시간으로 반영된 결과, i는 1로 올라가지만 기존 class가 live였던 p 태그는 class가 red로 바뀌었으므로
+    // i === 1이 가리키는 태그는 3번째 p 태그가 됨 => liveNodes.length도 2가 됨
+    // 3번째 p 태그도 red로 바뀐 후, liveNodes.length가 1이 되므로 반복문 종료
+
+
+    // 2
+    const nonLiveNodes = document.querySelectorAll('.non-live')
+
+    for (let i = 0; i < nonLiveNodes.length; i++) {
+      nonLiveNodes[i].className = 'blue'
+      console.log(nonLiveNodes)
+    }
+
+    // querySelectorAll()은 static collection으로 실시간 반영이 되지 않는다.
+  </script>
+</body>
+</html>

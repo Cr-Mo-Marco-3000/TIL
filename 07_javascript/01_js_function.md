@@ -291,7 +291,7 @@ str.includes('asan') // false
 ### 2. split
 
 - string.split(value)
-  - value가 없을 경우, 기존 문자열을 **배열에 담아** 반환
+  - value가 없을 경우, 기존 문자열을 **배열에 담아** **반환**
   - value가 빈 문자열일 경우 각 문자로 나눈 **배열을 반환**
   - value가 기타 문자열일 경우, 해당 문자열로 나눈 **배열을 반환**
     - 공백으로 나눌 경우, python에서는 빈 `()` 를 넣어 줬지만 js에서는 `(' ')`을 넣어 줘야 함
@@ -307,14 +307,16 @@ str.split(' ') // ['a', 'cup']
 ### 3. replace
 
 - string.replace(from, to)
-  - 문자열에 from 값이 존재할 경우, 1개만 to 값으로 교체하여 반환
+  - 문자열에 from 값이 존재할 경우, 1개만 to 값으로 교체하여 **반환**
 - string.replaceAll(from, to)
-  - 문자열에 from 값이 존재할 경우, 모두 to 값으로 교체하여 반환
+  - 문자열에 from 값이 존재할 경우, 모두 to 값으로 교체하여 **반환**
 
 ```js
 const str = 'a b c d'
 str.replace(' ', '-') // 'a-b c d'
 str.replaceAll(' ', '-') // 'a-b-c-d'
+
+// 반환값이므로 재사용할 때 변수에 담아 주어야 함!
 ```
 
 ### 4. trim
