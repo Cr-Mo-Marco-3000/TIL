@@ -53,11 +53,13 @@
     const app1 = new Vue({
       //element
       el: '#app1',
-      // data:{} => Model
+
+      // data:{} => M: Model
       data: {
         message: '오홍홍 좋아요'
       }
     })
+
 
     // 3. 엘리먼트 속성 바인딩
     const app2 = new Vue({
@@ -66,6 +68,7 @@
         message: `이 메시지는 ${new Date()} 에 로드됨!`
       }
     })
+
     
     // 4. 조건
     const app3 = new Vue({
@@ -75,6 +78,8 @@
         // seen: false,
       }
     })
+
+
     // 5. 반복
     const app4 = new Vue({
       el: '#app4',
@@ -86,6 +91,8 @@
         ]
       }
     })
+
+
     // 6. 사용자 입력 핸들링
     // 이 안에서는 반드시 fucntion 키워드를 사용해 주어야 한다
     // 화살표 함수 안 먹는다!!!

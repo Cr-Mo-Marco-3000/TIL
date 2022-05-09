@@ -8,10 +8,33 @@
 </head>
 <body>
   <div id="app">
+    <p v-if="seen">seen is True</p>
+
+    <!-- 개발자 도구 - Vue 에서 data의 알파벳을 변경할 때 반응해서 변경된다. -->
+
+    <!-- v-if는 v-show와 달리 개발자 도구의 html에서 보이지 않는다. -->
+    <!-- 돔에 없음을 표시하는 주석도 달린다. -->
+
+    <!-- 만약 계속 전환되는 부분을 구현하기 위해서는 v-seen이 좋고, 아니라면 v-if가 좋다. -->
+
+    <!-- 새로고침 시 순간적으로 모두 보이는 이유는 위에서 아래로 읽어나가기 때문이다. -->
+    
+    <p v-if="myType === 'A'"> A </p>
+    <p v-else-if="myType === 'B'"> B </p>
+    <p v-else-if="myType === 'C'"> C </p>
+    <p v-else>NOT Anytging</p>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script>
+
+    const app = new Vue({
+      el: '#app',
+      data: {
+        seen: false,
+        myType: 'A',
+      }
+    })
   </script>
 </body>
 </html>

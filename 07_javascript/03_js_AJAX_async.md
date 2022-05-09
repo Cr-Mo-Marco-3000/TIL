@@ -460,7 +460,7 @@ asdf(a) // 인자로 넘기기 가능
 
   - Promise 객체를 반환
   - 결과와 상관없이 무조건 지정된 callback 함수가 실행
-  - 어떠한 인자도 전달받지 않음
+  - **어떠한 인자도 전달받지 않음**
     - Promise가 성공되었는지 거절되었는지 판단할 수 없기 때문
   - 무조건 실행되어야 하는 절에서 활용
     - .then()과 .catch() 블록에서의 코드 중복을 방지
@@ -495,7 +495,6 @@ asdf(a) // 인자로 넘기기 가능
 - 'Promise based HTTP client for the browser and Node.js'
 - 브라우저를 위한 **Promise 기반의 클라이언트**
   - Promise는 객체, Axios는 라이브러리!
-
 - 원래는 XHR이라는 브라우저 내장 객체를 활용해 AJAX 요청을 처리하는데, 이보다 편리한 AJAX 요청이 가능하도록 도움을 줌
   - 확장 가능한 인터페이스와 함께 패키지로 사용이 간편한 라이브러리를 제공
   - 파이썬의 requests같은 거
@@ -506,13 +505,72 @@ asdf(a) // 인자로 넘기기 가능
 
 ### 2. XMLHttpRequest => Axios 변경
 
+- Axios 이용 시에는, `JSON.parse(res)`등을 통해 따로 parsing을 해 줄 필요가 없다!
+  - 아래 코드를 보면 알겠지만, Axios가 해 준다.
+
 ![image-20220502152647110](03_js_AJAX.assets/image-20220502152647110.png)
 
 
 
 ### 3. Axios 예시
 
+- finally에서는 들어오는 인자가 없다.
+
 <img src="03_js_AJAX.assets/image-20220502152712735.png" alt="image-20220502152712735" style="zoom:50%;" />
+
+```js
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    // // 아래 코드를 Axios로 대체하는 방법
+    // const request = new XMLHttpRequest()
+    // request.open('GET', 'https://jsonplaceholder.typicode.com/todos/1/')
+    // request.send()
+    // 여기서 한 번 쉬어준후 이후 코드 실행
+    // const todo = request.response
+    // console.log(todo)
+    // const ans = JSON.parse(todo) // JSON으로 파싱해줌
+
+    // 여기서부터 axios
+    const URL = 'https://jsonplaceholder.typicode.com/todos/1/'
+
+    // axios.get(URL) 
+    // promise 객체가 return 됨
+    
+    // return이 된 후(return이 끝나면) promise 객체를 가지고 무언가를 할 거야 => .then
+
+    // Axios의 편리한 점 중 하나 => parsing을 해 줄 필요가 없다!
+    // axios.get(URL).then(function(res) {
+    //   console.log(res.data)
+    // })
+
+
+    // responsePromise.then(function (res) {
+    //   return res.data
+    // }).then(function (res2) {
+    //   return res2.title
+    // }).then(function (title) {
+    //   console.log(title)
+    // })
+
+    // 화살표 함수로 위를 바꾸면 이렇게 된다.
+
+    axios.get(URL)
+    .then(res => res.data)
+    .then(res2 => res2.title)
+    .then(title => console.log(title))
+    // .catch(err => console.log(err))
+    .catch(err => {
+      if (err.response.status === 404) {
+        alert('그딴건 없다')
+      }
+    })
+    .finally(() => console.log('어쨌든 끝!'))
+
+
+
+
+  </script>
+```
 
 
 

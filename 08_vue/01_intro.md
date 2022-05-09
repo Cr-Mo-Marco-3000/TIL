@@ -253,6 +253,8 @@
 - 여러 Options들을 사용하여 원하는 동작을 구현
 - Vue Instance === Vue Component
 
+![image-20220508213258290](01_intro.assets/image-20220508213258290.png)
+
 
 
 ### 2. Options/DOM - 'el'
@@ -261,4 +263,79 @@
 - CSS 선택자 문자열 혹은 HTML Element로 작성
 - new를 이용한 인스턴스 생성 때만 사용
 
+![image-20220508213405387](01_intro.assets/image-20220508213405387.png)
 
+
+
+### 3. Options/Data - 'data'
+
+- Vue 인스턴스의 데이터 객체
+- Vue 인스턴스의 상태 데이터를 정의하는 곳
+- Vue template에서 interpolation을 통해 접근 가능
+- v-bind, v-on과 같은 directive에서도 사용 가능
+- Vue 객체 내 다른 함수에서 this 키워드를 통해 접근 가능
+
+![image-20220508213536626](01_intro.assets/image-20220508213536626.png)
+
+
+
+### 3. Options/Data - 'methods'
+
+- Vue 인스턴스에 추가할 메서드
+
+- Vue template에서 interpolation을 통해 접근 가능
+
+- v-on과 같은 directive에서도 사용 가능
+
+- Vue 객체 내 다른 함수에서 this 키워드를 통해 접근 가능
+
+- 주의
+
+  - 화살표 함수를 메서드를 정의하는 데 사용하면 안 됨
+
+  - 화살표 함수가 부모 컨텍스트를 바인딩하기 때문에 'this'는 Vue 인스턴스가 아님
+
+    
+
+![image-20220508213728427](01_intro.assets/image-20220508213728427.png)
+
+### 4. 'this' keyword in vue.js
+
+- Vue 함수 객체 내에서 vue 인스턴스를 가리킴 
+- 화살표 함수를 사용하면 안 되는 경우
+  1. data
+  2. method 정의
+
+
+
+## Template Syntax
+
+### 1. Template Syntax
+
+- 렌더링 된 DOM을 기본 Vue 인스턴스의 데이터에 선언적으로 바인딩 할 수 있는 HTML 기반 템플릿 구문을 사용
+  1. Interpolation
+  2. Directive
+
+
+
+### 2. Interpolation(보간법)
+
+1. Text
+   - `<span>메시지: {{ msg }} </span>`
+2. Raw HTML
+   - `<span v-html='rawHtml'></span>`
+3. Attributes
+   - `<div v-bind:id='dynamicID'></div>`
+4. JS 표현식
+   - `{{ number + 1 }}`
+   - `{{ message.split('').reverse().join('') }}`
+
+
+
+### 3. Directive(디렉티브)
+
+- **v-접두사가 있는 특수 속성**
+- 속성 값은 단일 JS 표현식이 됨(v-for는 예외)
+-  표현식의 값이 변경될 때 반응적으로 DOM에 적용하는 역할을 함
+
+- 더욱 자세한 내용들은 html 파일들 참조

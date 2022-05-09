@@ -1,4 +1,6 @@
-# JavaScript 02
+# JavaScript Advanced
+
+[toc]
 
 ## 1. History of JavaScript
 

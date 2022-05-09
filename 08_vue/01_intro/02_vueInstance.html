@@ -8,11 +8,27 @@
 </head>
 <body>
   <div id="app"></div>
+  {{ message }}
+  {{ greeting() }}
   <div id="app2">
   </div>
   
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        message: '안녕하세요'
+      },
+      mehtods: {
+        greeting: function () {
+          const newMessage = this.message + '!!!!'
+          console.log(newMessage)
+          return newMessage
+        }
+      }
+      
+    })
   </script>
 </body>
 </html>

@@ -331,6 +331,8 @@ html 태그 작성 및 css도 많이 써보고 익숙해지는 방법으로 접�
 
   - 상하 여백은 line-height로 지정한다.
 
+  - img도 inline이기 때문에 딱 붙이고 싶다면 font-size=0으로 지정하면 된다.
+
   - 대표적인 인라인 레벨 요소
 
     - span / a / img / input, label (form의 내부 - input은 닫는 태그가 없지만 label은 있다! 주의!) / b, em, i, strong (텍스트 요소) 등
