@@ -11,14 +11,15 @@
       <!-- v-for에는 key 필수! -->
 
       <h2>String</h2>
-      <div v-for="char in myStr" :>{{ char }}</div>
+      <div v-for="char in myStr">{{ char }}</div>
+    
       <!-- <div v-for="(char) in myStr">{{ char }}</div> 얘도 가능 -->
       <h2>Array</h2>
       <div v-for="fruit in fruits">{{ fruit }}</div>
 
       <!-- enumerate같이 인덱스와 요소를 같이 꺼낼 때 -->
       <!-- 단 요소 - 인덱스 순서로 꺼낸다. -->
-      <div v-for="(fruit, idx) in fruits">{{ idx }} => {{ fruit }}</div>
+      <div v-for="(fruit, idx) in fruits" :key="`fruit-${idx}`">{{ idx }} => {{ fruit }}</div>
 
       <div v-for="todo in todos" :key="todo.id">
         <!-- todo가 객체니까 .key로 접근 가능 -->

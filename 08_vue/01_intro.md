@@ -4,6 +4,12 @@
 
 ## Intro
 
+### 0. 들어가며
+
+- **'필수' 가 표시된 부분은 Vue.js의 공식 스타일 가이드에서 필수적으로 지정하고 있는 부분이니 필히 지켜야 한다.**
+
+
+
 ### 1. Front-End Development
 
 - HTML, CSS 그리고 JavaScript를 활용해서 데이터를 볼 수 있게 만들어 줌
@@ -274,6 +280,7 @@
 - Vue template에서 interpolation을 통해 접근 가능
 - v-bind, v-on과 같은 directive에서도 사용 가능
 - Vue 객체 내 다른 함수에서 this 키워드를 통해 접근 가능
+- **아래와 같은 경우(new Vue)를 제외한 컴포넌트의 data는 무조건 함수여야 한다!**
 
 ![image-20220508213536626](01_intro.assets/image-20220508213536626.png)
 
@@ -291,9 +298,9 @@
 
 - 주의
 
-  - 화살표 함수를 메서드를 정의하는 데 사용하면 안 됨
+  - **화살표 함수를 메서드를 정의하는 데 사용하면 안 됨**
 
-  - 화살표 함수가 부모 컨텍스트를 바인딩하기 때문에 'this'는 Vue 인스턴스가 아님
+  - **화살표 함수가 부모 컨텍스트를 바인딩하기 때문에 'this'는 Vue 인스턴스가 아님**
 
     
 
@@ -301,7 +308,7 @@
 
 ### 4. 'this' keyword in vue.js
 
-- Vue 함수 객체 내에서 vue 인스턴스를 가리킴 
+- Vue 함수 객체 내에서 **vue 인스턴스를 가리킴** 
 - 화살표 함수를 사용하면 안 되는 경우
   1. data
   2. method 정의
@@ -336,6 +343,83 @@
 
 - **v-접두사가 있는 특수 속성**
 - 속성 값은 단일 JS 표현식이 됨(v-for는 예외)
--  표현식의 값이 변경될 때 반응적으로 DOM에 적용하는 역할을 함
-
+- 표현식의 값이 변경될 때 반응적으로 DOM에 적용하는 역할을 함
+- 전달인자 (Arguments)
+  - ':' (콜론)을 통해 전달인자를 받을 수도 있음
+- 수식어(Modifiers)
+  - '.' (점)으로 표시되는 특수 접미사
+  - directive를 특별한 방법으로 바인딩 해야 함을 나타냄
 - 더욱 자세한 내용들은 html 파일들 참조
+  - 주의해야 할 부분만 본문에 표시하겠다.
+
+###  v-html
+
+- 쓰지 말 것
+  - XSS 공격에 취약할 수 있다.
+
+
+
+### v-show와 v-if
+
+- v-show (Expensive initial load, cheap toggle)
+  - CSS display 속성을 hidden으로 만들어 토글
+  - 실제로 렌더링은 되지만 눈에서 보이지 않는 것이기 때문에 딱 한 번만 렌더링이 되는 경우라면 v-if에 비해 상대적으로 렌더링 비용이 높음
+  - 자주 변경되는 요소라면 한 번 렌더링 된 이후부터는 보여주는지에 대한 여부만 판단하면 되기 때문에 토글 비용이 적음
+- v-if (Cheap initial load, expensive toggle)
+  - 전달인자가 false인 경우 렌더링 되지 않음
+  - 화면에서 보이지 않을 뿐만 아니라 렌더링 자체가 되지 않기 때문에 렌더링 비용이 낮음
+  - 하지만, 자주 변경되는 요소의 경우 다시 렌더링 해야 하므로 비용이 증가할 수 있음
+
+
+
+### v-for
+
+- `v-for="item in items"` 구문 사용
+  - 복수의 항목을 순환할 때는 `v-for="(item, idx) in items"` 이렇게 ()로 묶어서 사용
+  - python의 enumerate와는 다르게 idx가 뒤에 옴에 주의!
+
+- **필수: v-for 사용 시 반드시 key 속성을 각 요소에 작성!**
+  - 일반적으로 ``<div v-for="(fruit, idx) in fruits" :key="`fruit-${idx}`">``, 또는 `:key='item.id'` (todos 객체 내부에 id가 있을 때) 등 필수로 지정해 준다.
+  - `:key='idx'`로 해 주어도 무방하지만, 다른 for가 있을 때는 key값이 겹칠 수 있으니 주의
+- v-if와 함께 사용하는 경우 v-for가 우선순위가 더 높음
+  - **필수: 가능하면 v-if와 v-for를 동시에 사용하지 말 것**
+
+
+
+### v-on
+
+- 엘리먼트에 이벤트 리스터를 연결
+- 이벤트 유형은 전달인자로 표시함
+- 특정 이벤트가 발생했을 때, 주어진 코드가 실행 됨
+- 콜 백 함수에 인자는 넘길 수도, 넘기지 않을 수도 있음
+- 약어(Shorthand)
+  - @
+  - v-on:click => @click
+- 기본 동작 방지
+  - 기본 동작을 막고 대기
+    - @submit.prevent
+  - 기본 동작을 막고 행위
+    - @submit.prevent='callback'
+- 특정 이벤트에만 반응
+  - 모든 키 입력이 아니라(keyup) 엔터를 치면 함수를 실행
+    - @keyup.enter
+- 콜백 함수에 첫 번째 인자로 특정한 값(a)을 넘김
+  - @keyup.space="callback('a')"
+
+
+
+### v-bind
+
+- 사용예시
+  - isRed가 true면 activeRed라는 클래스를 주고 싶다.
+    - `<div :class="{ activeRed: isRed }">`
+  - 클래스 여러 개 적용 시
+    - `  <h3 v-bind="[active, my-background-color]">`
+  - 스타일 바인딩: 숫자 + 문자열 => 자동으로 문자열로 변경 in js
+    - `<li v-for="todo in todos" :style="{ fontsize: fontSize + 'px'}">`
+
+
+
+### v-model
+
+- HTML form 요소의 값과 data를 양방향 바인딩

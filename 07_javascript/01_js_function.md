@@ -856,13 +856,13 @@ printUser(user) // 20 100 '유태영'
 
 
 
-this 정리
+## this
 
 JS에서 this는 딱 세 가지를 가리킨다.
 
 - class 내부의 생성자(constructor)함수에서
   - this는 생성되는 객체를 가리킴(Python의 self)
-  - 우리 과정에서는 js로 클래스를 건드리지 않는다.
+  - 현재 과정에서는 js에서 class를 사용하지 않으니 나중에 다시 볼 것
 - **메서드(객체.메서드명() 으로 호출 가능한 함수)에서**
   - **this는 해당 메서드가 소속된 객체를 가리킴**
   - 메서드는 `.함수명()` 으로 실행하는 함수
@@ -927,3 +927,69 @@ you.qwer() // '준호김'
     - 화살표 함수와 function 키워드로 선언한 함수가 다르게 동작
   - 함수 내부에 this 키워드가 존재하지 않을 경우
     - 완전히 동일하게 동작 => 즉 신경쓸 필요 없음
+
+
+
+## Lodash
+
+### 1. A modern JavaScript utility library
+
+- 모듈성, 성능 및 추가 기능을 제공하는 JavaScript 유틸리티 라이브러리
+- array, object등 자료구조를 다룰 때 사용하는 유용하고 간편한 유틸리티 함수들을 제공
+- 브라우저, node.js 환경에서 모두 지원
+- 함수 예시
+  - reverse, sortBy, range, random, cloneDeep
+- 사용 예시
+
+```js
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+
+<script>
+    // 위의 CDN import를 통해 _ (underscore) 식별자 사용가능
+    /* 공식 사이트에 있는 <script src="lodash.js">는 이상하게 안 된다.*/
+
+    _.sample([1, 2, 3, 4]) // 3 (random 1 element)
+    
+    _.sampleSize([1, 2, 3, 4], 2) // [2, 3] (random 2 element)
+
+    _.reverse([1, 2, 3, 4]) // [4, 3, 2, 1] 
+    
+    _.range(5) // [0, 1, 2, 3, 4]
+
+    _.range(1, 5) // [1, 2, 3, 4]
+
+    _.range(1, 5, 2) // [1, 3]
+
+    // 로또 추첨
+    const lotto = _.sampleSize(_.range(1, 45), 6)
+    console.log(lotto)
+
+</script>
+```
+
+- 깊은 복사
+  - lodash를 사용하지 않을 경우, 깊은 복사는 직접 함수를 만들어서 구현해야 함(내장된 깊은복사 관련 함수 없음)
+
+```js
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+<script>
+
+    // 깊은 복사 => lodash 사용
+
+    const original = {a: {b: 1}}
+    const ref = original
+    const copy = _.cloneDeep(original)
+
+    console.log(original.a.b, ref.a.b, copy.a.b) // 1, 1, 1
+    ref.a.b = 10
+
+    console.log(original.a.b, ref.a.b, copy,a.b) // 10, 10, 1
+    copy.a.b = 100
+    
+    console.log(original.a.b, ref.a.b, copy,a.b) // 10, 10, 100
+    
+
+
+</script>
+```
+
