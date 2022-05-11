@@ -5,7 +5,7 @@
     <input v-model="appData" type="text">
 
     <p>ParentData: {{ parentData }}</p>
-    <p>ChildData: {{childData }}</p>
+    <p>ChildData: {{ childData }}</p>
     <!-- :넘기는 이름 = '넘길 값' -->
     <MyParent :appData="appData" @parent-input="inputParent" @child-input='inputChild'/>
   </div>
