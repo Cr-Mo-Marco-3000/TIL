@@ -18,8 +18,6 @@
 
 - 자바스크립트 언어를 위한 패키지 관리자
 
-
-
 npm은 pip과는 다르게 특정 프로젝트에 패키지를 설치하는 게 기본이다.
 
 컴퓨터 전체에 설치할 때는 -g 옵션을 붙여주어야 한다.
@@ -34,9 +32,12 @@ npm은 pip과는 다르게 특정 프로젝트에 패키지를 설치하는 게 
 
 props 안에서는 카멜 케이스(자식 컴포넌트의 props: {} 안에 작성할 때는 camelCase)
 
+
+
 - html에서는 케밥 케이스(html 태그 안에서: `<ChildComponeet :kebab-case="" 등으로 넘길 때/>`)
   - html은 자동 소문자 변환이 되기 때문
   - {{}} 안에는 케밥 케이스로 써 주지 말고 props로 받은 데이터 이름 그대로 써 주어야 한다!
+  - 근데 그냥 둘 다 camel case로 작성해 주자
 
 이렇게 해도 인식
 
@@ -70,3 +71,54 @@ props 안에서는 카멜 케이스(자식 컴포넌트의 props: {} 안에 작�
 - 컴포넌트 및 props와는 달리, 이벤트는 자동 대소문자 변환을 제공하지 않음
 - HTML의 대소문자 구분을 위해 DOM 템플릿의 v-on 이벤트 리스너는 항상 자동으로 소문자 변환되기 때문에 v-on:myEvent는 자동으로 v-on:myevent로 변환
 - 이러한 이유로 이벤트 이름에는 항상 kebob-case를 사용하는 것을 권장
+- 어떤 이벤트를 발생시키는 메서드를 정의할 때는 camel case를 쓰지만, 올려보낼 이벤트 정의시에는 kebab-case
+
+
+
+## Vue Router
+
+### 1. Vue Router
+
+- Vue.js 공식 라우터
+- 라우트(route)에 컴포넌트를 매핑한 후, 어떤 주소에서 렌더링할 지 알려줌
+  - 컴포넌트와 주소를 매핑함
+  - url을 통해 이동한 척 한다. => 한 페이지 안에서 component를 준비시켜 놓았다 url은 변화시키며 보여줌.
+- SPA 상에서 라우팅을 쉽게 개발할 수 있는 기능을 제공
+- [참고] router
+  - 위치에 대한 최적의 경로를 지정하며, 이 경로를 따라 데이터를 다음 장치로 전향시키는 장치
+
+
+
+### 2. Vue Router가 이것저것 바꿔줌
+
+`<router-link>`: anchor같은 역할: 근데 **컴포넌트임**
+
+`<router-view/>`가 component가 들어가는 자리: 얘도 컴포넌트
+
+### Named Routes
+
+- python에서의 url_patterns에서 이름 공간을 형성해 주는 것과 비슷함
+- 다음과 같이 작성 `<router-link :to="{ name: 'home'}">`
+
+
+
+### 프로그래밍 방식 내비게이션
+
+a tag와 같은 방식인 router-link 말고 button 등을 이용해서도 같은 동작을 할 수 있음
+
+`  <button @click="moveToHome"></button>`
+
+메소드 내부에 `moveToHome() { this.$router.push({ name: 'home' })}` 함수를 작성해서 구현
+
+
+
+### Dynamic Route matching
+
+쿼리스트링을 넘길 때는 query(url에)
+
+variable routing등을 넘길 때는 params를 같이 넘겨준다.
+
+
+
+### History mode
+

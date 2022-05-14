@@ -604,3 +604,15 @@ asdf(a) // 인자로 넘기기 가능
   - 인간 중심으로 설계된 사용자 경험
   - 실제 AJAX라는 용어를 처음 논문에서 사용한 Jesse James Garrett이 Ajax를 소개하며 강조한 한 마디
 
+
+
+```js
+      const movies = 
+      axios.get('https://api.themoviedb.org/3/movie/popular?api_key=ac824af39d5e13e1310acc5a598278ab')
+      .then(response => {
+        return response.data.results
+      })
+      console.log(movies)
+      state.movies = movies
+```
+
