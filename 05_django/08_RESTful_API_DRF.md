@@ -330,7 +330,7 @@ from .models import Article
 
 # 게시글에 대한 쿼리셋을 serialize해 주는 도구
 class ArticleSerializer(serializers.ModelSerializer):
-    class Mera:
+    class Meta:
         model = Article
         fields = '__all__'
 ```

@@ -339,6 +339,23 @@ str.trimEnd()) // '    hello'
 
 
 
+### 5. charAt()
+
+- 문자열에서 특정 인덱스에 위치하는 유니코드 단일문자를 반환
+
+```js
+const sentence = 'I love You.'
+const thirdChar = sentenc.charAt(2)
+const secondChar = sentence.charAt(1)
+
+console.log(thirdChar) // l
+console.log(secondChar) // 공백 반환
+```
+
+
+
+
+
 ## 4. 배열(Arrays)
 
 ### - 배열의 정의와 특징
@@ -489,7 +506,15 @@ console.log(result) // 1, 2, 3, 4, 5
 
 
 
-### 7. Spread operator
+### 7. splice
+
+- array.splice(index[, number])
+  - 배열의 특정 index부터 number개의 숫자를 삭제하여  **배열로 반환**
+  - number가 없을 때는 index부터 배열의 끝까지 삭제하여 반환
+
+
+
+### Spread operator
 
 - spread operator(...)를 사용하면 배열 내부에서 배열 전개 가능.
 - ES5까지는 Array.content() 메서드를 사용.
@@ -745,15 +770,16 @@ console.log(isEveryNumberEven) // false
 
 ## 5. 객체(Objects)
 
-### 객체의 정의와 특징
+### 1. 객체의 정의와 특징
 
 - 객체는 속성(property)의 집합이며, 중괄호 내부에 key와 value의 쌍으로 표현
 - key는 문자열 타입*만 가능
   - 참고: key 이름에 띄어쓰기 등의 구분자가 있으면 따옴표로 묶어서 표현
+  - 띄어쓰기가 없으면, 따옴표가 없어도 문자열로 인식하기 때문에 따옴표를 붙여주지 않아도 된다.
 - value는 모든 타입(함수포함) 가능
 - 객체 요소 접근은 점 또는 대괄호로 가능
-  - 점 접근일 때는 키에 따옴표를 붙이지 않아도 되지만, 대괄호 접근일 때는 붙여주어야 한다.
-    - 파이썬과 다르게 key가 string일 때도 띄어쓰기가 없으면 `''`를 붙여주지 않아도 된다.
+  - 점 접근일 때는 키에 따옴표를 붙이지 않아도 되지만, **대괄호 접근일 때는 붙여주어야 한다.**
+    - 이것 때문에 오류가 많이 났던 것 같다 => 주의!!!
   - 참고: key 이름에 띄어쓰기 같은 구분자가 있으면 대괄호 접근만 가능
 
 ```js
@@ -773,100 +799,166 @@ console.log(me['samsung products'].buds)
 
 
 
-### 객체와 메서드
+### 2. 객체와 메서드
 
 - 메서드는 어떤 객체의 속성이 참조하는 함수.
-- 객체.메서드명() 으로 호출 가능.
-- 메서드 내부에서는 this 키워드가 객체를 의미함
+- **객체.메서드명()** 으로 호출 가능.
+- 메서드 내부에서는 this 키워드가 **객체**를 의미함
   - fullName은 메서드가 아니기 때문에 정상출력 되지 않음(NaN)
   - getFullName은 메서드이기 때문에 해당 객체의 firstName과 lastName을 정상적으로 이어서 반환
 
+<img src="01_js_function.assets/image-20220529221420880.png" alt="image-20220529221420880" style="zoom: 67%;" />
+
+
+
+### 3. 객체 관련 ES6 문법 익히기
+
+- ES6에 새로 도입된 문법들로 객체 생성 및 조작에 유용하게 사용 가능
+  - 속성명 축약
+  - 메서드명 축약
+  - 계산된 속성명 사용하기
+  - 구조 분해 할당
+    - 참고: 구조 분해 할당은 배열도 가능
+  - 객체 전개 구문(Spread Operator)
+
+
+
+#### 1. 속성명 축약(Shorthand)
+
+- 객체를 정의할 때 key와 할당하는 **변수의 이름**(문자열 말고!)이 같으면 예시와 같이 축약 가능
+
+<img src="01_js_function.assets/image-20220529221850560.png" alt="image-20220529221850560" style="zoom:67%;" />
+
+#### 2. 메서드명 축약(Shorthand)
+
+- 메서드 선언 시 function 키워드 생략 가능
+
+![image-20220529222138388](01_js_function.assets/image-20220529222138388.png)
+
+#### 3. 계산된 프로퍼티 명(Computed Property Name)
+
+- 객체를 정의할 때 key의 이름을 표현식을 이용하여 동적으로 생성 가능
+- 대괄호 안에 표현식을 쓰면 프로퍼티명으로 계산되어 사용됨
+
+```js
+let i = 0
+let a = {
+    ['foo' + ++i]: i,
+    ['foo' + ++i]: i,
+    ['foo' + ++i]: i
+}
+
+console.log(a.foo1) // 1
+console.log(a.foo2) // 2
+console.log(a.foo3) // 3
+
+
+const items = ['A', 'B', 'C']
+const obj = {
+    [items]: 'Hello'
+}
+console.log(obj) // A,B,C: 'Hello'
+console.log(obj.A,B,C) // {A,B,C: 'Hello'}
+
+let param = 'size'
+let config = {
+    [param]: 12, // key로 'size'가 들어간다!
+    ['mobile' + param.CharAt(0).toUpperCase() + param.slice(1)]: 4
+}
+
+console.log(config)
+// {size: 12, moblieSize: 4}
+```
+
+
+
+#### 4. 구조 분해 할당(Destructing Assignment)
+
+- 배열 또는 객체를 분해하여 속성을 변수에 쉽게 할당할 수 있는 문법
+- `const name = object.name` => 이렇게 쓰는 경우가 많기 때문에 생긴 문법
+
+```js
+const userInformation = {
+    name: 'ssafy',
+    userId: 'ssafyID',
+    phoneNumber: '010-1234-5678'
+}
+
+const { name } = userInformation // const name = userInformation.name 과 동일
+const { userId } = userInformation // const userId = userInformation.userId 과 동일
+const { phoneNumber } = userInformation // const phoneNumber = userInformation.phoneNumber 과 동일
+
+// 여러개도 가능
+const {name, userId}= userInformation
+```
+
+
+
+#### 5. Spread Operator(...)
+
+- Spread Operator(...)를 사용하면 객체 내부에서 객체 전개 가능
+- ES5까지는 Object.assign() 메서드를 사용
+- 얕은 복사에 활용 가능
+
+```js
+const obj = {a: 1, b: 2, c: 3}
+const newObj = {d: 4, ...obj, e: 5}
+
+console.log(newObj) // {d: 4, a: 1, b: 2, c: 3, e: 5}
+
+const obj = {a: 1, b: 2, c: 3}
+const newObj = {a: 6, ...obj, e: 5}
+
+console.log(newObj) // {a: 1, b: 2, c: 3, e: 5}
+// 객체에서는 같은 key를 가진 경우 뒤에 선언된 걸로 덮어 씌워진다.
+
+
+```
 
 
 
 
-JSON
+
+### 4. JSON
 
 - key-value쌍의 형태로 데이터를 표기하는 언어 독립적 표준 포맷
-- 자바스크립트의 객체와 유사하게 생겼으나 실제로는 문자열 타입
+- 자바스크립트의 객체와 유사하게 생겼으나 실제로는 **문자열 타입**
   - 따라서 JS의 객체로써 조작하기 위해서는 구문 분석(parsing)이 필수
-  - JSON(JavaScript Object Notation)예시
+- 자바스크립트에서는 JSON을 조작하기 위한 두 가지 내장 메서드를 제공
+  - JSON.parse()
+    - JSON => 자바스크립트 객체
 
-```js
-function getFullName() {
-    return this.firstName + this.lastName
-}
-
-const me = {
-    firstName: 'John',
-    last
-}
-```
+  - JSON.stringfy()
+    - 자바스크립트 객체 => JSON
 
 
+![image-20220529225948981](01_js_function.assets/image-20220529225948981.png)
 
-구조 분해 할당
+### 5. 참고: 배열은 객체
 
-```js
-const user = {
-    name: '유태영',
-    age: 20,
-    balance: 100
-}
+- 키와 속성들을 담고 있는 참조 타입의 객체(Object)
+- 배열은 인덱스를 키로 가지며 length 프로퍼티를 갖는 특수한 객체
 
-// 객체의 특정 key의 value값을 변수에 넣을 일이 많다.
-const name = user.name
-
-name // '유태영'
-
-const age = user.age
-
-age // 20
-
-const balance = user.balance
-
-balance // 100
-
-// 반복되는 부분이 많음
-// 아래 두 코드는 같다!
-const {name} = user 
-const name = user.name
-
-// user라는 객체에서 key와 {} 안의 변수명을 일치시켜야 한다!
-
-// 이렇게 사용도 가능하다!
-const {name, age, balance} = user
-// name => '유태영'
-// age => 20
-// balance => 100
-
-
-// 아래 두 함수는 동일하게 작동한다.
-
-fucntion printuser(user) {
-    console.log(user.name, user.age, user.balance)
-}
-
-function printUSer({name, age, balance}) {
-    console.name(age, balance, name)
-}
-
-printUser(user) // 20 100 '유태영'
-```
+<img src="01_js_function.assets/image-20220529230053826.png" alt="image-20220529230053826" style="zoom: 50%;" />
 
 
 
-## this
+## 6. this
 
-JS에서 this는 딱 세 가지를 가리킨다.
+- JS에서 this는 실행 문맥에 따라 딱 세 가지를 가리킨다.
 
 - class 내부의 생성자(constructor)함수에서
   - this는 생성되는 객체를 가리킴(Python의 self)
   - 현재 과정에서는 js에서 class를 사용하지 않으니 나중에 다시 볼 것
 - **메서드(객체.메서드명() 으로 호출 가능한 함수)에서**
   - **this는 해당 메서드가 소속된 객체를 가리킴**
-  - 메서드는 `.함수명()` 으로 실행하는 함수
-
+  - **메서드는 `.함수명()` 으로 실행하는 함수**
+    - 즉, 메서드가 어떤 객체에 소속되었을 때만 this가 객체를 가리키게 작동한다.
+    - 소속되었다는 것은, 객체.메서드명()으로 호출 가능할 때, 즉 직접적으로 key와 value로 묶였을 때를 뜻한다.
+    - 아래의 예시에서, printArea: **함수()** 에서의 함수는 obj.printArea()로 호출 가능
+      - 그러나 forEach안의 함수는, obj.printArea로 호출이 불가능 => obj 소속이 아니기 때문!
+  - 
+  
 - 위의 두가지 경우를 제외하면 모두 최상위 객체(window)를 가리킴
   - 이런 방식으로 쓸일이 없다. 걍 window 쓰자
 
@@ -879,8 +971,11 @@ const me ={
 }
 // this는 어디서 왔을까?
 // python의 self와 헷갈리는 이유는 명시적으로 등장하지 않기 때문
-
 ```
+
+<img src="01_js_function.assets/image-20220529232536459.png" alt="image-20220529232536459" style="zoom:50%;" />
+
+
 
 ```js
 function getFullName() {
@@ -891,8 +986,8 @@ function getFullName() {
 const me = {
     firstName = '태영',
     lastName = '유',
-    'getFullName' : getFullname // getFullName : getFullname 또는 그냥 getFullName으로도 사용 가능 
-}								// key와 value가 같은 경우 후자와 같은 방식으로도 사용 가능
+    'getFullName' : getFullname 
+}
 
 getFullName() // => NAN
 
@@ -917,7 +1012,7 @@ you.qwer() // '준호김'
 ```
 
 ```js
-// 예시에서 안쪽의 함수는 . 찍고 부르지 않음(못함)/ obj.함수명 으로 호출 불가!!! => 메서드가 아니라서 this는 window
+// 예시에서 아래쪽의 함수는 . 찍고 부르지 않음(못함)/ obj.함수명 으로 호출 불가!!! => 메서드가 아니라서 this는 window
 // 따라서 .bind(this)를 붙여주어야 함
 // bind를 매번 붙여주는 게 귀찮기 때문에 => 화살표 함수가 나옴
 ```
@@ -930,7 +1025,7 @@ you.qwer() // '준호김'
 
 
 
-## Lodash
+## 7. Lodash
 
 ### 1. A modern JavaScript utility library
 

@@ -259,6 +259,7 @@ export default {
 
 - `:props에서 받을 이름="보내는 데이터"`  형식으로 보낸다
 - v-for 같은 경우는 데이터를 돌리는 역할이므로, 지정한 데이터를 내려보내는 v-bind도 필요하다!
+  - 거의 쓰지 않겠지만 그나마 여기서 쓰게 될 것이다.
 
 ![image-20220514203037852](03_vuex.assets/image-20220514203037852.png)
 
@@ -273,6 +274,8 @@ export default {
   - CREATE_TODO 함수
   - state의 todo 데이터 조작
 
+<img src="03_vuex.assets/image-20220514230756793.png" alt="image-20220514230756793" style="zoom:50%;" />
+
 ##### Actions의 "context" 객체
 
 - Vuex store의 전반적인 맥락 속성을 **모두** 포함하고 있음
@@ -281,13 +284,18 @@ export default {
 - 할 수 있지만 actions에서 state를 조작하지 말 것!
   - 실제 데이터의 흐름을 추적하기 위해서, state를 건드리는 일들은 mutations를 사용
 
+<img src="03_vuex.assets/image-20220514230834237.png" alt="image-20220514230834237" style="zoom:50%;" />
+
 #### 2) TodoForm.vue
 
 - createTodo 메서드를 통해 createTodo Action 함수 호출()
-- Vuex Stores에서는 this를 쓰지 않는다.
-- 
+- Vuex Stores에서는 this를 쓰지 **않는다.**
+- Actions의 createTodo를 호출하여, methods 내부에서 정의한 createTodo 함수에 위의 todoTitle을 사용해서 정의한 객체인 todoItem을 두 번째 인자로 넘긴다.
+- input이 비었을 때도 함수가 실행되어 state에 정보가 쌓이는 것을 막기 위해 if에 조건을 달아준 후, 함수가 정상적으로 종료되면 다시 빈칸으로 변하게 한다.
+- 입력 시 앞쪽과 뒤쪽에 쓸데없는 띄어쓰기를 없애기 위해 todoItem 내부에 `.trim()`을 달아줄 수도 있지만, 아래처럼 v-model 뒤에 `.trim`을 달아줄 수도 있다.
+- 버튼도 만들어 준다.
 
-### 6. Actions의 "context" 객체
+<img src="03_vuex.assets/image-20220514230435088.png" alt="image-20220514230435088" style="zoom:50%;" />
 
 
 
@@ -303,11 +311,135 @@ export default {
 ### 9. Javascript Destructuring assignment
 
 - 배열의 값이나 객체의 속성을 고유한 변수로 압축 해제(unpack)할 수 있는 JavaScript 표현식
+  - 구조분해할당 파일(00_destructuring.js) 참조
 - actions 변경
 
-### 10.
+<img src="03_vuex.assets/image-20220514230957722.png" alt="image-20220514230957722" style="zoom:50%;" />
+
+
+
+## Component Binding Helper
+
+### 1. Component Binding Helper
+
+- JS Array Helper Method를 통해 배열 조작을 편하게 하는 것과 유사
+  - 논리적인 코드 자체가 변하는 것이 아니라 "쉽게" 사용할 수 있도록 되어 있음에 초점
+- 종류
+  - mapState
+  - mapGetters
+  - mapActions
+  - mapMutations
+  - createNameSpacedHelper
+
+- spread operator를 사용하여 객체 내부에서 객체 전개 가능 
+  - 예를 들어, `mapActions(['deleteTodo', 'createTodo']) 의 반환값은 { deleteTodo: function (something) {something}, createTodo: function (something) {something} }`
+
+```vue
+<template>
+  <div>
+    {{ todo.title }}
+    <button @click="deleteTodo" >[삭제]</button>
+  </div>
+</template>
+
+<script>
+import { mapActions } from 'vuex'
+
+export default {
+  name: 'TodoListItem',
+  props: {
+    todo: {
+      type: Object
+    }
+  },
+  methods: {
+	...mapActions(['deleteTodo', 'createTodo'])
+    // 본 객체 안에 deleteTodo 함수와 createTodo 함수를 풀어 놓는 것과 같음
+    // 즉 methods: { deleteTodo: function (something) {something}, createTodo: function (something) {something} }와 바로 위 코드는 같다.
+    }
+  }
+}
+</script>
+
+<style>
+
+</style>
+```
+
+
+
+### 2. Component Binding Helper - mapState
+
+- computed와 Store의 state를 매핑
+- Vuex Store의 하위 구조를 바노한하여 component 옵션을 생성함
+- 매핑된 computed 이름이 state 이름과 같을 때 문자열 배열을 전달 할 수 있음
+
+
+## Getters
+
+- computed와 비슷한 개념
+- state를 기반으로 값을 계산해 냄
+- state나 getters에서 불러오는 값은 data가 아니라 computed에 매핑해야 한다
+- data를 state에 매핑하면 변동될 때 state와 연동되어 같이 꼬이기 때문이다.
+  - data는 그 컴포넌트에서 사용하고 변경하는 값이라고 생각하자
+
+```js
+  getters: {
+    allTodosCount(state) {
+      return state.todos.length
+    },
+    completedTodosCount(state) {
+      return state.todos.filter(todo => {
+        return todo.isCompleted === true
+      }).length
+    },
+    uncompletedTodosCount(state) {
+      return state.todos.filter(todo => {
+        return !todo.isCompleted
+      }).length
+    },
+  },
+```
+
+
 
 ## Local Storage
 
 - 브라우저의 DB같은 느낌
-- 영구적으로 저장 되기 때문에
+- 영구적으로 저장 되기 때문에 직접 지워주어야 함
+- 활용법
+- localstorage에는 문자열만 저장 되기 때문에 각각 파싱 해 주어야 한다.
+
+```js
+// mutations에서
+    LOAD_TODOS(state) {
+      const todoString = localStorage.getItem('todos')
+      state.todos = JSON.parse(todoString)
+    }
+
+// actions에서
+    saveTodos({state}) {
+        const jsonData = JSON.stringify(state.todos)
+        localStorage.setItem('todos', jsonData)
+    },
+        
+// App에서, 실행될 때, 자동으로 저장하게 해 준다
+        
+  methods: {
+    ...mapMutations(['LOAD_TODOS'])
+  },
+  created() {
+    this.LOAD_TODOS()
+  }
+```
+
+- vuex-persistedstate
+  - Vuex state를 자동으로 브라우저의 LocalStorage에 저장해주는 라이브러리 중 하나
+  - 페이지가 새로고침 되어도 Vuex state를 유지시킴
+  - 설치
+  - `$ npm i vuex-persistedstate`
+    - 설치시 기본값이 --save가 들어감
+
+- 라이브러리 사용
+
+![image-20220520124153230](03_vuex.assets/image-20220520124153230.png)
