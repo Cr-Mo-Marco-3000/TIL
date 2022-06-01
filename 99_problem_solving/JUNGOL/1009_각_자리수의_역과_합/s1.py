@@ -1,5 +1,5 @@
 
-string = input()
+string = input().rstrip()
 
 while string != '0':
     number = int(string)
@@ -10,4 +10,4 @@ while string != '0':
         total += int(string[i])
     print(' ', end='')
     print(total)
-    string = input()
+    string = input().rstrip()
