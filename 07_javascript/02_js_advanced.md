@@ -1,4 +1,4 @@
-# JavaScript Advanced
+# JavaScript Advanced - DOM
 
 [toc]
 
@@ -153,7 +153,7 @@
 
 
 
-## DOM 조작
+## 3. DOM 조작
 
 ### - 실습 스크립트
 
@@ -260,8 +260,6 @@
     listTwo.innerText = '반환됨'
     // appendChild는 append된 객체를 반환하기 때문에, 이렇게도 활용 가능하다
     
-
-
 
 
     // 2-2. innerText & innerHTML
@@ -574,7 +572,7 @@
 
 
 
-## Event
+## 4. Event
 
 ### 1. Event(이벤트) 개념
 
