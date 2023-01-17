@@ -1,8 +1,35 @@
 # Functions in Python
 
-[toc]
 
 
+## 1. 설명
+
+### I. 인자
+
+> https://docs.python.org/ko/3/glossary.html#term-argument
+
+함수에 인자를 받을 때는 두 가지 방법이 있다.
+
+순서는 위치 인자 => 키워드 인자 순서대로 들어간다.
+
+#### 1) 키워드 인자
+
+- 함수 호출 때 식별자가 앞에 붙은 인자
+  - 여기서 식별자는 `name=` 형태로, name 부분에는 변수의 형태와 같이 ''를 붙이지 않은 문자열이 들어간다.
+  - `complex(real='레알', imag=5)`
+- 또는 **를 앞에 붙인 - 언패킹한 - 딕셔너리로 전달되는 인자.
+  - `complex(**{'real': '레알', 'imag': 5})`
+
+#### 2) 위치 인자
+
+- 인자 목록의 처음에 나오거나
+  - `complex(3, 5)`
+- 이터러블 앞에 *를 붙여 - 언패킹해 - 전달할 수 있다.
+  - `complex(*(3, 5))`
+
+
+
+## 2. Built-in-Functions
 
 ### map(function, iterable)
 
