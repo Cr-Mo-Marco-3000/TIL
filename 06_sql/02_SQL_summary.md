@@ -421,5 +421,3 @@ GROUP BY last_name;
   ALTER TABLE 테이블명
   DROP COLUMN 컬럼명;
   ```
-
-  
