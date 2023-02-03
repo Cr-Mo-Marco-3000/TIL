@@ -4,14 +4,15 @@
 
 DML은 데이터 조작 언어(Data Manipulation Language)의 약자로, DB 내부의 데이터를 조작하기 위해 사용하는 명령어를 의미한다.
 
-DML에는 대표적으로 다음 4가지 명령이 속한다.
+DML에는 대표적으로 다음 3가지 명령이 속한다.
+
+>일부 문서에서는 SELECT 명령도 DML로 분류하고 있지만, SELECT 명령은 DM에 직접 변화를 일으키는 명령이 아니므로 DML이 아니다.
 
 1. INSERT
 2. UPDATE
 3. DELETE
-4. SELECT - 주의!
 
-일부 문서에서는 SELECT 명령도 DML로 분류하고 있지만, SELECT 명령은 DM에 직접 변화를 일으키는 명령이 아니므로 명확하지 않다.
+
 
 
 
