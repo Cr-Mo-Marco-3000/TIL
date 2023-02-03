@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Title</title>
+  </head>
+  <body>
+    {{ result }} {% for data in result %}
+    <li>사번: {{ data[0] }} - 사원명</li>
+    {% endfor %}
+  </body>
+</html>
+
+http://apis.data.go.kr/1613000/ArvlInfoInqireService/getSttnAcctoArvlPrearngeInfoList?serviceKey=인증키(URL
+Encode)&cityCode=25&nodeId=DJB8001793&numOfRows=10&pageNo=1&_type=xml
