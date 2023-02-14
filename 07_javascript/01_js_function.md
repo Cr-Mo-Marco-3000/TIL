@@ -890,6 +890,9 @@ const { phoneNumber } = userInformation // const phoneNumber = userInformation.p
 
 // 여러개도 가능
 const {name, userId}= userInformation
+
+// alias 사용 가능
+const { name: myName } = userInformation
 ```
 
 
