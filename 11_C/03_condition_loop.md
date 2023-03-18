@@ -204,6 +204,36 @@ int main() {
 
 ```
 
+- for문에서의 특수한 반복조건
+
+```c
+#include <stdio.h>
+
+int main() {
+	char msg[100];
+	int number = 0, alpha = 0, special = 0, i;
+
+	printf("문자열 입력? ");
+	
+	gets(msg); // C program is Fun !!!, Book Price: 25000[enter]
+
+	for (i = 0; msg[i] != '\0'; i++) { // 비교 연산자가 아닌 반복조건
+		if (msg[i] >= 48 && msg[i] <= 57) {
+			number++;
+		}
+		else if (msg[i] >= 65 && msg[i] <= 90 || msg[i] >= 97 && msg[i] <= 122) {
+			alpha++;
+		}
+		else {
+			special++;
+		}
+	}
+	printf("숫자: %d, 알파벳: %d, 특수문자 : %d \n", number, alpha, special);
+	
+	return 0;
+}
+```
+
 
 
 ## 3. 기타 제어문

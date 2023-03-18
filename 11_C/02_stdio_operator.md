@@ -103,7 +103,7 @@ int main() {
 
 - 형식 지정자의 종류
 
-![20230309_190429](C:\Users\bizyoung93\Desktop\TIL\11_C\02_stdio_operator.assets\20230309_190429-1678358110589-2.jpg)
+![20230309_193411](C:\Users\bizyoung93\Desktop\TIL\11_C\02_stdio_operator.assets\20230309_193411.jpg)
 
 ```c
 #include <stdio.h>
@@ -145,7 +145,7 @@ int main(void)
 
 ### 4. 백슬래시 문자 상수
 
-![20230309_190429](C:\Users\bizyoung93\Desktop\TIL\11_C\02_stdio_operator.assets\20230309_190429-1678358627687-7.jpg)
+![20230309_194057](C:\Users\bizyoung93\Desktop\TIL\11_C\02_stdio_operator.assets\20230309_194057.jpg)
 
 - backslash-character constant
 - escape sequence라고도 함
@@ -182,6 +182,12 @@ int main(void)
 - 연산자의 분류
 
   ![20230309_190429](C:\Users\bizyoung93\Desktop\TIL\11_C\02_stdio_operator.assets\20230309_190429.jpg)
+
+
+
+- 연산자 우선순위
+
+![20230315_161650](C:\Users\bizyoung93\Desktop\TIL\11_C\02_stdio_operator.assets\20230315_161650.jpg)
 
 
 
