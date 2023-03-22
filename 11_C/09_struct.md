@@ -8,9 +8,15 @@
 
 이 때, 데이터들의 집합은 자료형에 구애받지 않는다.
 
-1. 사용자 정의 자료형으로 변수 선언
-2. 구조체 변수로 메모리 할당
-3. 하나의 변수이름으로 여러 형의 데이터 제어 가능
+- 구조체 사용순서
+
+  1. 사용자 정의 자료형으로 변수 선언
+
+  2. 구조체 변수로 메모리 할당
+
+  3. 하나의 변수이름으로 여러 형의 데이터 제어 가능
+
+
 
 ### 1. 구조체의 선언과 메모리 할당
 
@@ -54,6 +60,8 @@ struct 구조체자료형명 {
 #### 구조체의 크기와 멤버 접근
 
 구조체 변수 자료형의 크기를 얻기 위해 `sizeof()` 연산자를 사용한다.
+
+**구조체 변수의 크기와 구조체 자료형의 크기는 같다.**
 
 구조체는 멤버와 멤버 사이에 빈 공간을 포함할 수 있기 때문에 단순히 멤버들의 할당 메모리 합으로 이를 구하면 안되고 꼭 sizeof() 연산자를 사용해야 한다.
 
@@ -117,6 +125,10 @@ int main(void) {
 
 - 구조체 변수를 선언할 때 초기화를 할 수 있다.
   - 초기화 이후에는, 한번에 값을 넣지 못하고 각 멤버별로 값을 넣어주어야 한다.
+
+**구조체 선언은 일반적으로 헤더파일에 한 후, 함수에서 이를 가져와 쓴다.**
+
+
 
 #### 구조체의 전역선언
 
@@ -298,3 +310,254 @@ struct EMPLOYEE funcB() // EMP funcB()
 
 
 
+## III. 구조체 배열
+
+구조체 변수들을 여러 개의 연속된 공간에 모아 놓은 형태
+
+변수명 대신 배열명과 첨자를 이용한다.
+
+**일반 배열과 마찬가지로 구조체 배열에서 구조체 변수명은, 주소값이다.**
+
+- 구조체 배열 선언문
+  - `struct EMPLOYEE emps[10];`
+
+- 참조
+  - `emps[i].name`
+
+```c
+#include <stdio.h>
+#include <string.h>
+#define EMP_SZ 3
+
+int main(void) {
+	
+	int i, Cn;
+	
+	typedef struct EMPLOYEE
+	{
+		char name[20];
+		int salary;
+		float height;
+		char comAddr[60];
+	} EMP;
+    
+	// 구조체 배열 emp 선언 => 크기는 3
+	EMP emp[EMP_SZ];
+
+	for (i = 0; i < EMP_SZ; i++) {
+		printf("성명 ?");
+		gets(emp[i].name);
+
+		if (!strcmp(emp[i].name, "end"))
+			break;
+		printf("월급 ?");
+		scanf("%d%*c", &emp[i].salary);
+
+		printf("키(신장) ?");
+		scanf("%f%*c", &emp[i].height);
+
+		printf("회사주소?");
+		gets(emp[i].comAddr);
+	}
+
+	Cn = i;
+	
+	for (i = 0; i < Cn; i++) {
+		printf("%s, %d, %.2f, %s \n",
+			emp[i].name, emp[i].salary, emp[i].height, emp[i].comAddr);
+	}
+
+	return 0;
+}
+```
+
+
+
+## IV. 구조체 포인터
+
+**구조체 포인터란, 포인터를 통하여 구조체 변수에 접근하는 개념이다.**
+
+**즉, 포인터 변수를 통해 구조체 변수의 멤버를 제어하는 방법이다.**
+
+- 선언 및 대입
+  - 일반 구조체 변수를 선언하듯이 하되, 앞에 *를 붙이면 된다.
+  - **구조체 포인터 변수에 포인터를 대입할 때 구조체 변수의 시작주소를 대입해야 한다.**
+
+```c
+typedef struct EMPLOYEE {
+    char name[20];
+    int age;
+} EMP; 
+
+EMP empV;  // 구조체 변수 empV 선연
+
+struct EMPLOYEE *empP1 // 구조체 포인터 변수 empP1 선언 
+EMP *empP2; // 구조체 포인터 변수 empP2 선언
+
+// 구조체 변수의 시작주소 대입
+// 시작주소를 대입하지 않으면 이상한 주소를 참조하므로 주의할것!
+empP1 = &empV; 
+```
+
+
+
+### 1. 구조체 포인터를 인자로 받는 함수
+
+```c
+#include <stdio.h>
+
+// 구조체 선언
+struct EMPLOYEE {
+	char name[20];
+	int salary;
+	float height;
+	char comAddr[60];
+};
+
+// 구조체를 인자로 받는 함수 선언
+void str_func(struct EMPLOYEE emp);
+
+// 구조체 포인터를 인자로 받는 함수 선언
+void strP_func(struct EMPLOYEE *emp);
+
+    
+int main(void) {
+    struct EMPLOYEE emp = {
+        "홍길동", 4500000, 175, "서울시 강남구"
+    };
+    
+    str_func(emp);
+    printf("%d", emp.salary); // 4500000
+    
+    // 구조체 포인터를 인자로 받는 함수이므로 포인터를 넘겨줌
+    strP_func(&emp);
+    printf("%d", emp.salary); // 9000000   
+    
+    return 0;
+}
+
+// 해당 함수의 emp는 지역변수이기에 원본의 값을 변경 불가
+void str_func(struct EMPLOYEE emp) {
+    emp.salary += 4500000;
+}
+
+// 주소를 넘겨주었기에 구조체 포인터를 통해 원본 값 변경 가능
+void strP_func(struct EMPLOYEE *emp) {
+    emp->salary += 4500000;
+}
+```
+
+
+
+### 2. 구조체 포인터를 이용한 접근
+
+- 사용
+  - 구조체 포인터 연산자 `->`
+    - 구조체 멤버 연산자 `.`로는 포인터를 통해 접근이 불가능하다.
+  - 구조체 포인터 뒤에 `->`를 붙여서, 해당 구조체 내부의 멤버에 접근할 수 있다.
+
+```c
+empP1->age += 1; //구조체 변수 empV의 age 멤버에 접근하여 +1;
+```
+
+- 구조체 포인터의 크기는, 일반 포인터의 크기와 마찬가지로 4byte(32bit 운영체제) 혹은 8byte이다.
+- 구조체 포인터에 *를 붙이면, 해당 변수 할당된 값에 접근한다는 의미이므로, 해당 구조체 자체에 접근할 수 있다.
+
+```c
+#include <stdio.h>
+
+struct EMPLOYEE {
+	char name[20];
+	int salary;
+	float height;
+	char comAddr[60];
+};
+
+
+int main(void) {
+
+	struct EMPLOYEE emp = { "홍길동", 4500000, 173.5, "서울시 강남구" };
+
+	struct EMPLOYEE *ptr; // 구조체 포인터 변수
+    
+	// 구조체 자료형의 크기 == 구조체 변수의 크기 => 88
+    // 구조체 포인터 변수의 크기 4
+	printf("%d, %d, %d \n", sizeof(struct EMPLOYEE), sizeof(emp), sizeof(ptr));
+
+	ptr = &emp;
+
+	// 구조체 포인터 == 구조체 포인터가 할당된 구조체 변수의 시작 주소
+	printf("%p, %p \n", ptr, &emp);
+
+	// -> : 구조체 포인터 연산자 // . : 구조체 멤버 연산자
+
+	// -> 구조체 포인터 변수가 참조하는 구조체 멤버에 접근
+	// *를 붙여 해당 구조체 변수 값에 접근
+	printf("%s, %d, %.2f, %s \n", 
+		ptr -> name, ptr -> salary, ptr->height, (*ptr).comAddr);
+
+	printf("%d \n", sizeof(*ptr));
+	return 0;
+}
+```
+
+### 3. 구조체 포인터 연산
+
+- 구조체 포인터 연산자도 포인터 연산자와 마찬가지로 4종류이다.
+  - `+, -, ++, --`
+- 포인터 연산자가 지정된 자료형의 크기만큼 포인터를 증가시키듯이, 구조체 포인터 연산자도 구조체 자료형의 크기만큼 포인터를 증가시킨다.
+- 즉, 구조체 배열을 연산할 때 유용하게 사용할 수 있다.
+
+```c
+#include <stdio.h>
+
+struct EMP {
+	char name[20];
+	int age;
+	int salary;
+} emps[4] = {
+	{"진달래", 20, 2900000 },
+	{"개나리", 23, 3100000 },
+	{"까꿍이", 27, 2300000 },
+	{NULL}
+};
+
+int main() 
+{
+	struct EMP *ptr; // 구조체 포인터 변수 선언
+	struct EMP tmp; // 구조체 변수 선언;
+
+	ptr = emps; // emps는 구조체 배열 변수명이므로 주소값 => 구조체 포인터 변수에 대입
+
+	while (*ptr->name) {
+		printf("%s, %d, %d \n", ptr->name, ptr->age, ptr->salary);
+		ptr++;
+	}
+
+	ptr = emps; // 다시 구조체 대입
+
+	tmp = *ptr; // 구조체는 자료형 => 구조체 변수는 멤버들의 집합 == 거대한 변수;
+
+	printf("%s, %d, %d \n", tmp.name, tmp.age, tmp.salary); // 구조체 배열의 주소로 접근 => 구조체 배열의 첫 번째 행에 접근
+
+	return 0;
+}
+```
+
+
+
+### 4. 구조체 포인터를 반환하는 함수
+
+- 함수의 return 값 뒤에 *를 붙인다.
+  - `struct EMPLOYEE * myFunc()`;
+  - EMPLOYEE 구조체의 구조체 포인터를 반환
+
+- 대표적으로 파일입출력에 사용하는 fopen 연산자가 있다.
+  - 함수 원형
+    - `FILE * fopen(char *filename, char *mode);`
+
+
+
+## V. 중첩된 구조체
+
+- 많이 쓰이지 않는다고 한다.
