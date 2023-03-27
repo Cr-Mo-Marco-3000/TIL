@@ -35,18 +35,14 @@ i 변수의 주소를 포인터 편수 p에 저장한다면, p는 i를 가리킨
 
   - 64비트 운영체제
     - 8바이트
-
 - 포인터는 다른 포인터를 가리킬 수도 있다.
 - 포인터 변수의 자료형은 자신이 참조할 데이터의 자료형과 같아야 한다.
   - **왜냐하면, 포인터 변수가 가리키는 번지로 가서 데이터를 읽어올 때, 해당 자료형이 가지는 바이트만큼 읽어오기 때문이다.**
     - 예를 들어 32비트 운영체제에서 `int *p`면, 해당 메모리 주소로 가서 **4바이트**를 읽어오라는 것이다.
-
-  - 
   - 각각 정수형, 부동소수점형, 문자형을 가리킴
     - `int *p;`
     - `double *q;`
     - `char *r;`
-
 - visual studio에서는, 가독성을 위해 포인터 변수를 선언할 때 *의 위치를 앞으로 바꾼다.
   - `int* p;`
 
@@ -89,7 +85,7 @@ int main() {
 - `*`
   - 간접 참조(indirection) 연산자
     - 변수명으로 참조하는 건 직접참조
-  - 포인터가 특정 개체를 가리키고 있을 때, 참조 연산자를 통해 그 개체의 **값**에 접근 가능
+  - 포인터가 특정 개체를 가리키고 있을 때, 참조 연산자를 통해 **가리키는 개체에 접근 가능**
   - **`*` 연산자를 사용하면 해당 포인터의 자료형을 참고하여 해당 자료형만큼의 byte를 읽어온다.**
 
 ```c
@@ -307,23 +303,24 @@ void showMsg2(const char* ptr) // 포인터 상수화
 
 
 
-### 주의 포인터 상수와 포인터 변수
+### 배열변수는 포인터 상수이지만 sizeof 연산자에서 길이를 반환
 
-배열명은 포인터 상수(상수 포인터와는 다름)
+포인터 상수이든 포인터 변수이든, 원칙적으로 sizeof를 찍어보았을 때는 포인터 자체의 크기를 반환하는 것이 맞다.
+
+**하지만 배열변수의 경우 포인터 상수임에도 불구하고, sizeof를 찍었을 때 컴파일러는 해당 배열의 전체 크기를 반환한다!** 
+
+[참고](https://www.quora.com/What-is-the-difference-between-a-constant-pointer-and-an-array-name-in-C)
 
 ```c
-#include <stdio.h>
-
-int main(void) {
-	int num[5];
-	int* ptr;
-
-	printf("num sizeof: %d, 열크기: %d \n", sizeof(num), sizeof(num) / sizeof(num[0])); // 배열변수는 포인터 상수;
-
-	ptr = num;
-
-	printf("ptr sizeof: %d, %d \n", sizeof(ptr), sizeof(ptr) / sizeof(int)); // 포인터 변수로는 해당 배열의 크기를 확인할 수 없다.
-}
+int arr[10] = {0,1,2,3,4,5,6,7,8,9}; 
+ 
+//let us find the size of the array - 
+printf("Size: %d\n", sizeof(arr)); //this prints 40; assuming size of int is 4 
+ 
+//let me create a constant pointer now 
+int* const ptr = arr; //has to be initialized during declaration 
+ 
+printf("Size: %d\n", sizeof(ptr)); //this prints 4; assuming size of int is 4 
 ```
 
 
@@ -353,6 +350,8 @@ int main(void) {
        - `int myArray[10] = {0};`
 
      - **포인터(주소)는 변하게 하지 못하지만 값은 바꿀 수 있음**
+       - 즉, 포인터 상수는 포인터 연산이 불가능함
+     
 
 ```c
 #include <stdio.h>

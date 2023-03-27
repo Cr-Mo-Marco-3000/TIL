@@ -52,7 +52,9 @@ fopen
 - FILE 구조체를 생성하고, FILE 구조체 포인터를 반환하는 함수
 - 각 FILE 개체는 스트림을 나타내고, 내부에 장치에 엑세스하는 데 필요한 정보들을 보유
 
-### 3. 텍스트 데이터 입출력
+### 1. 텍스트 데이터 입출력
+
+r == rt, w == wt, a == at
 
 #### 1. 문자 입출력
 
@@ -61,6 +63,45 @@ fopen
 
 
 
-
-
 ... => 가변인자 함수
+
+
+
+### 3. 정형화된 함수 입출력
+
+
+
+## 3. 이진 스트림 모드
+
+`rb, wb, ab`
+
+fread, fwrite;
+
+해당 함수들은 어떠한 종류의 어떠한 파일이라도 읽어들일 수 있다.
+
+
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void) {
+	int salary;
+	
+	// 임시 문자배열을 선언해서, 사용자의 입력을 검사한다.
+	// atoi, atol, atif
+	char tmp[100];
+
+	do { 
+		
+		printf("input salary ?");
+		gets(tmp);
+		salary = atoi(tmp);
+
+	} while (!salary);
+
+
+	return 0;
+}
+```
+
