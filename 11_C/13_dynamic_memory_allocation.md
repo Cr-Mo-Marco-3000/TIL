@@ -152,3 +152,521 @@ int main() {
 }
 ```
 
+## 3. 메모리 누수
+
+- 메모리 누수 현상은 컴퓨터 프로그램이 필요하지 않은 메모리를 계속 점유하고 있는 현상으로 할당된 메모리를 사용한 다음 반환하지 않는 것이다.
+- 메모리 누수는 프로그램이 메모리를 할당 후, 해제하지 않음으로 시스템의 메모리를 고갈시키는 소프트웨어 오류로, 당장 프로그램이 비정상적으로 종료되지 않으나 메모리 누수가 누적되면 결국 메모리 부족으로 인한 프로그램의 비정상적인 종료를 유발한다.
+- 동적 메모리 할당은, 반드시 확인 후 진행하는 것이 좋다.
+
+### 참고: 여러 언어에서의 동적 할당
+
+- C
+  - 구조적인 programming
+  - malloc으로 힙 영역 할당
+- C++
+  - 객체 지향 프로그래밍
+  - new로 힙 영역 할당, delete로 삭제
+    - 원래는 수동으로 해주어야함
+    - 메모리를 수동으로 관리해주면, 성능상의 이점이 있으나 메모리 누수 발생 가능
+  - 메모리 관리를 수월하게 하기 위한 라이브러리 존재
+    - VLD
+- JAVA, C#
+  - 객체 지향 프로그래밍
+  - delete를 대신 해 주는 가비지 콜렉터 내장
+    - 메모리 누수가 발생하지 않는 대신, 즉시 지워지지 않는다.
+
+### VLD를 이용한 메모리 누수 관리
+
+- 한글이 있으면, 메모리 누수가 발생하는 위치를 줄로 찝어주지 못하는 오류가 발생하므로 주의
+
+```c
+#include <vld.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+int* funcA(int _numSz)
+{
+	//
+	int *nPtr, i;
+
+	nPtr = (int*)malloc(_numSz * sizeof(int));
+
+	if (nPtr == NULL)
+	{
+		perror("funcA() Error : ");
+		exit(1);
+	}
+
+	for (i = 0; i < _numSz; i++)
+		*(nPtr + i) = 100 + i;
+
+	return nPtr;
+}
+
+void funcB(char* msg)
+{
+	printf("msg : %s \n", msg);
+}
+
+int main()
+{
+	int numSz, * Ptr, i;
+
+	printf("input Array Size ? ");
+	scanf("%d", &numSz);
+
+	Ptr = funcA(numSz);
+
+	printf("\n동적할당 데이터\n");
+	for (i = 0; i < numSz; i++)
+		printf("%d, ", *(Ptr + i));
+
+	printf("\n");
+
+	funcB("다우기술");
+
+	// free(Ptr); 해당 주석을 풀지 않으면 메모리 누수가 발생한다.
+
+	return 0;
+}
+
+```
+
+
+
+
+
+## 3. 구조체 포인터 동적 할당
+
+- 힙 세그먼트는 포인터를 통해 조작할 수 밖에 없기 때문에, 구조체를 힙 세그먼트에서 이용하기 위해서는 구조체 포인터를 이용해야 한다.
+  - 구조체 포인터 연산자 `->`이용
+
+```c
+// 구조체 포인터 empPtr 이용
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+struct EMP {
+	char name[20];
+	int salary;
+	float height;
+	char comAddr[50];
+};
+
+int main() {
+
+	struct EMP *empPtr; // 구조체 포인터
+
+	while (1) {
+		empPtr = (struct EMP*)malloc(sizeof(struct EMP));
+
+		if (empPtr == NULL) {
+			perror("Error");
+			exit(1);
+		}
+
+		// 데이터입력
+		printf("이름? (입력 종료:end)\n");
+		gets(empPtr->name);
+
+		if (!strcmp(empPtr->name, "end")) { // 주소이므로 그대로 입력 가능
+			break;
+		}
+
+		printf("연봉?\n");
+		scanf("%d", &empPtr->salary);
+
+		printf("키?\n");
+		scanf("%f%*c", &empPtr->height);
+		
+		printf("주소?\n");
+		gets(empPtr->comAddr);
+
+		// 데이터 출력
+		printf("이름: %s\n", empPtr->name);
+		printf("연봉: %d\n", empPtr->salary);
+		printf("키: %f\n", empPtr->height);
+		printf("주소: %s\n", &empPtr->comAddr);
+	}
+
+	// 메모리해제
+	free(empPtr);
+	empPtr = NULL;
+	return 0;
+}
+```
+
+### 구조체 포인터 리스트
+
+
+
+
+
+## 4. 연결 리스트(Linked List)
+
+자기참조 구조체를 사용해서 연결 리스트를 만든다.
+
+**구조체를 사용해서 연결 리스트를 생성할 때는, 구조체 네임태그가 반드시 필요하다!**
+
+
+
+### 1. 단일 연결 리스트
+
+- 단방향으로만 순환 가능한 연결 리스트
+- 일반적으로 연결 리스트의 노드에는 head(시작), tail(끝) 용어를 사용한다.
+
+```c
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <vld.h>
+
+struct EMP {
+	char name[20];
+	int salary;
+	float height;
+	char comAddr[50];
+	struct EMP *next; // 구조체 내부에 다음 노드의 포인터를 저장
+};
+
+int main() {
+	struct EMP *head, *tail; // 연결 리스트의 시작, 끝을 저장할 포인터 변수
+	struct EMP *empPtr, *x;  // 연결 리스트를 만들 때 활용할 포인터, 메모리 해제할 때 사용할 포인터.
+	head = tail = NULL;      // 첫 번째 노드 생성 전에는 head와 tail이 모두 비어있으므로, 
+							 // 이를 표시하기 위함 => 사실 head에만 붙여도 됨
+
+	while (1) {
+
+		// 노드 EMP의 크기만큼 동적 할당을 받은 후 구조체 포인터 반환
+		// 노드마다 사이즈는 같지만 동적 할당된 메모리상의 위치는 제각각이다
+		empPtr = (struct EMP *)malloc(sizeof(struct EMP));
+		
+		// 할당 실패시 에러 처리
+		if (empPtr == NULL) {
+			perror("Error");
+			exit(1);
+		}
+		// 각 정보 입력받기 => 연봉과 신장의 경우에는 & 필요
+		printf("이름 입력? - 종료: end\n");
+		gets(empPtr->name);
+
+		// 종료조건 만족시
+		if (!strcmp(empPtr->name, "end")) {
+			break;
+		}
+
+		printf("연봉 입력?\n");
+		scanf("%d", &empPtr->salary);
+		printf("신장 입력?\n");
+		scanf("%f%*c", &empPtr->height);
+		printf("주소 입력?\n");
+		gets(empPtr->comAddr);
+
+		// 새로운 노드를 만들기 전에는 지금 만든 노드(empPtr)가 마지막 노드이므로
+		// 다음 노드가 없다는 의미로 NULL 포인터를 넣어 처리
+		empPtr->next = NULL;
+
+		if (head == NULL) {			// 기존에 시작 노드가 없으면
+			head = tail = empPtr;	// 지금 만든 노드가 처음이자 끝 노드
+		} else {
+			tail->next = empPtr;	// 기존 최종 노드의 next에 새로 만든 노드를 저장 후
+			tail = empPtr;			// 새로 만든 노드를 마지막 노드로 설정
+		}
+	}
+
+	free(empPtr);					// 연결 리스트에 속하지 못한 불완전한 노드 해제
+
+	/*
+	출력
+	*/
+	puts("");
+	printf("출력을 실행합니다.\n");
+	puts("");
+	empPtr = head;					// 리스트에 시작 노드를 넣는다.
+	while (empPtr) {				// 마지막 노드까지 반복
+		printf("이름: %s, 연봉: %d, 키: %.2f, 주소: %s\n",
+			empPtr->name, empPtr->salary, empPtr->height, empPtr->comAddr);
+		empPtr = empPtr->next;
+	}
+
+	/*
+	해제
+	*/
+	puts("");
+	printf("해제를 실행합니다.\n");
+	puts("");
+	empPtr = head;						// 리스트에 시작 노드를 넣는다.
+	while (empPtr) {					// 마지막 노드까지 반복
+		x = empPtr->next;
+		free(empPtr);
+		empPtr = x;
+	}
+
+	/*
+	교수님 코드
+	
+	while (empPtr) {
+		x = empPtr;
+		empPtr = empPtr->next;
+		free(x);
+	}
+	*/
+
+	empPtr = NULL; // 눈 먼 free() 방지용
+
+	
+	return 0;
+}
+```
+
+
+
+### 2. 이중 연결 리스트
+
+- 아래 코드에서는 head, tail 대신 start, end를 쓰겠다.
+
+```c
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <vld.h>
+
+struct EMP {
+	char name[20];
+	int salary;
+	float height;
+	char comAddr[50];
+	struct EMP *next;	// 구조체 내부에 다음 노드의 포인터를 저장
+	struct EMP *before;	// 구조체 내부에 이전 노드의 포인터를 저장
+};
+
+int main() {
+	struct EMP *start, *end; // 연결 리스트의 시작, 끝을 저장할 포인터 변수
+	struct EMP *empPtr, *x;  // 연결 리스트를 만들 때 활용할 포인터, 메모리 해제할 때 사용할 포인터.
+	start = end = NULL;      // 첫 번째 노드 생성 전에는 start와 end가 모두 비어있으므로, 
+							 // 이를 표시하기 위함 => 사실 start에만 붙여도 됨
+
+	while (1) {
+
+		// 노드 EMP의 크기만큼 동적 할당을 받은 후 구조체 포인터 반환
+		// 노드마다 사이즈는 같지만 동적 할당된 메모리상의 위치는 제각각이다
+		empPtr = (struct EMP *)malloc(sizeof(struct EMP));
+		
+		// 할당 실패시 에러 처리
+		if (empPtr == NULL) {
+			perror("Error");
+			exit(1);
+		}
+		// 각 정보 입력받기 => 연봉과 신장의 경우에는 & 필요
+		printf("이름 입력? - 종료: end\n");
+		gets(empPtr->name);
+
+		// 종료조건 만족시
+		if (!strcmp(empPtr->name, "end")) {
+			break;
+		}
+
+		printf("연봉 입력?\n");
+		scanf("%d", &empPtr->salary);
+		printf("신장 입력?\n");
+		scanf("%f%*c", &empPtr->height);
+		printf("주소 입력?\n");
+		gets(empPtr->comAddr);
+
+		// 새로운 노드를 만들기 전에는 지금 만든 노드(empPtr)가 마지막 노드이므로
+		// 다음 노드가 없다는 의미로 NULL 포인터를 넣어 처리
+
+		empPtr->next = NULL;
+		empPtr->before = end;			// 위쪽에서 end에 NULL을 초기화시켜 주었으므로 시작노드에서는 NULL 할당
+										// empPtr->before = NULL; => 교수님 코드
+							
+		if (start == NULL) {			// 기존에 시작 노드가 없으면
+			start = end = empPtr;		// 지금 만든 노드가 처음이자 끝 노드
+		} else {
+			// empPtr->before = end;	//교수님 코드
+			end->next = empPtr;			// 기존 최종 노드의 next에 새로 만든 노드를 저장 후
+			end = empPtr;				// 새로 만든 노드를 마지막 노드로 설정
+		}
+	}
+
+	free(empPtr);					// 연결 리스트에 속하지 못한 불완전한 노드 해제
+
+	/*
+	출력 (end => start)
+	*/
+	puts("");
+	printf("출력을 실행합니다.\n");
+	puts("");
+	empPtr = end;					// 리스트에 마지막 노드를 넣는다.
+	while (empPtr) {				// 시작 노드까지 반복
+		printf("이름: %s, 연봉: %d, 키: %.2f, 주소: %s\n",
+			empPtr->name, empPtr->salary, empPtr->height, empPtr->comAddr);
+		empPtr = empPtr->before;
+	}
+
+	/*
+	출력 (start => end)
+	*/
+	puts("");
+	printf("출력을 실행합니다.\n");
+	puts("");
+	empPtr = start;					// 리스트에 마지막 노드를 넣는다.
+	while (empPtr) {				// 시작 노드까지 반복
+		printf("이름: %s, 연봉: %d, 키: %.2f, 주소: %s\n",
+			empPtr->name, empPtr->salary, empPtr->height, empPtr->comAddr);
+		empPtr = empPtr->next;
+	}
+
+
+	/*
+	해제
+	*/
+	puts("");
+	printf("해제를 실행합니다.\n");
+	puts("");
+	empPtr = start;						// 리스트에 시작 노드를 넣는다.
+	while (empPtr) {					// 마지막 노드까지 반복
+		x = empPtr->next;
+		free(empPtr);
+		empPtr = x;
+	}
+
+	/*
+	교수님 코드
+	
+	while (empPtr) {
+		x = empPtr;
+		empPtr = empPtr->next;
+		free(x);
+	}
+	*/
+
+	empPtr = NULL; // 눈 먼 free() 방지용
+
+	
+	return 0;
+}
+```
+
+### 3. 연결 리스트 노드 내부 문제점과 개선
+
+- 노드 내부에 문자열이 있을 경우, 해당 영역이 길어졌을 때 이후 메모리 영역을 침범하는 일이 발생할 수 있다.
+- 이럴 때를 대비해서 두 가지 방법이 있다.
+  1. 버퍼를 만들어서 입력 크기를 제한하는 일반적인 방법
+  2. 주소 같이 크기가 큰 문자열은, 자체적으로 힙 세그먼트에 할당한 후 구조체에는 그 포인터만 저장하는 방법
+- 위 두 개를 같이 쓸 수도 있다.
+
+```c
+// 위의 단일 연결 리스트 코드와 같이 보자
+// 주석이 달린 부분이 변화된 부분이다.
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <vld.h>
+
+struct EMP {
+	char name[20];
+	int salary;
+	float height;
+	char *comAddr;
+	struct EMP *next;	
+};
+
+int main() {
+	struct EMP *head, *tail; 
+	struct EMP *empPtr, *x;  
+	head = tail = NULL;     
+							
+	char tmp[250];			 // 문자열 처리를 위한 임시 문자배열
+
+	while (1) {
+
+		empPtr = (struct EMP *)malloc(sizeof(struct EMP));
+		
+		// 할당 실패시 에러 처리
+		if (empPtr == NULL) {
+			perror("Error");
+			exit(1);
+		}
+
+		do {
+			printf("이름 입력? : 최대 19자: 종료: end\n");
+			gets(tmp);
+		} while (strlen(tmp) >= sizeof(empPtr->name)); // 같아도 안된다. => 끝에 \0
+
+		strcpy(empPtr->name, tmp);	// 조건 통과시 이름 저장
+
+		// 종료조건 만족시 종료 
+		// => 불완전한 구조체 메모리는 아래서 할당해제하므로 괜찮다.
+		if (!strcmp(empPtr->name, "end")) {
+			break;
+		}
+
+		printf("연봉 입력?\n");
+		scanf("%d", &empPtr->salary);
+		printf("신장 입력?\n");
+		scanf("%f%*c", &empPtr->height);
+		printf("주소 입력?\n");
+
+		// address는 길이가 가변적이므로, 
+		// 임시 배열에 저장해준 후 힙 영역에 동적할당한다
+		gets(tmp);
+		empPtr->comAddr = (char *)malloc(strlen(tmp) + 1);
+		strcpy(empPtr->comAddr, tmp);
+
+		empPtr->next = NULL;
+							
+		if (head == NULL) {			
+			head = tail = empPtr;
+		} else {
+			tail->next = empPtr;		
+			tail = empPtr;	
+		}
+	}
+
+	free(empPtr);					
+
+	puts("");
+	printf("출력을 실행합니다.\n");
+	puts("");
+	empPtr = head;					// 리스트에 마지막 노드를 넣는다.
+	while (empPtr) {				// 시작 노드까지 반복
+		printf("이름: %s, 연봉: %d, 키: %.2f, 주소: %s\n",
+			empPtr->name, empPtr->salary, empPtr->height, empPtr->comAddr);
+		empPtr = empPtr->next;
+	}
+
+
+	/*
+	해제
+	*/
+	puts("");
+	printf("해제를 실행합니다.\n");
+	puts("");
+
+	empPtr = head;
+	
+	while (empPtr) {
+		free(empPtr->comAddr);
+		x = empPtr->next;
+		free(empPtr);
+		empPtr = x;
+
+		/* 교수님 코드
+		x = empPtr;
+		empPtr = empPtr->next;
+		free(x->comAddr);
+		free(x);
+		*/
+	}
+
+	empPtr = NULL; // 눈 먼 free() 방지용
+
+	
+	return 0;
+}
+```
+
