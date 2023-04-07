@@ -156,7 +156,9 @@ public class void main VariableExchangeExample{
 }
 ```
 
+### 0. 기본형 변수
 
+- 값이 저장
 
 ### 1. 참조형 변수
 
@@ -348,8 +350,11 @@ public class typecast {
    - 프로그램 실행시 생성, 프로그램 종료시 소멸
      - **즉, 딱 한번만 생성된다.**
      - 어떤 값을 누적하거나 할 때 사용한다.
-   - **method area에 저장**
-     - JAVA 8부터는 HEAP 영역에 저장
+   - **method area(Permanent Generation space)에 저장되었음**
+     - **JAVA 8부터는 JAVA HEAP 영역에 저장(String과 마찬가지)**
+       - 원래 Perm Gen space는 HEAP 영역의 특수한 공간이었는데, 이것이 그냥 HEAP 영역으로 옮겨진 것
+       - [참고](https://stackoverflow.com/questions/8387989/where-are-static-methods-and-static-variables-stored-in-java)
+     - 가비지 콜렉터의 대상이 됨
    - **초기화 안하면 임의의 값으로 자동 초기화**
 
 - 생성 및 소멸 순서

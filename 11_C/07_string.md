@@ -142,6 +142,7 @@ int main() {
       - `stringArray == &stringArray == &stringArray[0]`
   - **공백문자를 포함할 수 없으며** 공백, 탭, Enter로 문자열을 구분하여 저장한다.
     - **공백, tab, enter가 null로 바뀌어** 문자열을 구분하여 저장된다.
+      - 저장된 후 엔터는 남아있다.
     - 뒤에 `%*c`를 잊지 말자
 - gets에서 enter 입력시 null로 바뀌는 예시
 

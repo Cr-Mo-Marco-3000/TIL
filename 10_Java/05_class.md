@@ -1,176 +1,314 @@
-# class
+# Class
 
-## I. 배열
+자바에서는 모든 객체가 클래스로 정의되어지며 가장 작은 실행단위이다.
 
-데이터가 많을 경우, 배열로 만들어서 관리
+클래스를 통해서 자바프로그램 개발에 필요한 데이터 및 처리작업을 수행할 수 있다.
 
-### 1. 배열의 특징
+## I. 클래스
 
-- 원시형, 참조형 등 **모든 데이터**를 배열로 저장 가능
-- 같은 데이터 형만 배열로 저장 가능(C와 동일)
-- 배열 원소로의 접근은 첨자 사용
-- 배열의 크기는 `.length`를 사용해서 구함
-- **사용시 선언 및 생성 필요**
-  - 선언만 해서는 사용할 수 없음
-- 생성은 3가지 방법으로 가능
-  - `new` 키워드
-  - 리터럴 사용
-  - `new` 키워드와 리터럴 혼합
-
-- 배열이 생성되면 기본적으로 데이터형에 맞춰서 초기화됨
-  - 임의의 값은 변수 문서 참고
-
-### 2. 배열 사용법
-
-1. 변수 선언
-   - `데이터형 [] 배열명`
-     - 주로 사용
-   - `데이터형 배열명 []`
-2. 생성 및 할당
-   - 배열명 = new 객체명[배열크기]
-   - 변수에 저장된 데이터는 주소값
-     - 즉 변수의 자료형은 `데이터형`이 아니라 `데이터형[]`
-3. 선언과 생성 및 할당 동시에 가능
-   - `int[] numbers = new int[30];`
-   - 배열 자체는 클래스의 인스턴스이므로 **힙 영역에 생성**되고, 스택 영역에 생성된 numbers변수로 사용가능
-
-```
-package p02;
-
-public class Array {
-
-	public static void main(String[] args) {
-		int[] myArray = new int[30]; // 선언, 생성, 할당
-		
-		System.out.println(myArray.length); // 길이는 30
-		
-		System.out.println(myArray); // 주소값 출력
-		
-		System.out.println(new int[30]); // 생성만 하고 할당 안하기 => 힙역역의 주소값 출력
-	}
-
-}
-
-```
-
-
-
-### 3. for - each 반복문
-
-- 배열의 크기를 넘는 인덱스를 사용할 경우 `ArrayIndexOutOfBoundsException` 에러 발생
-- 이를 방지하기 위한 특이한 방식의 반복문
-- 배열의 원소를 가져와서 i에 저장한 후, 이후 문을 실행
-  - **변수에 저장해 주는 것이기 때문에, 원본은 변경할 수 없다!**
-  - 즉, 출력이나 별도 연산에서만 가능
-
-```
-package p02;
-
-public class Array {
-
-	public static void main(String[] args) {
-		int[] myArray = new int[30]; // 선언, 생성, 할당
-		
-		
-		for (int i=0; i < myArray.length; i++) {
-			myArray[i] = i;
-		}
-		
-		// for - each 반복문 => for of 반복문과 유사
-		for (int i: myArray) {
-			System.out.println(i);
-		}	
-	}
-}
-
-```
-
-
-
-### 4. 리터럴을 이용한 배열 초기화
-
-- **C와 마찬가지로 초기화 때만 이렇게 할당 가능**
-
-- `int[] myArr = {1, 2, 3};`
+- 형식
 
 ```java
-package p02;
-
-public class Array {
-
-	public static void main(String[] args) {
-		
-		int[] myArr = {1, 2, 3};
-
-		for (int i : myArr) {
-			System.out.println(i);
-		}
-		
-	}
-
-}
-
-```
-
-
-
-### 5. new와 리터럴 혼합
-
-- 혼합 사용시는 new 생성자 내부에 배열 크기를 넣어주면 안됨
-
-```java
-package p02;
-
-public class Array {
-
-	public static void main(String[] args) {
-		
-		int[] myArr;
-		myArr = new int[] {1, 2, 3};
-		
-		// 위 두 라인을 한 번에
-		// int[] myArr = new int[] {1, 2, 3};
-		
-		for (int i : myArr) {
-			System.out.println(i);
-		}
-	}
+modifier class Classname {
+    [instance variable]
+    [method]
+    [constructor]
 }
 ```
 
 
 
-### 6. 파라미터로 배열 전송
+### 1. 지정자(modifier)
 
-메서드의 파라미터로 배열을 전달할 경우, 배열도 객체이기 때문에 원본 배열의 위치값이 넘겨진다.
+- 특정 목적을 위해서 사용하는 키워드를 의미
+- 클래스, 변수, 메서드 선언에 사용할 수 있고 생략이 가능하다.
 
-**따라서 해당 배열을 수정하면 원본 배열도 수정된다.**
+#### 1. 일반 지정자
 
-- **call by reference**
+- static, final, abstract
+
+#### 2. 접근 지정자
+
+- private, protected, (default), public
+- 일반적으로 클래스는 public을 사용
+
+- 일반 지정자와 접근 지정자는 같이 사용 가능하다.
+
+
+
+### 2. 클래스명
+
+- 클래스를 가장 잘 표현할 수 있는 의미 있는 이름으로 지정
+- 명사형으로 작성, 첫 글자는 대문자로 지정
+
+
+
+### 3. 클래스의 3가지 구성요소
+
+1. 인스턴스 변수
+   - 클래스 구성요소인 속성값을 저장하기 위한 용도
+   - 멤버변수 라고도 부름
+2. 메서드
+   - 인스턴스 변수에 저장된 속성 값을 수정하거나 조회 또는 
+3. 생성자
+   - 인스턴스 변수를 초기화 하는 역할
+   - 즉, 변수에 데이터를 맨 처음 지정할 때 사용됨
+   - 메서드를 이용해서 초기화를 하는 것도 가능하지만 생성자를 이용해서 초기화를 하는 것을 권장
+
+## II. 클래스의 구성요소
+
+- 인스턴스 변수는 데이터가 실제로 저장되는 곳
+- 생성자를 통해 변수에 데이터를 맨 처음 저장
+- 메서드는 저장된 데이터를 수정, 삭제, 조회
+- **클래스를 사용하려면 객체생성(instance화)는 반드시 선행되어야 한다.**
+
+
+
+### 1. 인스턴스 변수
+
+- 클래스를 통해서 객체 생성된 인스턴스에 필요한 데이터를 저장하는 곳
+- 클래스를 인스턴스화(객체생성)할 때마다 메모리에 새로 생성됨
+  - 각 인스턴스마다 서로 다른 데이터로 관리
+- 소문자로 작성
+- 힙 영역에 저장됨
+
+- 형식
+  - `[지정자] 데이터형 변수명;`
+
+- **자동으로 기본값이 저장됨**
+  - 정수형 0
+  - 실수형 0.0
+  - 논리형 false
+  - 참조형 NULL
+  - **메서드 안에서 선언된 변수는 로컬변수**
+    - **초기화가 되지 않으므로 주의**
+
+
+
+### 2. 메서드
+
+클래스의 기능적인 면을 표현할 때 사용하고 일반적으로 인스턴스 변수에 저장된 데이터를 수정, 조회 및 중복코드 처리시 사용
+
+**멤버 메서드라고 하며 클래스를 인스턴스화 할 때마다 매번 생성되지는 않고 공유해서 사용됨**
+
+- 모두 동일한 코드를 사용하기 때문
+- 소문자로 작성
+
+객체 생성 후 메서드 호출 작업을 해야 동작한다.
+
+호출하는 메서드와 호출 당하는 메서드가 존재한다.
+
+다음과 같은 2가지로 구분될 수 있다.
+
+- caller 메서드
+  - 특정 동작을 수행하는 메서드를 호출하는 메서드를 의미한다.
+  - 가변인자를 사용할 때는 `...`를 사용한다.
+- worker 메서드
+  - caller 메서드에 의해서 호출되어 실제로 특정 작업을 수행하는 메서드이다.
+  - 일반적으로 메서드라고 하면 **worker 메서드**를 의미한다.
+  - worker 메서드는 역할에 따라서 getter와 setter 2가지로 구분된다.
+    - getter와 setter는 변수를 만든 수 eclipse 툴에서 생성 가능하다.
+
+#### 1. setter
+
+인스턴스 변수에 저장된 데이터를 수정할 목적으로 사용된다.
+
+메서드 이름은 `set변수명`으로 지정한다.
+
+- camelCase를 사용하기 때문에, 변수명의 첫 글자는 대문자를 붙인다.
+  - setAge
+
+#### 2. getter
+
+- 인스턴스 변수의 데이터를 조회할 목적으로 사용된다.
+- `get변수명`으로 지정한다.
+
+
+
+#### 메서드의 형식
+
+- 모두 소문자로 작성한다.
 
 ```java
-package p02;
+/*
+[지정자] 리턴타입 메서드명 ([파라미터, ...]) {
+    
+    // 실행문
+    
+    [return 결과값;]
+}
+*/
 
-public class Array {
+public static void main (String[] args) {
+    
+    
+}
+```
 
-	public static void main(String[] args) {
+- 지정자는 일반, 접근 지정자 모두 사용 가능하며 일반적으로 public 접근지정자를 사용한다.
+
+- 호출한 곳(caller)에서 호출된 곳(worker)로 넘어가게 되며, 호출된 곳의 작업이 모두 끝나면 호출한 곳으로 복귀한다.
+
+  - return 값을 가지고 복귀하는 메서드가 주로 getter 메서드 형태이다.
+
+- parameter를 넘겨 데이터를 인스턴스 변수에 저장할 수 있다.
+
+  - setter 메서드가 주로 이런 형식이다.
+
+- 결과값이 없을 때는 `return;`을 사용하거나 `return`을 명시하지 않고, 리턴타입에 void를 **반드시** 지정한다.
+
+  
+
+#### 메서드의 호출
+
+메서드를 호출할 때는 **메서드명과 인자 리스트가 반드시 일치**해야 한다.
+
+
+
+#### main 메서드
+
+main 메서드는 명시적으로 후출하지 않아도 실행될 수 있는 유일한 메서드이자, 프로그램의 시작점이다.
+
+하나의 애플리케이션에서 main 메서드를 가진 클래스는 반드시 존재하며 또한 하나의 클래스에서만 정의할 수 있다.
+
+형식은 반드시 다음과 같이 정의해야 자동 실행된다.
+
+`public static void main(String[] args) {}`
+
+
+
+### 3. 생성자(constructor)
+
+인스턴스 변수를 초기화하는 역할이다.
+
+setter 메서드를 이용해서 생성할 수도 있지만, 생성자를 이용해서 초기화를 하고 setter 메서드를 이용해서 수정한다.
+
+**생성자도 메서드처럼 호출되어야 수행되며 필요에 따라 여러 개 정의가 가능하다.** 
+
+메서드와 차이점은 **1) 리턴타입이 없고**, 반드시 **2) 클래스명으로 생성자 이름을 지정**해야 된다.
+
+접근지정자에는 **일반적으로 public을 사용**하며, 파라미터를 이용해 인스턴스 변수를 초기화한다.
+
+- 형식
+  - `[접근지정자] 클래스명 ([파라미터]) {}`
+
+- 예시
+
+```java
+public class Student {
+    
+	// 인스턴스 변수 2개
+	String name;
+	int age;
+
+    public Student(String n, int a) {
+        name = n;
+        age = a;
+    }
+}
+```
+
+#### 1) 기본 생성자 (derault constructor)
+
+모든 클래스에는 자동으로 기본 생성자가 생성되며, 다음과 같은 **파라미터 없는 형식**을 갖는다.
+
+기본 생성이므로, 접근지정자에는 **클래스 선언시 사용한 접근지정자를 따르며** 생성자의 파라미터가 없다.
+
+- 형식
+  - `[접근지정자] 클래스명 () {}`
+
+내부적으로는 자동으로 기본 생성자가 삽입되지만, 개발자가 **명시적으로 생성자를 지정하면 기본 생성자는 자동 생성되지 않는다.**
+
+
+
+## III. 객체 생성
+
+클래스를 정의한 후에는 반드시 객체를 생성해야 클래스를 사용할 수 있다.
+
+new 키워드와 함께 생성자를 호출하는 작업으로서, 클래스 내의 인스턴스 변수와 메서드를 메모리에 생성시키는 작업이다.
+
+- 형식
+  - `클래스형 변수명 = new 클래서형([값...])`
+
+값을 저장할 수 있는 파라미터 있는 **생성자를** 호출하거나, 파라미터 없는 **기본 생성자**를 호출할 수 있다.
+
+메서드와 마찬가지로 생성자 이름과 인자 리스트가 일치되어야 한다.
+
+new를 사용해서 생성자를 호출하면 클래스의 멤버가 메모리에 생성이 된다. 
+
+- 인스턴스 변수는 힙 영역에, 메서드는 메서드 영역에 생성이 된다.
+  - JAVA 8 버전부터는 다를 수 있다.
+
+- 해당 메모리 위치를 변수에 저장한 후 참조(참조 데이터형: 클래스)하는 것이다.
+
+클래스의 멤버에 접근하기 위해 참조형 변수와 .(dot)를 이용한다.
+
+- 같은 클래스안의 메서드 및 인스턴스 변수에 접근하기 위해서는 다음과 같이 `.`를 사용하지 않고 **바로 접근할 수 있다.**
+
+```java
+public class Myclass {
+    
+    String name;
+    
+    public void setName(String n) {
+        name = n; // name 그대로 호출 가능
+    }
+}
+```
+
+### 1. 인자 전달
+
+- 원시형 변수를 인자로 전달하면, 파라미터(일종의 지역변수)에는 값이 복사되어 전달된다
+- 참조 데이터형을 전달하면, 메모리 주소값이 복사되어 전달되기에 한쪽 값이 변경되면 다른쪽에도 영향을 미친다.
+
+```java
+package practice;
+
+public class StudentTest {
+
+	public static void main(String[] args){
+		Student hyun = new Student("김현영", 31);
 		
-		int[] numbers = {1, 2, 3 ,4, 5};
+		int zero = 0;
+		int[] zeroArray = new int[5];
 		
-		for (int i: numbers) {
-			System.out.println(i);
-		} // 1, 2, 3, 4, 5
+		hyun.giveValue(zero);
+		hyun.giveRef(zeroArray);
 		
-		change(numbers);
 		
-		for (int i: numbers) {
-			System.out.println(i);
-		} // 2, 3, 4, 5, 6
+		// 원본 값에 변화가 있을까?
+		System.out.println(zero); 	// 없음: 0출력
+		
+		for(int x: zeroArray) {
+			System.out.println(x);	// 있음: 1 1 1 1 1 출력
+		}
+		
+	}
+}
+
+// =======================================================================
+
+package practice;
+
+public class Student {
+	
+	String name;
+	int age;
+	
+	public Student(String name, int age) {
+		this.name = name;
+		this.age = age;
 	}
 	
-	public static void change(int[] args) {	
-		for (int i=0; i < args.length; i++) {
-			args[i]++;
+	// 값을 받는 메서드 => 원본값에 영향 없음
+	public void giveValue(int num) {
+		num++;
+	}
+
+	// 주소를 받는 메서드 => 원본값에 영향 잇음
+	public void giveRef(int[] nums) {
+		for (int i=0; i < nums.length; i++) {
+			nums[i]++;
 		}
 	}
 }
@@ -179,120 +317,92 @@ public class Array {
 
 
 
-### 7.  배열 복사
+## IV. 메서드, 생성자 오버로딩
 
-- System.arraycopy를 사용한 배열 복사
-- `System.arraycopy(Object source, int sourceStartIndex, Object dest, int destStartIndex, int length)`
-  - source배열의 sourceStartIndex인덱스부터 length만큼의 원소를 dest 배열의 destStartIndex부터 복사
-  - target 배열의 크기가 더 작으면 오류
+- 변수와 다르게 메서드와 생성자는 같은 클래스 내에서 같은 이름으로 여러 번 사용될 수 있으며, 같은 이름으로 된 메서드와 생성자를 오버로딩 메서드와 오버로딩 생성자라고 한다.
+- 기본적으로 이름이 동일하더라도 인자 리스트가 다르면 식별할 수 있기 때문에 가능하다.
+
+- 오버로딩 메서드, 생성자를 작성하기 위한 규칙
+  - 매서드 및 생성자 **이름이 같아야 한다.**
+  - **인자 리스트는 반드시 달라야 한다.** (인자 개수 또는 인자 타입 또는 인자 순서)
+    - 인자의 이름이 달라도 소용이 없다.
+  - 리턴타입이 달라도 위 두 항목이 같으면 오버로딩이 안된다.
+
+- 대표적인 오버로딩 메서드가 `println()`, `print()` 메서드이다
+  - 같은 이름의 메서드가, 서로 다른 다양한 인자를 받아 다른 메서드 취급을 당한다.
+
+- 오버로딩 생성자를 사용할 때 주의할 점은, 명시적으로 파라미터 있는 생성자를 지정하면 기본 생성자가 자동 생성되지 않는다는 것이다.
+  - 따라서 기본 생성자도 따로 작성해 주어야 한다.
+
+
+
+## VI. this
+
+this는 객체생성 후에 힙 메모리에 생성된 자기 자신의 인스턴스를 의미한다.
+
+즉, 인스턴스가 자기 자신을 가리킬 때 사용될 수 있다. 
+
+일반적으로 this 키워드는 생략하고 사용하지만, 반드시 사용해야 하는 경우가 있는데 대표적인 경우는 다음과 같다.
+
+1. 인스턴스 변수와 로컬 변수명이 동일한 경우
+   - 메서드 안에 선언된 로컬 변수명과 인스턴스 변수명이 동일할 때, `this.변수명`으로 인스턴스 변수를 참조할 수 있다.
+   - 이때 this를 붙이지 않으면 로컬변수를 참조한다.
+2. **생성자**에서 **다른 오버로딩 생성자**를 **호출**하는 경우
+   - this([값]) 형식으로 사용된다.
+   - 주의할 점은 반드시 **생성자 첫 라인에서 사용**해야 하며, **인자 리스트가 반드시 일치**해야 한다.
+   - 여러 생성자에 인스턴스 변수를 초기화하는 코드를 중복적으로 작성하지 않고, 하나의 생성자에만 이를 작성한 뒤 다른 생성자에는 이를 요청해서 사용하게 해 코드량을 절약할 수 있다.
 
 ```java
-package p02;
+package practice;
 
-public class Array {
+public class StudentTest {
 
-	public static void main(String[] args) {
+	public static void main(String[] args){
 		
-		int[] source = {1, 2, 3, 4, 5};
+		Student hyun = new Student("김현영"); 	 // 이름만 넣는 인스턴스 생성
 		
-		for(int i : source) {
-			System.out.println(i);
-		}
+		Student go = new Student("고유한", 19); // 이름과 나이를 넣는 인스턴스 생성
 		
-		int[] target = new int[5] ;
-		
-		
-		System.arraycopy(source, 0, target, 0, source.length);
-		
-		System.arraycopy(source, 0, target, 0, source.length);
-		for(int j : target) 
-			System.out.println(j);
-		
+		System.out.println(hyun.name);
+		System.out.println(go.name);
 	}
+}
+
+//========================================================================
+
+package practice;
+
+public class Student {
+    
+    String name;
+    int age;
+    
+    // 인자를 2개 받는 생성자
+    public Student(String name, int age) {
+        this.name = name; // this를 안 붙여주면 name이 지역변수인지, 인스턴스변수인지 알 수 없다.
+        this.age = age;
+    }
+    
+    // 인자를 하나만 받는 생성자
+    public Student(String name) {
+        // 이 생성자에서 초기화하지 않는다.
+    	this(name, 19); // 얘가 없었으면 아래와 같이 써 주어야 함
+        /*
+        this.name = name;
+        this.age = 19;
+        */
+    }
+    
+
 }
 
 ```
 
+- getter, setter와 마찬가지로 생성자도 이클립스로 편하게 생성할 수 있다.
 
 
-## II. 이차원 배열
 
-- 배열 생성 및 할당
-- 이차원 배열은 나란히 메모리 공간을 차지하는 게 아니라, 주소를 담고 있는 행 배열이 있고, 그 주소들은 각각 다른 위치에 할당된 배열들을 가리킴
+## VII. package와 import문
 
-- 비정방형 이차원 배열은, 행에 NULL(주소값이므로)이 선언되어 있음
 
-```java
-package p02;
-
-public class Array {
-
-	public static void main(String[] args) {
-		
-		// 여러 가지 이차원 배열 생성 방법
-		
-		// 1. new 키워드 할당
-		// 정방형 배열
-		int[][] myArr = new int[3][5];
-		
-		// 비정방형 배열
-		int[][] myArr2 = new int[3][];
-		
-		System.out.println(myArr[0]);
-		System.out.println(myArr[1]);
-		System.out.println(myArr[2]);
-		
-		// 에러 2가지
-		// int[][] myArr3 = new int[][];		
-		// int[][] myArr3 = new int[][5];		
-		
-		// 비정방형 배열의 원소를 각각 할당
-		// myArr의 [0], [1], [2]에는 처음에는 NULL값이 할당
-		myArr2[0] = new int[] {1, 2, 3};
-		
-		myArr2[1] = new int[4];
-		for(int x: myArr[1]) {
-			x = 4;
-		}
-
-		// 불가능 => 이미 초기화됨
-		// myArr2[2] = { 1, 2, 3, 4, 5 }; 
-		
-		
-		// 참
-		System.out.println(myArr2 instanceof int[][]);
-
-		
-		// 2. 리터럴 사용 할당
-		int [][] myArr3 = { {1, 2}, {3, 4, 5} };
-	
-		
-		// 3. 혼합 사용 할당
-		int[][] myArr4 = new int[][] {{1, 2}, {3, 4, 5}};
-		
-	}
-}
-
-```
-
-- 비정방형 배열 반복 돌리기
-
-```java
-package p02;
-
-public class Array {
-
-	public static void main(String[] args) {
-		
-		String[][] myString = {{"햄릿", "맥베스"}, {"아메리칸 푸라푸치노", "앙카와 푸카", "패스츄리 로맨스"}};
-		
-		for (int i=0; i < myString.length; i++) {
-			for (int j=0; j < myString[i].length; j++) {
-				System.out.println();
-			}	
-		}
-	}
-}
-
-```
 

@@ -22,7 +22,7 @@
 
 - break가 없으면 걸리는 조건부터 이후까지 다 실행
 - C와 다른 점
-  - 조건에 문자열, enum을 사용할 수 있다
+  - 조건에 byte, short, int, char, String, enum 가능
 
 ```java
 package p02;

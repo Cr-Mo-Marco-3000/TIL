@@ -112,6 +112,11 @@
 3. 해제 후 할당되었던 포인터에 NULL포인터를 할당해서 오류를 방지하자
    - `ptr = NULL;`
 
+#### 이중 구조체 포인터를 통한 접근
+
+- 이중 구조체 포인터로 접근할 때, *p->member가 아니라, `(*p)->member`를 사용해야 한다.
+  - 우선순위가 ->가 먼저이기 때문이다
+
 ```c
 #include <stdlib.h>
 #include <stdio.h>
@@ -298,7 +303,83 @@ int main() {
 }
 ```
 
-### 구조체 포인터 리스트
+
+
+### 구조체 포인터 배열와 재할당
+
+- 숫자를 받아, 해당 숫자만큼 포인터 배열에 저장한 후, 그 포인터 배열에 문자열을 할당한다.
+- 문자열 추가시 숫자를 받아서, 해당 숫자만큼 realloc 한 뒤 저장
+
+```c
+// double_pointer1.c
+#include <stdio.h>
+#include <string.h>
+int main()
+{
+	char **ptr, tmp[100];
+	
+	int x, y, i;
+	
+	printf("\n문자열의 수 ? ");
+	scanf("%d%*c", &x); //3
+	
+	// 힙 세그먼트 어딘가에 12바이트를 할당한 뒤 
+	ptr = (char **)malloc(x * sizeof(char *)); 
+	if (ptr == NULL) {
+		perror("Error");
+		exit(1);
+	}
+
+	for (i = 0; i < x; i++)
+	{
+		printf("%d,input string ? ", i + 1);
+		gets(tmp);
+		*(ptr + i) = (char *)malloc(strlen(tmp) + 1); // (char *)malloc(strlen(tmp) + 1) : char * 형 포인터를 반환
+		strcpy(*(ptr + i), tmp);
+	}
+
+	printf("\n문자열 출력\n");
+	
+	for (i = 0; i < x; i++)
+		printf("%p, %s \n", *(ptr + i), *(ptr + i));
+	
+	puts("");
+	puts("============================ 문자열 추가 ============================");
+	puts("");
+
+	printf("\n추가할 문자열의 수 ? ");
+	scanf("%d%*c", &y); // 2
+
+	ptr = (char **)realloc(ptr, (x + y) * sizeof(char *));
+	if (ptr == NULL) {
+		perror("Error");
+		exit(1);
+	}
+
+	for (i = x; i < x + y ; i++)
+	{
+		printf("%d,input string ? ", i + 1);
+		gets(tmp);
+		*(ptr + i) = (char *)malloc(strlen(tmp) + 1); // (char *)malloc(strlen(tmp) + 1) : char 배열을 가리키는 포인터를 반환
+		strcpy(*(ptr + i), tmp);
+	}
+
+	printf("\n문자열 출력\n");
+
+	for (i = 0; i < x; i++)
+		printf("%p, %s \n", *(ptr + i), *(ptr + i));
+
+	puts("");
+
+
+	for (i = 0; i < x + y; i++)
+		free(ptr[i]);
+
+	free(ptr);
+	ptr = NULL;
+	return 0;
+}
+```
 
 
 
@@ -309,6 +390,8 @@ int main() {
 자기참조 구조체를 사용해서 연결 리스트를 만든다.
 
 **구조체를 사용해서 연결 리스트를 생성할 때는, 구조체 네임태그가 반드시 필요하다!**
+
+- 네임태그가 구조체 내부 멤버 전에 작성되기 때문에, 이를 참조할 수 있는 것
 
 
 
@@ -669,4 +752,157 @@ int main() {
 	return 0;
 }
 ```
+
+### 4. 정렬된 연결 리스트
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+#define true 1
+#define false 0
+
+int node_insert();
+void node_output();
+void node_free();
+
+typedef struct S {
+	int value;
+	struct S *next;
+} node;
+
+node *head; // head는 전역변수 => 나중에 출력이나 해제할 때, 처음 노드부터 쫘르륵 할 것이기 때문에 저장해 주어야 해요
+
+int main()
+{
+	char ch;
+	int stop = 0;
+
+	head = NULL;
+
+	do {
+		printf("\n1) 레코드 입력 \n");
+		printf("2) 레코드 출력 \n");
+		printf("3) 종료 \n");
+		printf("\n 선택하세요... ");
+		ch = getchar();
+		getchar();
+
+		switch (ch)
+		{
+		case '1':node_insert();
+			break;
+		case '2': node_output();
+			break;
+		case '3': node_free();
+			stop = 1;
+		}
+	} while (!stop);
+
+	return 0;
+}
+
+int node_insert()
+{
+	node *temp, *prev, *newNode;
+	int in_value; // 받는 값
+					
+	while (1)											 // 새로 입력될 값이 있으면 몇 번째 노드에 위치하는지 비교를 해야 합니다
+	{
+		temp = head;									 // 비교는 가장 작은 값을 담은 노드(head)부터 해야죠
+		prev = NULL;									 // head는 가장 작은 노드(시작노드)니까 전 노드가 없어요
+
+		printf("\ninput value ? (입력종료:-99999) ");
+		scanf("%d%*c", &in_value);						 // 5, 10, 15, 3, 7 
+		if (in_value == -99999)
+			break;
+
+
+		// 아래 반복문은, 새로 받은 값과 비교해서 1) 바로 작은 값을 갖는 노드의 주소와, 2) 바로 큰 값을 가진 다음 노드를 찾는 과정입니다.
+
+
+		while (temp != NULL && temp->value < in_value)   // temp != NULL : temp가 NULL이면 첫 번째 입력받은 노드이므로 반복문을 돌릴 필요가 없어요
+														 // 매 루프마다, 가장 작은 값이 들어간 상태인 head부터 temp에 넣고 비교합니다.
+														 // temp->value < in_value : 새로 입력받은 값(in_value) 보다 temp값이 작으면
+		{
+			prev = temp;								 // 현재 temp는 prev에 넣고 => 즉, 현재 값보다 작은 값을 포함한 노드를 prev에 넣음
+			temp = temp->next;							 // 한 단계 큰 노드로 확인하러 이동
+		}
+
+
+		// 위 반복이 끝나면 1) prev에는 현재 입력받은 값보다 한 단계 작은 값을 가진 node의 주소가 들어 있고, 2) temp에는 한 단계 큰 노드가 들어 있어요
+		// 즉 ... -> prev -> 새로 입력받은 값(in_value에 저장) -> temp -> ... 순서로 논리상 정렬되어 있지만, 
+		// 새로 입력받은 값은 아직 힙 세그먼트에 구조체가 만들어지지 않았고, 위 정보가 기존 구조체에도 바르게 저장되지 않은 상태예요
+
+
+		newNode = (node *)malloc(sizeof(node));			 // 새로 입력받은 값을 넣을 공간을 할당받음
+		if (newNode == NULL)							 // 정상 생성 확인용
+			return false;
+
+		newNode->value = in_value;						 // 새로 만든 노드에 값은 새로 받은 값을 집어넣고
+		newNode->next = temp;							 // 한 단계 큰 노드(temp)를 새로운 노드의 다음 포인터 변수(next)에 넣어줌(만약 새 노드가 head라도 기존 head가 temp에 담겨 있어 괜찮다)
+										
+		if (prev == NULL)								 // 만약 노드가 지금까지 값들 중 가장 작은 값인 경우(위 루프를 돌았는데 prev(더 직전 작은 값을 가진 주소) 가 없네?)
+			head = newNode;								 // 새로 생성된 노드를 머리(가장 작은 값 == 시작점)로 만듬
+		else
+			prev->next = newNode;						 // 이외의 경우(새로운 값이 중간에 들어가거나, 마지막인 경우) prev 노드의 다음 노드에 새로 생성된 노드를 집어넣음
+
+	} //while (1) end
+
+	return true;
+}
+
+void node_output()
+{
+	node *temp;
+	int cn = 1;
+
+	temp = head;
+
+	while (temp)
+	{
+		printf("%d, value : %d \n", cn++, temp->value);
+		temp = temp->next;
+	}
+}
+
+void node_free()
+{
+	node *temp, *x;
+
+	temp = head;
+
+	while (temp)
+	{
+		x = temp;
+		temp = temp->next;
+		free(x);
+	}
+}
+```
+
+연결 리스트의 장단점
+
+- 메모리를 미리 할당할 필요 없이
+- 필요한 만큼 할당하고, 필요없을때 반납하면 된다.
+
+단점
+
+- 느리다(자료 5만개 => malloc 5만번)
+
+## 5. 동적배열
+
+동적배열의 장단점
+
+- 장점
+
+메모리 연속 할당으로 인해 pointer로 계속 레퍼런스 할 필요 없다.
+
+malloc 횟수가 적어진다.
+
+- 단점
+
+일정 메모리를 미리 확보해야 한다.
+
+최대크기 - 현재 차지하는 크기(줄어들지라도 최대크기만큼 할당)만큼의 메모리 낭비가 발생한다.
 
