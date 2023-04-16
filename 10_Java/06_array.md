@@ -110,6 +110,8 @@ public class Array {
 
 - `int[] myArr = {1, 2, 3};`
 
+- 단, 리터럴을 이용해 초기화 할 때는, 선언 후 따로 할당을 할 수 없다.
+
 ```java
 package p02;
 
@@ -263,6 +265,8 @@ public class Args {
 
 - 비정방형 이차원 배열은, 행에 NULL(주소값이므로)이 선언되어 있음
 
+- r행 c열의 2차원 배열 n에서, 행의 길이에 접근할때는 `n.length`, 열의 길이에 접근할때는 `n[0].length`
+
 ```java
 package p02;
 
@@ -333,6 +337,72 @@ public class Array {
 			}	
 		}
 	}
+}
+
+```
+
+
+
+## III. java.util.Arrays 클래스
+
+배열 사용시 도움을 받을 수 있는 클래스
+
+```java
+package counter;
+
+import java.util.Arrays;
+
+import java.util.List;
+
+public class UtilString {
+
+	public static void main(String[] args) {
+		
+		// 1. 배열값 출력(문자열로 출력)
+		int[] n = {10, 20, 30};
+		String[] s = {"A", "B", "C"};
+		System.out.println(Arrays.toString(n)); 		// [10, 20, 30]
+		System.out.println(Arrays.toString(s)); 		// [A, B, C]
+		
+		// 2. 모든 배열값이 변경
+		String[] s2 = {"A", "B", "C"};
+		Arrays.fill(s2, "X");
+		System.out.println(Arrays.toString(s2));
+		
+		// 3. 값 변경: 일부분 배열값이 변경
+		String[] s3 = {"A", "B", "C", "D", "E", "F", };
+		Arrays.fill(s3, 0, 4, "X");						// 0 ~ 3까지 변경
+		System.out.println(Arrays.toString(s3));
+		
+		// 4. 값 비교
+		int [] x = { 1, 2, 3 };
+		int [] x2 = { 1, 2, 3 };
+		System.out.println(Arrays.equals(x, x2));
+		
+		// 5. 정렬
+		int [] x3 = {4, 2, 3, 98, 43, 24, 65};
+		Arrays.sort(x3);
+		System.out.println(Arrays.toString(x3));
+		
+		// 6. 이진탐색 => 위치찾기 => 정렬 필수
+		int [] k2 = {2, 4, 6, 29, 31, 42, 51};
+		System.out.println(Arrays.binarySearch(k2, 6));
+		
+		// 7. 배열 길이 변경
+		int [] y = {1, 2, 3};
+		int [] y2 = Arrays.copyOf(y, 5);
+		System.out.println(Arrays.toString(y));
+		System.out.println(Arrays.toString(y2));
+		
+		// 8. 개별적인 값들을 컬렉션 API로 생성
+		
+		List<String> list = Arrays.asList("A", "B", "C");
+		System.out.println(list);
+		
+		List<Integer> list2 = Arrays.asList(1, 2, 3);
+		System.out.println(list2);
+	}			
+
 }
 
 ```
