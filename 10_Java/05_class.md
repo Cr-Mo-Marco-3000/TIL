@@ -237,6 +237,9 @@ main 메서드를 갖고 있는 클래스를 핸들링 클래스라고 부른다
   1. main에서, new를 이용해서 클래스 로딩(메모리에 클래스를 올리는 것)을 한다.
   2. 값을 직접, 또는 간접 참조로 저장하거나 조회한다.
 
+- main 메서드에서, 만약 값을 클래스에 저장해놓고 쓰고 싶다면 인스턴스 변수를 쓰면 안되고 static 변수를 써야한다.
+  - 아무리 main메서드가 실행되었다 해도, 인스턴스 변수는 인스턴스를 생성해야 생기기 때문이다.
+
 
 
 ### 3. 생성자(constructor)
@@ -842,6 +845,46 @@ public class Bank {
 	public String getName() {							// 은행 이름을 불러오기 위한 메서드
 		return name;
 	}
+}
+
+```
+
+- 더 깔끔한 싱글톤 디자인 패턴
+
+```java
+package p03;
+
+class Earth {
+	
+	private static Earth e;
+	
+	// 단 하나의 객체만 만들 수 있게 한다.
+	public static Earth getInstance() {
+		if (e==null) {
+			e = new Earth();
+		}
+		return e;
+	}
+	
+	// 생성자에도 private를 줘서, 외부에서 객체 생성을 막는다.
+	private Earth() {
+		
+	}
+}
+
+public class SingletonTest {
+
+	public static void main(String[] args) {
+
+		Earth e1 = Earth.getInstance();
+		Earth e2 = Earth.getInstance();
+		Earth e3 = Earth.getInstance();
+		
+		System.out.println(e1);
+		System.out.println(e2);
+		System.out.println(e3);
+	}
+
 }
 
 ```
