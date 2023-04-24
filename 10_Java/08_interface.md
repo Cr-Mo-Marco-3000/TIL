@@ -147,7 +147,7 @@ public interface interfaceName {
   - 상수는  **public static final** 지정자를 사용한다.
     - **작성하지 않아도, 변수를 작성하면 자동으로 지정이 된다.**
   - 추상 메서드(abstract method)는 **public abstract** 지정자를 사용한다. 
-    - 추상 클래스와 다르게 인터페이스의 추상 메서드는 public 뿐만 아니라 **abstract 키워드를 생략** 할 수 있으나 지정하는 것을 권장한다.
+    - 추상 클래스와 다르게 인터페이스의 추상 메서드는 **public 뿐만 아니라** **abstract 키워드를 생략** 할 수 있으나 지정하는 것을 권장한다.
     - **추상 메서드 작성 역시 선택사항이다**
 - 일반 클래스의 일반 메서드 기능과 동일한 **default 메서드와, static 메서드 기능과 동일한 static 메서드는 블록({})을 포함**한다.
   - 기본적으로, default 메서드와 static 메서드 또한 추상 메서드이다.
@@ -666,7 +666,7 @@ public class TestMain {
 
 
 
-##### 4-1) 람다식
+## IV. 람다식
 
 함수형 프로그래밍 기반의 람다 표현식
 
@@ -832,4 +832,445 @@ public class TestMain {
 }
 
 ```
+
+
+
+### 1. java.util.function
+
+자바에서 API로 제공하는 함수형 인터페이스
+
+자주 쓰이는 형식의 메서드를 함수형 인터페이스로 미리 구현해놓은 것
+
+주로 제네릭 안에 Object를 넣어 설정 후 사용
+
+[참고](https://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html)
+
+1. Consumer
+   - 파라미터만 받음
+
+2. Supplier
+   - 리턴만 존재
+
+3. Function
+   - 파라미터와 return 타입이 매핑됨
+
+4. Operator
+   - 연산하고 결과를 리턴
+5. Predicate
+   - boolean 결과값 반환
+
+#### 1. Consumer
+
+- 특정한 값을 파라미터로 받기만 한다.
+
+- accept로 받는다.
+
+```java
+package com.consumer;
+
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.ObjIntConsumer;
+
+public class ConsumerTest {
+
+	public static void main(String[] args) {
+		// java.util.function.Consumer 인터페이스
+		/*
+		 * Consumer<T>: void accept(T t);
+		 * BiConsumer<T, U>: void accept(T t, U u); T와 U를 파라미터로 받아서 소비
+		 * DoubleConsumer: void accept(double d); double를 파라미터로 받아서 소비
+		 * IntConsumer: void accept(int d); int를 파라미터로 받아서 소비
+		 * LongConsumer: void accept(long d); long을 파라미터로 받아서 소비
+		 * 
+		 * ObjDoubleConsumer<T>: void accept(T t, double); T와 double을 파라미터로 받아서 소비
+		 * ObjIntConsumer<T>: void accept(T t, int); T와 double을 파라미터로 받아서 소비
+		 * ObjLongConsumer<T>: void accept(T t, long);
+		 */
+		
+		// 1. Consumer<T>: void accept(T t);
+		// 1-1. 익명 클래스
+		Consumer<String> c = new Consumer<String> () {
+			@Override
+			public void accept(String t) {
+				System.out.println("Consumer: " + t);
+			}
+		};
+		c.accept("hello");
+		
+		// 1-2. 람다
+		Consumer<String> c2 = x -> System.out.println("Consumer_Lambda" + x);
+		c2.accept("hello");
+		
+		// 2. BiConsumer<T, U>: void accept(T t, U u)
+		// 두 parameter의 제네릭 설정
+		BiConsumer<String, String> b = new BiConsumer<String, String> () {
+			@Override
+			public void accept(String t, String u) {
+				System.out.println("BiCousumer: " + t + u);
+			}
+		};
+		// 2-2
+		BiConsumer<String, String> b2 = (t, u) -> System.out.println("BiConsumer: " + t + u);
+		b2.accept("Hello", "World");
+		
+		// 3. ObjIntConsumer => Object는 임의설정, Int는 확정
+		ObjIntConsumer<String> x = (s, i) -> System.out.println(s + i);
+		x.accept("Hello", 1);
+	}
+
+}
+
+```
+
+#### 2. Supplier
+
+- 특정한 값을 return으로 공급해준다.
+- 제네릭을 직접 지정해주면 `get()`, 메서드명에 들어가면, `getAsGeneric()`으로 사용된다.
+
+```java
+package com.supplier;
+
+import java.util.function.BooleanSupplier;
+import java.util.function.IntSupplier;
+import java.util.function.Supplier;
+
+public class SupplierTest {
+
+	public static void main(String[] args) {
+		
+		// java.util.function.supplier
+		/*
+		 * Supplier<T>: T get(), T 타입 리턴
+		 * BooleanSupplier: boolean getAsBoolean(): Boolean 타입 입력
+		 * DoubleSupplier: double getAsDouble(): double 타입 리턴
+		 * IntSupplier: int getAsInt(): int 타입 리턴
+		 * LongSupplier: long getAsLong(): long 타입 리턴
+		 * 
+		 * */
+		
+		// 1. Supplier<T>
+		Supplier<String> s = new Supplier<String>() {
+			@Override
+			public String get() {
+				return "hello";
+			}
+		};
+		System.out.println(s.get());
+		
+		// 1-1. lambda
+		Supplier<Integer> s2 = () -> 2;
+		System.out.println(s2.get());
+		
+		
+		// 2-1. IntSupplier
+		IntSupplier x = new IntSupplier() {
+			@Override
+			public int getAsInt() {
+				return 100;
+			}
+		};
+		
+		// 2-2
+		System.out.println(x.getAsInt());
+		IntSupplier x2 = () -> 100;
+		System.out.println(x2.getAsInt());
+		
+		// 3-1 BooleanSupplier
+		BooleanSupplier b = new BooleanSupplier() {
+			@Override
+			public boolean getAsBoolean() {
+				return false;
+			}
+		};
+		b.getAsBoolean();
+	}
+
+}
+
+```
+
+#### 3. Function
+
+- 일반적인 메서드명은 apply
+- 파라미터와 리턴이 정해져있으면 `applyAsReturnType()`
+
+```java
+package com.function;
+
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.IntToDoubleFunction;
+
+public class FunctionTest {
+
+	public static void main(String[] args) {
+		// java.util.Function.function: 파라미터 있고 리턴 존재
+		/*
+		 * Function<T, R>: R apply(T t); T를 R로 매핑
+		 * BiFunction<T, U, R> R apply(T t, U u), T와 U를 R로 매핑
+		 * DoubleFunction<R>: R apply(double), double을 R로 매핑
+		 * IntFunction<R>
+		 * LongFunction<R>
+		 * LongToDoubleFunction
+		 * IntToDoubleFunction...
+		 */
+		
+		// 1. Function<T, R> -> R apply(T t);
+		Function<String, Integer> f = new Function<String, Integer>() {
+			@Override
+			public Integer apply(String t) {
+				return t.length();
+			}
+		};
+		
+		// 1-1. lambda
+		Function <String, Integer> f2 = s -> s.length();
+		
+		System.out.println(f.apply("hello"));
+		System.out.println(f2.apply("hello2"));
+		
+		// 2. BiFunction<T, U, R> -> R apply(T t, U u);
+		BiFunction<String, String, Integer> x = new BiFunction<String, String, Integer>() {
+			@Override
+			public Integer apply(String t, String u) {
+				return (t + u).length();
+			}
+		};
+		BiFunction<String, String, Integer> x2 = (t, u) -> (t + u).length();
+		
+		System.out.println(x.apply("Hello", "World"));
+		System.out.println(x2.apply("Hello2", "World2"));
+		
+		// 3. IntToDoubleFunction -> double applyAsDouble (int i)
+		IntToDoubleFunction y = new IntToDoubleFunction() {
+			@Override
+			public double applyAsDouble(int v) {
+				return v + 0.0;
+			}
+		};
+		
+		IntToDoubleFunction y2 = v -> v+0.0;
+	}
+
+}
+
+```
+
+#### 4. Operator
+
+- paramete를 연산 후 반환
+- unary는 단항, binary는 이항
+
+```java
+package com.operator;
+
+import java.util.function.BinaryOperator;
+import java.util.function.IntBinaryOperator;
+import java.util.function.IntUnaryOperator;
+import java.util.function.UnaryOperator;
+
+public class OperatorTest {
+
+	public static void main(String[] args) {
+		// java.util.function.Operator 인터페이스
+		// Operator와 Function은 상속관계
+		
+		/*
+		 * BinaryOperator<T> == BiFunction<T, T, T>
+		 * T apply(T, T) 
+		 * 
+		 * DoubleBinaryOperator == double applyAsDouble(double left, double right);
+		 * IntBinaryOperator: int applyAsInt(int left, int right);
+		 * LongBinaryOperator: long applyAsLong(long left, long right);
+		 * 
+		 * UnaryOperator<T>: Function <T, T> 동일 -> T apply(T)
+		 * DoubleUnaryOperator == double applyAsDouble(double left, double right);
+		 * IntUnaryOperator: int applyAsInt(int left);
+		 * LongUnaryOperator: long applyAsLong(long left);
+		 * */
+		
+		BinaryOperator<Integer> x = new BinaryOperator<Integer>() {
+			@Override
+			public Integer apply(Integer t, Integer u) {
+				return t + u;
+			}
+		};
+		
+		BinaryOperator<Integer> x2 = (t, u) -> t + u; 
+		
+		IntBinaryOperator y = (n, n2) -> n + n2;
+		System.out.println(y.applyAsInt(1, 3));
+		
+		// unary Operator
+		UnaryOperator<Integer> k = new UnaryOperator<Integer>() {
+			@Override
+			public Integer apply(Integer t) {
+				return t + 100;
+			}
+		};
+		
+		UnaryOperator<Integer> k2 = t -> t+100;
+		System.out.println(k.apply(100));
+		System.out.println(k2.apply(100));
+		
+		IntUnaryOperator z = new IntUnaryOperator() {
+			
+			@Override
+			public int applyAsInt(int x) {
+				return x + 100;
+			}
+		};
+		
+	}
+
+}
+
+```
+
+#### 5. Predicate
+
+- 파라미터가 있고, return는 반드시 boolean
+
+```java
+package com.predicate;
+
+import java.util.function.IntPredicate;
+import java.util.function.Predicate;
+
+public class PredicateTest {
+
+	public static void main(String[] args) {
+		// java.util.function.predicate 인터페이스:
+		// 파라미터 있고 리턴 존재(반드시 boolean)
+		/*
+		 * Predicate<T> boolean test(T t)
+		 * 
+		 * DoublePredicate: boolean test(double t)
+		 * IntPredicate: boolean test(int t)
+		 * LongPredicate: boolean test(long t)
+		 * 
+		 * BiPredicate<T, U>: boolean test(T t, U u)
+		 * */
+		
+		Predicate<String> x2 = t-> t.length() == 5;
+		
+		IntPredicate y2 = t -> t > 10;
+		System.out.println(y2.test(5));
+	}
+
+}
+
+```
+
+
+
+### 2. 메서드 참조
+
+메소드를 참조해서, 매개변수의 정보 및 리턴 타입을 알아내 람다식에서 불필요한 매개변수를 제거
+
+`(left, right) -> Math.max(left, right);`
+
+->
+
+`Math :: max;`
+
+1. 정적 메서드를 참조할 경우, 클래스 이름 뒤에 `::`를 붙이고 정적 메서드 이름을 기술한다.
+2. 인스턴스 메서드일 경우 먼저 객체를 생성한 다음 참조변수 뒤에`::`를 붙이고 인스턴스 메서드 이름을 기술한다.
+
+- 중요한 3가지
+
+```java
+// 1.		
+UnaryOperator<String> yy = new UnaryOperator<String> () {
+    @Override
+    public String apply(String t) {
+        return t.toUpperCase();
+    }
+};
+
+UnaryOperator<String> yy3 = String::toUpperCase; // 중요
+
+// 2. 
+Consumer<String> m2 = t -> System.out.println(t);
+Consumer<String> m3 = System.out::println;	// 중요
+
+// 3.
+class Calculator {
+	
+	public static int methodA(int x, int y) {
+		return x + y;
+	}
+	
+}
+    
+public class MethodReference {
+
+public static void main(String[] args) {
+    // static 메서드
+    BinaryOperator<Integer> k = new BinaryOperator<Integer> () {
+        @Override
+        public Integer apply(Integer t, Integer u) {
+            return Calculator.methodA(t, u);
+        }
+    };
+
+    // 람다식
+    BinaryOperator<Integer> k2 = (t, u) -> Calculator.methodA(t, u);
+
+    // 함수형 인터페이스 축약법
+    BinaryOperator<Integer> k3 = Calculator::methodA;
+}
+```
+
+```java
+package method_reference2;
+
+@FunctionalInterface
+public interface Calcuable {
+	double calc(double x, double y);
+}
+
+public class Computer {
+	public static double staticMethod(double  x, double y) {
+		return x + y;
+	}
+	public double instanceMethod(double x, double y) {
+		return x + y;
+	}
+}
+
+
+public class Person {
+	public void action(Calcuable cal) {
+		double result = cal.calc(10, 4);
+		System.out.println("결과: " + result);
+	}
+}
+
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+		Person person = new Person();
+		
+		// 정적 메서드를 경우
+		// 람다식
+		// person.action((x, y) -> Computer.staticMethod(x, y));
+		// 메서드 참조
+		person.action(Computer::staticMethod);
+		
+		// 인스턴스 메서드일경우
+		Computer com = new Computer();
+		// 람다식
+		// person.action((x, y) -> com.instanceMethod(x, y));
+		// 메서드 참조
+		person.action(com::instanceMethod);
+	}
+
+}
+
+```
+
 
