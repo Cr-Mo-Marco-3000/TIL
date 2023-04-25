@@ -1,5 +1,9 @@
 # 쓰레드
 
+## 0. 프로세스 vs 쓰레드
+
+스레드로 구현된 자바 서버(서블릿, JSP)
+
 ## 1. 메인 스레드
 
 모든 자바 프로그램은 메인 스레드가 main() 메서드를 실행하면서 시작된다.
@@ -13,17 +17,93 @@
 
 작업 스레드보다 메인 스레드가 먼저 종료될 수도 있다는 것을 기억하자.
 
+우선권은 5이다.
 
+- 스레드의 단계
+  - 시작
+  - 준비
+  - 실행
+  - blocked
+  - 제거
 
 ## 2. 작업 스레드 직접 생성
 
 1. Thread에 Runnable 객체를 인자로 집어넣은 후, 오버라이딩한 `run()`메서드에 실행시킬 코드를 작성, start() 메서드로 해당 스레드를 실행
-
+   - Thread class는 Runnable 인터페이스를 implements받은 객체이다.
+   - Runnable을 구현한 객체를 선언해서 사용할 수도 있지만, 익명 클래스를 만들어서 더 많이 사용한다.
 2. Thread에 Runnable를 집어넣는 대신 그 자체를 상속한 후 run()메서드를 재정의해서 사용도 가능하다.
    - 단, Runnable의 익명 클래스를 만드는 것과 같이 Thread 익명 클래스를 만들어서 더 많이 사용된다.
 
-1. Runnable 인터페이스의 run() 사용
-   - 상속 등 확장성을 위해 많이 사용.
+### 0. 기본 사용
+
+```java
+package com.main_thread;
+
+class Go implements Runnable {
+	@Override
+	public void run() {
+		System.out.println("러너블 클래스 출력");
+	}
+}
+
+class Go2 extends Thread {
+	
+	@Override
+	public void run() {
+		System.out.println("고투 출력");
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Go go = new Go();
+		Thread myThread = new Thread(go);
+		myThread.start();
+		
+		Thread myThread2 = new Go2();
+		myThread2.start();
+	}
+}
+
+```
+
+- 응용: 시계 만들기
+
+```java
+package com.clock;
+
+import java.util.Date;
+
+class MyClock extends Thread {
+	@Override
+	public void run () {
+		while (true) {
+			Date date = new Date();
+			try {
+				Thread.sleep(1000);
+			} catch (Exception e) {
+			}
+			System.out.println(date);
+		}
+	}
+}
+
+public class Clock {
+
+	public static void main(String[] args) {
+		MyClock myThread = new MyClock();
+		myThread.start();
+	}
+
+}
+
+```
+
+
+
+### 1. Runnable 인터페이스의 run() 사용
+
+- 상속 등 확장성을 위해 많이 사용.
 
 ```java
 package com.main_thread;
@@ -64,7 +144,9 @@ public class Main {
 
 ```
 
-2. Thread의 run 사용
+
+
+### 2. Thread의 run 사용
 
 ```java
 package com.main_thread;
@@ -106,7 +188,14 @@ public class Main {
 
 ```
 
+### 3. 우선권 확인 / 변경
 
+- 우선권 확인
+  - `thread.getPriority()`
+- 우선권 변경
+  - `thread.setPriority(number)`
+  - 1 ~ 10
+  - 기본값 5
 
 ## 3. 스레드 이름
 
@@ -212,7 +301,7 @@ try {
 
 ### 2. join()
 
-- 다른 스레드가 종료될 때까지 기다렸다가 실행을 해야 하는 경우
+- 다른 스레드가 종료될 때까지 기다렸다가 실행을 해야 하는 경우 사용
 
 ```java
 package com.main_thread;
@@ -304,6 +393,238 @@ public class Main {
 		
 		threadA.work = true;
 	}
+}
+
+```
+
+## 5. 스레드 동기화
+
+멀티 스레드는 하나의 객체를 공유해서 작업할 수도 있다.
+
+이 때, 특정 스레드 작업이 끝날 때까지 **특정 객체에 잠금을 거는 용도**로 자바는 동기화 메서드와 블록을 제공한다.
+
+** 특정한 객체 내부에 동기화 메서드와 동기화 블록이 여러개가 있다면**, 스레드가 이들 중 하나를 실행할 때 다른 스레드는 해당 메서드는 물론이고 다른 동기화 메서드 및 블록도 실행할 수 없다.
+
+**하지만 일반 메서드는 실행이 가능하다.**
+
+### 1. 동기화 메서드 및 블록 선언
+
+- 동기화 메서드 선언
+
+  - `public synchronized void method() {}`
+
+  - 스레드가 동기화 메소드를 실행하는 즉시 객체는 잠금이 일어나고, 메소드 실행이 끝나면 잠금이 풀린다.
+
+- 동기화 블록 선언
+  - 메소드 전체가 아닌 일부 영역을 실행할 때만 객체 잠금을 걸고 싶다면 다음과 같이 동기화 블록을 생성한다.
+
+```java
+public void method () {
+    // 여러 스레드가 실행할 수 있는 영역 1
+    synchronized(공유객체) {
+        // 단 하나의 스레드만 실행하는 영역
+    }
+    // 여러 스레드가 실행할 수 있는 영역 2
+}
+```
+
+- 예시
+
+  - 하나의 Calculator 객체를 공유하는 쓰레드 클래스를 2개 만든 다음, 1 -> 2 순서로 실행시킨다.
+
+  - 실행 순서는 다음과 같다.
+
+    1. 동기화 메서드 시작
+
+    2. 동기화 블록 시작 전!
+       - 쓰레드 내부에서 동기화 블록을 아직 만나지 않았기 때문에, 해당 프린트는 실행된다.
+    3. 5초 후 동기화 메서드 마지막의 thread1이 출력
+    4. 동기화 블록 시작!
+       - 동기화 메서드가 끝났기 때문에, 동기화 블록 내부로 들어간다.
+    5. 2초 후 동기화 블록 마지막의 thread 2가 출력
+
+```java
+package com.sync;
+
+// 공유할 Calculator 객체
+class Calculator {
+	private int memory;
+	
+	public int getMomory() {
+		return memory;
+	}
+	
+	public synchronized void setMemory1(int memory) {	// 동기화 메서드
+		System.out.println("동기화 메서드 시작!");
+		this.memory = memory;							// 메모리 값 저장
+		try {
+			Thread.sleep(5000);							// 5초간 정지
+		} catch (InterruptedException e) {
+		}
+		System.out.println(Thread.currentThread().getName() + ": " + this.memory);	// 메모리 값을 읽기
+	}
+	
+	public void setMemory2(int memory) {
+		System.out.println("동기화 블록 시작 전!");
+		synchronized(this) {							// 동기화 블럭
+			System.out.println("동기화 블록 시작!");
+			this.memory = memory;
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+			}
+			System.out.println(Thread.currentThread().getName() + ": " + this.memory);	// 메모리 값을 읽기
+		} 
+		System.out.println("동기화 블록 종료!");
+	}
+}
+
+// 쓰레드 클래스 2개 생성
+class User1Thread extends Thread {
+	private Calculator calculator;
+	
+	public User1Thread() {
+		setName("User1Thread");
+	}
+	
+	public void setCalculator(Calculator cal) {
+		calculator = cal;
+	}
+	
+	@Override
+	public void run () {
+		calculator.setMemory1(100);
+	}
+}
+
+class User2Thread extends Thread {
+	private Calculator calculator;
+	
+	public User2Thread() {
+		setName("User2Thread");
+	}
+	
+	public void setCalculator(Calculator cal) {
+		calculator = cal;
+	}
+	
+	@Override
+	public void run () {
+		calculator.setMemory2(50);
+	}
+}
+
+public class ThreadSync {
+
+	public static void main(String[] args) {
+		
+		Calculator calculator = new Calculator();
+		
+		User1Thread user1Thread = new User1Thread();
+		user1Thread.setCalculator(calculator);
+		user1Thread.start();
+		
+		User2Thread user2Thread = new User2Thread();
+		user2Thread.setCalculator(calculator);
+		user2Thread.start();
+	}
+
+}
+
+```
+
+
+
+### 2. wait()와 notify()를 이용한 스레드 제어
+
+경우에 따라서는 두 개의 스레드를 교대로 번갈아 가며 실행할 때도 있다.
+
+**정확한 교대 작업이 필요할 경우**, 자신의 작업이 끝나면 상대방 스레드를 일시 정지 상태에서 풀어주고 자신은 일시 정지 상태로 만들면 된다.
+
+이 방법의 핵심은 특정 객체를 공유하는 데에 있으며, 하나의 객체를 두 개의 스레드가 공유하며 번갈아 동기화 메서드, 혹은 블럭을 실행하고 멈춘다.
+
+1. notify()는 wait()에 의해 일시 정지된 스레드 중 한 개를 실행 대기 상태로 만든다.
+
+2. wait()는 자기 자신의 스레드를 일시 정지 상태로 만든다.
+3. notifyAll()은 일시 정지된 모든 스레드를 실행 대기 상태로 만든다.
+
+단, 위 메서드들은 동기화 블럭, 혹은 동기화 메서드 내부에서만 사용 가능함에 주의!
+
+```java
+package com.sync;
+
+// 공유할 Calculator 객체
+class WorkObject {
+	public synchronized void methodA ( ) {			// 동기화 메서드
+		Thread thread = Thread.currentThread();
+		System.out.println(thread.getName() + ": " + "methodA 작업 실행");
+		notify();									// 다른 스레드들 중 하나를 실행 대기 상태로 만듦
+		try {
+			wait();									// 자기 스레드는 일시정지로 만듦
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public synchronized void methodB () {
+		Thread thread = Thread.currentThread();
+		System.out.println(thread.getName() + ": " + "methodB 작업 실행");
+		notify();									// 다른 스레드들 중 하나를 실행 대기 상태로 만듦
+		try {
+			wait();									// 자기 스레드는 일시정지로 만듦
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+class ThreadA extends Thread {
+	
+	private WorkObject workObject;
+	
+	public ThreadA (WorkObject o) {
+		setName("ThreadA");
+		workObject = o;
+	}
+	
+	@Override
+	public void run() {
+		for(int i=0; i <10; i++) {
+			workObject.methodA();
+		}
+	}
+}
+
+class ThreadB extends Thread {
+	
+	private WorkObject workObject;
+	
+	public ThreadB (WorkObject o) {
+		setName("ThreadB");
+		workObject = o;
+	}
+	
+	@Override
+	public void run() {
+		for(int i=0; i <10; i++) {
+			workObject.methodB();
+		}
+		
+	}
+}
+
+public class ThreadSync {
+
+	public static void main(String[] args) {
+		WorkObject wo = new WorkObject();	// 공유작업 객체 생성
+		
+		ThreadA tA = new ThreadA(wo);
+		ThreadB tB = new ThreadB(wo);
+		
+		tA.start();
+		tB.start();
+	}
+
 }
 
 ```
