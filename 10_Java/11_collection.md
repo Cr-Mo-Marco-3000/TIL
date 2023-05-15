@@ -279,6 +279,10 @@ public class ListTest2 {
 				new Cat("야옹이", 2, "암컷"), 
 				new Cat("나비", 1, "수컷"));
 		
+        
+        // 2-3 asList를 사용한 초기화
+        List<Integer> myList = new ArrayList<>(Arrays.asList(1, 2, 3)) ;
+        
 		// 추가
 		list.add(new Cat("망치", 3, "수컷"));
 		// 삽입

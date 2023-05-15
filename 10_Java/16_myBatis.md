@@ -594,6 +594,7 @@ public class RecordNotFoundException extends Exception {
 - Mapper
   - 동적인 sql를 적용하기 위해서, if 역할을 하는 `<if test="">`와 `<choose> - <when test =""> - <otherwise>`를 사용한다.
   - if를 사용할 때와 마찬가지로, 조건문 통과는 주의해야 한다.
+  - `#{variablename}`에는, 앞 뒤에 자동으로 `''`가 붙으므로 한 번 더 붙이지 않게 주의한다.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>

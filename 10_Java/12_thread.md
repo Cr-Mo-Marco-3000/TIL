@@ -629,3 +629,5 @@ public class ThreadSync {
 
 ```
 
+## 6. 스레드 종료
+

@@ -165,3 +165,8 @@ runs as maven build... 에서 goal에 넣거나(아래 명령어에서 mvn을 �
    - install
    - maven의 로컬저장소
      - `C:\Users\bizyoung93\.m2\repository\com\app\MavenTest\0.0.1-SNAPSHOT` 에 있다.
+
+
+
+- 빌드 중 테스트 생략하는 방법
+  - 명령어 뒤에 `-DskipTests` 추가

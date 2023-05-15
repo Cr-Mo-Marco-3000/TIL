@@ -1,0 +1,33 @@
+plugins { 
+	id 'java'											 // 자바
+	id 'org.springframework.boot' version '3.0.6'		 // 스프링부트 플러그인 => 라이브러리 의존성 관리도 해줌
+	id 'io.spring.dependency-management' version '1.1.0' // 필요한 라이브러리들 import
+}
+
+group = 'jpabook'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'				 // 강의에서는 1.8 == java 8버전 사용
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor	 // lombok
+	}
+}
+
+repositories {						
+	mavenCentral()						 // 해당 레포지토리에서 mavenCentral을 다운받을 것
+}
+
+dependencies {							 // 라이브러리에서 필요한 의존관계들을 당겨옴
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

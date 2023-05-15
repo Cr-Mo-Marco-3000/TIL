@@ -94,8 +94,8 @@ public class StringBufferTest {
 	public static void main(String[] args) {
 		StringBuffer mySB = new StringBuffer("Hello");
 		mySB.append(" World");
-		mySB.toString();
-		System.out.println(mySB);			// Hello World
+		String myS = mySB.toString();
+		System.out.println(myS);			// Hello World
 	}
 }
 

@@ -146,6 +146,8 @@ public class Hello { // Hello 클래스 선언
        - 클래스 파일을 검색하기 위한 디렉토리
    - `java -cp bin ch01.sec06.Hello`
    - 뒤의 클래스명에는 `.class`를 붙이면 안된다.
+   - bin 폴더에서, 클래스명을 명시한 채로 진입점을 실행시켜도 된다.
+     - `C:\java_study\test\bin> java test_package.TestMain`
    - 콘솔에 Hello, Java 출력
    - 해당 바이트코드는 다른 운영체제에서도 정상적으로 실행 가능하다.
 
