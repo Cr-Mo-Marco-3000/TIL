@@ -38,6 +38,12 @@
 - intellij lombok 사용 설정
   - setting -> annotation processors -> enable annotation processing 체크
 
+- 자동으로 빌드가 안 되는 경우
+  - jdk가 정상적으로 설치되었는지 확인
+  - intellij 설정 - gradle - gradle JVM에서 jdk 버전 확인 후 맞춤 -> 시스템 종료 후 다시실행
+
+- 서버 종류 시 Exception이 발생하는 경우
+  - intellij 설정 - buildtools - gradle - build and run using & run test using -> intellij idea로 변경
 
 
 ## 3. 의존성 확인
